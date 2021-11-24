@@ -1,3 +1,5 @@
+import com.sun.tools.javac.Main;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +26,7 @@ public class StartWindow extends JFrame{
 //                        App.initWindow();
 //                    }
 //                });
-                new TestGrid02();
+                new MainWindow();
             }
         });
         salirButton.addActionListener(new ActionListener() {
