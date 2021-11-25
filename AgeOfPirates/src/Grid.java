@@ -1,24 +1,85 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.JPanel;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 
 
-public class Grid extends JPanel {
-    private static final int ROWS = 20;
-    private static final int COLUMNS = 20;
+public class Grid extends JPanel implements ActionListener {
+    public static final int ROWS = 20;
+    public static final int COLUMNS = 20;
     private ArrayList<Item> items;
+    private final int DELAY = 25;
+    private Timer timer;
 
+    /**
+     * Se crean los componentes en las primeras lineas, desde que se declara el timer,
+     * se inicia el hilo del juego, que se hace con el ActionListener, que a su vez entonces la acción realizada
+     * es la que está en la función "actionPerformed", para correr la actionPerformed, se necesita un Timer, que
+     * genera un delay de n segundos para ir corriendo (esto supongo que se hace para no sobrecargar al cpu (nuestro
+     * delay es de 25 ms, se puede cambiar)), que se guarda en la variable DELAY. creado el timer, se hace
+     * timer.start() para dar inicio al hilo, lo que esté en el actionPerformed se mantiene durante toda la partida,
+     * así que básicamente es la función más importante.
+     */
     public Grid() {
-        setLayout(new GridBagLayout());
+        crearTablero();
+        items = crearItems();
+        //pintarItems();
 
+        timer = new Timer(DELAY,this);
+        timer.start();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        // when calling g.drawImage() we can use "this" for the ImageObserver
+        // because Component implements the ImageObserver interface, and JPanel
+        // extends from Component. So "this" Board instance, as a Component, can
+        // react to imageUpdate() events triggered by g.drawImage()
+
+        // draw our graphics.
+        for (Item item : items) {
+            item.draw(g, this);
+        }
+
+        // this smooths out animations on some systems
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+    private ArrayList<Item> crearItems(){
+        ArrayList<Item> conjuntoItems = new ArrayList<>();
+        conjuntoItems.add(new Item(10,10));
+        conjuntoItems.add(new Item(5,5));
+        conjuntoItems.add(new Item(15,15));
+        return conjuntoItems;
+    }
+
+    private void crearTablero(){
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 gbc.gridx = col;
                 gbc.gridy = row;
                 CellPane cellPane = new CellPane(new Point(col, row));
+                try {
+                    BufferedImage myPicture = ImageIO.read(new File("images/coin.png"));
+                    JLabel w = new JLabel(new ImageIcon(myPicture));
+                    cellPane.add(w);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Border border = null;
                 if (row < ROWS-1) {
                     if (col < ROWS-1) {
@@ -37,29 +98,6 @@ public class Grid extends JPanel {
                 add(cellPane, gbc);
             }
         }
-    }
-//    @Override
-//    public void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        // when calling g.drawImage() we can use "this" for the ImageObserver
-//        // because Component implements the ImageObserver interface, and JPanel
-//        // extends from Component. So "this" Board instance, as a Component, can
-//        // react to imageUpdate() events triggered by g.drawImage()
-//
-//        // draw our graphics.
-//        drawBackground(g);
-//        drawScore(g);
-//        for (Coin coin : coins) {
-//            coin.draw(g, this);
-//        }
-//        player.draw(g, this);
-//
-//        // this smooths out animations on some systems
-//        Toolkit.getDefaultToolkit().sync();
-//    }
-
-    public void crearItems(){
-
     }
 }
 

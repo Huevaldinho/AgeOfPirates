@@ -8,29 +8,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class MainWindow extends JFrame implements ActionListener {
-    private final int DELAY = 25;
-    Timer timer;
+public class MainWindow extends JFrame {
     JFrame frame;
     JPanel mapaJugador;
     JPanel mensajes;
     JPanel mapaRival;
 
-    /**
-    * Se crean los componentes en las primeras lineas, desde que se declara el timer,
-    * se inicia el hilo del juego, que se hace con el ActionListener, que a su vez entonces la acción realizada
-    * es la que está en la función "actionPerformed", para correr la actionPerformed, se necesita un Timer, que
-    * genera un delay de n segundos para ir corriendo (esto supongo que se hace para no sobrecargar al cpu (nuestro
-    * delay es de 25 ms, se puede cambiar)), que se guarda en la variable DELAY. creado el timer, se hace
-    * timer.start() para dar inicio al hilo, lo que esté en el actionPerformed se mantiene durante toda la partida,
-    * así que básicamente es la función más importante.
-    */
 
     MainWindow(){
         createUIComponents();
-
-        timer = new Timer (DELAY,this);
-        timer.start();
     }
 
     /**
@@ -41,7 +27,7 @@ public class MainWindow extends JFrame implements ActionListener {
         frame = new JFrame("Age of Pirates");
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        Dimension dimension = new Dimension(700,700);
+        Dimension dimension = new Dimension(800,800);
         mapaJugador = new Grid();
         mapaJugador.setBackground(Color.CYAN);
         mapaJugador.setEnabled(true);
@@ -63,21 +49,17 @@ public class MainWindow extends JFrame implements ActionListener {
         mapaRival.setMinimumSize(dimension);
         mapaRival.setMaximumSize(dimension);
 
-        tabbedPane.setBounds(0,0,700,700);
+        tabbedPane.setBounds(0,0,800,800);
         tabbedPane.add("Mapa",mapaJugador);
         tabbedPane.add("Mensajes",mensajes);
         tabbedPane.add("Mapa Rival",mapaRival);
 
         frame.add(tabbedPane);
-        frame.setSize(new Dimension(700,750));
+        frame.setSize(new Dimension(800,850));
         frame.setBackground(Color.BLUE);
         frame.setLayout(null);
         frame.setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
 
 }

@@ -37,6 +37,10 @@ public class CellPane extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(30, 30);
+        return new Dimension(32, 32);
+    }
+
+    public void draw(ImageIcon image) {
+
     }
 }

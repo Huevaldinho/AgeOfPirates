@@ -34,8 +34,8 @@ public class Item {
         // position by multiplying by the tile size.
         g.drawImage(
                 image,
-                pos.x * Board.TILE_SIZE,
-                pos.y * Board.TILE_SIZE,
+                pos.x,
+                pos.y,
                 observer
         );
     }
