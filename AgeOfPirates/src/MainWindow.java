@@ -3,21 +3,18 @@ import General.IConstantes;
 import General.Peticion;
 import General.TipoAccion;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
+import java.util.ArrayList;
 
 public class MainWindow extends JFrame {
     JFrame frame;
     JPanel mapaJugador;
     JPanel mensajes;
     JPanel mapaRival;
+    private int jugadorID;
 
     MainWindow(){
         //ANTES QUE HAGA CUALQUIER COSA DEBE VERIFICAR QUE PUEDE JUGAR (Hay menos de 4 players)
@@ -32,6 +29,7 @@ public class MainWindow extends JFrame {
         }else{
             System.out.println("\nPuede jugar, actualmente hay: "+(int)puedeSeguir+" jugadores conectados");
         }
+        jugadorID=(int)puedeSeguir+1;
         createUIComponents();
     }
     /**
@@ -39,7 +37,7 @@ public class MainWindow extends JFrame {
      */
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        frame = new JFrame("Age of Pirates");
+        frame = new JFrame("Age of Pirates"+"- Jugador: "+jugadorID);
         JTabbedPane tabbedPane = new JTabbedPane();
 
         //Mi mapa
@@ -50,13 +48,65 @@ public class MainWindow extends JFrame {
         mapaJugador.setPreferredSize(dimension);
         mapaJugador.setMinimumSize(dimension);
         mapaJugador.setMaximumSize(dimension);
+
         //Chat
         mensajes = new JPanel();
+        //Cuadro texto chat de todos
+        JTextArea cuadroTextoChat = new JTextArea();
+        cuadroTextoChat.setPreferredSize(new Dimension(300,200));
+        mensajes.add(cuadroTextoChat);
+
+        Peticion petiAgregarPanel = new Peticion(TipoAccion.AGREGAR_PANEl_CHAT,cuadroTextoChat);
+        Client clienteAgregarPanel = new Client(petiAgregarPanel);
+        System.out.println("Respuesta: "+clienteAgregarPanel.getRespuestaServer());
+
+
+        //Mensaje a enviar
+        JTextArea mensaje = new JTextArea();
+        mensaje.setPreferredSize(new Dimension(500,200));
+        mensajes.add(mensaje);
+
+        //Boton enviar mensaje
+        JButton btnEnviar = new JButton();
+        btnEnviar.setPreferredSize(new Dimension(50,50));
+        btnEnviar.setText("Enviar Mensaje");
+        mensajes.add(btnEnviar);
+        btnEnviar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Peticion peticionParaVerSiContinua = new Peticion(TipoAccion.GET_CANTIDAD_PLAYERS_CONECTADOS,null);
+                Client petiParaContinuar = new Client(peticionParaVerSiContinua);
+                Object puedeSeguir = petiParaContinuar.getRespuestaServer();
+
+                ArrayList<JTextArea> objetos = new ArrayList<>();
+
+                objetos.add(cuadroTextoChat);//Chat
+                objetos.add(mensaje);//Mensaje
+
+                Peticion peticioEnviarMensaje = new Peticion(TipoAccion.ENVIAR_MENSAJE,objetos);
+                peticioEnviarMensaje.setDatosSalida(jugadorID);
+
+                Client cliente = new Client(peticioEnviarMensaje);
+                Object respuestaServer = cliente.getRespuestaServer();
+                objetos = (ArrayList<JTextArea>) respuestaServer;
+
+                cuadroTextoChat.setText(objetos.get(0).getText()+'\n');
+
+            }
+        });
+
+
         mensajes.setBackground(Color.gray);
         mensajes.setEnabled(true);
         mensajes.setPreferredSize(dimension);
         mensajes.setMinimumSize(dimension);
         mensajes.setMaximumSize(dimension);
+
+
+
+
+
+
         //Mapa enemigos
         mapaRival = new JPanel();
         mapaRival.setBackground(Color.RED);
@@ -75,17 +125,6 @@ public class MainWindow extends JFrame {
         frame.setBackground(Color.BLUE);
         frame.setLayout(null);
         frame.setVisible(true);
-
-
-        //REGISTRA EL JUGADOR 1
-        Peticion peticionRegistrarJugador = new Peticion(TipoAccion.REGISTRAR_PLAYER,null);
-        Client conexionRegistrarJugador = new Client(peticionRegistrarJugador);
-        Object respuestaRegistrarJugador = conexionRegistrarJugador.getRespuestaServer();
-        System.out.println("\nRespuesta servidor registrar player: "+respuestaRegistrarJugador);
-        //ESTE ES EL ID QUE SE LE VA A ASIGNAR AL PLAYER
-        Player jugador = new Player();
-        jugador.setID((int)respuestaRegistrarJugador);
-        System.out.println("Jugador tiene ID:"+jugador.getID());
 
     }
 }

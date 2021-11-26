@@ -1,3 +1,8 @@
+import Cliente.Client;
+import General.Peticion;
+import General.TipoAccion;
+import ObjetosJuego.Item;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +22,7 @@ public class Grid extends JPanel implements ActionListener {
     private ArrayList<CellPane> celdasOcupadas;
     private final int DELAY = 25;
     private Timer timer;
+    private Player jugador;
 
     /**
      * Se crean los componentes en las primeras lineas, desde que se declara el timer,
@@ -28,11 +34,29 @@ public class Grid extends JPanel implements ActionListener {
      * así que básicamente es la función más importante.
      */
     public Grid() {
+
         crearTablero();
         //pintarItems();
 
         timer = new Timer(DELAY,this);
         timer.start();
+
+        //REGISTRA EL JUGADOR 1
+        Peticion peticionRegistrarJugador = new Peticion(TipoAccion.REGISTRAR_PLAYER,null);
+        Client conexionRegistrarJugador = new Client(peticionRegistrarJugador);
+        Object respuestaRegistrarJugador = conexionRegistrarJugador.getRespuestaServer();
+        //ESTE ES EL ID QUE SE LE VA A ASIGNAR AL PLAYER
+        jugador = new Player();
+        jugador.setID((int)respuestaRegistrarJugador);//Se le pasa el ID al player
+        System.out.println("Jugador tiene ID:"+jugador.getID());
+
+        jugador.setGrid(this);
+        System.out.println(jugador.toString());
+
+
+    }
+    public int getPlayerID(){
+        return jugador.getID();
     }
 
     @Override
@@ -53,31 +77,11 @@ public class Grid extends JPanel implements ActionListener {
         Toolkit.getDefaultToolkit().sync();
     }
 
-    private ArrayList<Item> crearItems(){
-        ArrayList<Item> conjuntoItems = new ArrayList<>();
-        conjuntoItems.add(new Item(10,10));
-        conjuntoItems.add(new Item(5,5));
-        conjuntoItems.add(new Item(15,15));
-        return conjuntoItems;
-    }
 
     private void crearTablero(){
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        String listaItems [] = {"Fuente de Energía ($12000)",
-                                "Mercado ($2000)",
-                                "Mina ($1000)",
-                                "Templo de la Bruja ($2500)",
-                                "Armería ($1500)"};
-        JComboBox cmbBoxItems = new JComboBox(listaItems);
-
-        JButton btnListo = new JButton("Listo");
-        btnListo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
@@ -109,6 +113,22 @@ public class Grid extends JPanel implements ActionListener {
                 add(cellPane, gbc);
             }
         }
+//        String listaItems [] = {"Fuente de Energía ($12000)",
+//                "Mercado ($2000)",
+//                "Mina ($1000)",
+//                "Templo de la Bruja ($2500)",
+//                "Armería ($1500)"};
+//        JComboBox cmbBoxItems = new JComboBox(listaItems);
+//        gbc.gridx=COLUMNS/2;
+//        gbc.gridy=ROWS;
+//        add(cmbBoxItems,gbc);
+//
+//        JButton btnListo = new JButton("Listo");
+//        btnListo.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//            }
+//        });
     }
 }
 

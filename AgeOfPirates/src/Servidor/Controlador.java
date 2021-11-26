@@ -27,6 +27,15 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(admin.GetCantidadPlayersActivos());
                 break;
             }
+            case ENVIAR_MENSAJE:{
+                peticionRecibida.setDatosSalida(admin.EscribirEnCuadroTexto(peticionRecibida));
+                break;
+            }
+            case AGREGAR_PANEl_CHAT:{
+                admin.AgregarPanelArrayList(peticionRecibida);
+                peticionRecibida.setDatosSalida(1);
+                break;
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }

@@ -1,3 +1,5 @@
+import ObjetosJuego.Item;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -6,8 +8,8 @@ import java.awt.event.MouseEvent;
 public class CellPane extends JPanel {
 
     private Color defaultBackground;
-
     private final Point cellCoordinate;
+    private Item item;//Item que le mete desde la GUI
 
     public CellPane(Point cellCoordinate) {
         this.cellCoordinate = cellCoordinate;
@@ -17,12 +19,10 @@ public class CellPane extends JPanel {
                 defaultBackground = getBackground();
                 setBackground(Color.RED);
             }
-
             @Override
             public void mouseExited(MouseEvent e) {
                 setBackground(defaultBackground);
             }
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 //Here is where it is supposed to be
@@ -30,7 +30,6 @@ public class CellPane extends JPanel {
             }
         });
     }
-
     public Point getCellCoordinate() {
         return cellCoordinate;
     }
@@ -43,4 +42,11 @@ public class CellPane extends JPanel {
     public void draw(ImageIcon image) {
 
     }
+    public Item getItemEnCelda(){
+        if (item!=null)
+            return item;
+        return null;
+    }
+
+
 }

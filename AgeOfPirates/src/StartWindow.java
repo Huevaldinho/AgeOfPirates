@@ -9,7 +9,6 @@ public class StartWindow extends JFrame{
     private JButton btn_Iniciar;
     private JButton salirButton;
     private JPanel mainPanel;
-    private static App app;
 
     public StartWindow(String nombre) {
         super("Age Of Pirates");
@@ -21,11 +20,6 @@ public class StartWindow extends JFrame{
         btn_Iniciar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    public void run() {
-//                        App.initWindow();
-//                    }
-//                });
                 new MainWindow();
             }
         });
@@ -36,7 +30,6 @@ public class StartWindow extends JFrame{
             }
         });
     }
-
     public static void main(String[] args) {
         // create a window frame and set the title in the toolbar
         JFrame interfaz = new StartWindow("Age of Pirates");

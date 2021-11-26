@@ -1,4 +1,7 @@
 import Arma.Arma;
+import ObjetosJuego.FuenteEnergia;
+import ObjetosJuego.Item;
+import ObjetosJuego.Mercado;
 
 import java.awt.event.KeyEvent;
 import java.awt.Graphics;
@@ -11,24 +14,20 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Player {
-//    public static ArrayList<Arma> armas;
-//    public static ArrayList<Item> items;
-//    public static Grid grid;
-    public static int ID;
-    // image that represents the player's position on the board
-    private BufferedImage image;
-    // current position of the player on the board grid
-    private Point pos;
-    // keep track of the player's score
-    private int score;
+    private ArrayList<Arma> armas;//Para atacar, se muestran en combobox del mapa rival
+    private ArrayList<Item> items;//Cada componente, se muestra en mi mapa
+    private Grid grid;
+    private int ID;
+    private int dinero;
+
 
     public Player() {
-        // load the assets
-        loadImage();
+        items=new ArrayList<>();
+        dinero=4000;
 
-        // initialize the state
-        pos = new Point(0, 0);
-        score = 0;
+        items.add(new FuenteEnergia());
+        items.add(new Mercado());
+
     }
     public void setID(int id){
         this.ID=id;
@@ -37,80 +36,45 @@ public class Player {
         return ID;
     }
 
-    private void loadImage() {
-        try {
-            // you can use just the filename if the image file is in your
-            // project folder, otherwise you need to provide the file path.
-            image = ImageIO.read(new File("images/player.png"));
-            System.out.println("Image height: "+image.getHeight());
-            System.out.println("Image width: "+image.getWidth());
-        } catch (IOException exc) {
-            System.out.println("Error opening image file: " + exc.getMessage());
-        }
+    public ArrayList<Arma> getArmas() {
+        return armas;
     }
 
-    public void draw(Graphics g, ImageObserver observer) {
-        // with the Point class, note that pos.getX() returns a double, but
-        // pos.x reliably returns an int. https://stackoverflow.com/a/30220114/4655368
-        // this is also where we translate board grid position into a canvas pixel
-        // position by multiplying by the tile size.
-        g.drawImage(
-            image,
-            pos.x * 40,
-            pos.y * 40,
-            observer
-        );
+    public void setArmas(ArrayList<Arma> armas) {
+        this.armas = armas;
     }
 
-    public void keyPressed(KeyEvent e) {
-        // every keyboard get has a certain code. get the value of that code from the
-        // keyboard event so that we can compare it to KeyEvent constants
-        int key = e.getKeyCode();
-
-        // depending on which arrow key was pressed, we're going to move the player by
-        // one whole tile for this input
-        if (key == KeyEvent.VK_UP) {
-            pos.translate(0, -1);
-        }
-        if (key == KeyEvent.VK_RIGHT) {
-            pos.translate(1, 0);
-        }
-        if (key == KeyEvent.VK_DOWN) {
-            pos.translate(0, 1);
-        }
-        if (key == KeyEvent.VK_LEFT) {
-            pos.translate(-1, 0);
-        }
+    public ArrayList<Item> getItems() {
+        return items;
     }
 
-    public void tick() {
-        // this gets called once every tick, before the repainting process happens.
-        // so we can do anything needed in here to update the state of the player.
-
-        // prevent the player from moving off the edge of the board sideways
-        if (pos.x < 0) {
-            pos.x = 0;
-        } else if (pos.x >= Board.COLUMNS) {
-            pos.x = Board.COLUMNS - 1;
-        }
-        // prevent the player from moving off the edge of the board vertically
-        if (pos.y < 0) {
-            pos.y = 0;
-        } else if (pos.y >= Board.ROWS) {
-            pos.y = Board.ROWS - 1;
-        }
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
     }
 
-    public String getScore() {
-        return String.valueOf(score);
+    public Grid getGrid() {
+        return grid;
     }
 
-    public void addScore(int amount) {
-        score += amount;
+    public void setGrid(Grid grid) {
+        this.grid = grid;
     }
 
-    public Point getPos() {
-        return pos;
+    public int getDinero() {
+        return dinero;
     }
 
+    public void setDinero(int dinero) {
+        this.dinero = dinero;
+    }
+    @Override
+    public String toString() {
+        return "Player{" +
+                "armas=" + armas +
+                ", items=" + items +
+                ", grid=" + grid +
+                ", ID=" + ID +
+                ", dinero=" + dinero +
+                '}';
+    }
 }
