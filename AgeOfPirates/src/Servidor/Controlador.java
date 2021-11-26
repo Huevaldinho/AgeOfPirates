@@ -27,9 +27,6 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(admin.GetCantidadPlayersActivos());
                 break;
             }
-            case AGREGAR_PLAYER:{
-                peticionRecibida.setDatosSalida(admin.AgregarPlayer(peticionRecibida));
-            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }

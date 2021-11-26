@@ -14,7 +14,7 @@ public class Player {
 //    public static ArrayList<Arma> armas;
 //    public static ArrayList<Item> items;
 //    public static Grid grid;
-//    public static int id;
+    public static int ID;
     // image that represents the player's position on the board
     private BufferedImage image;
     // current position of the player on the board grid
@@ -29,6 +29,12 @@ public class Player {
         // initialize the state
         pos = new Point(0, 0);
         score = 0;
+    }
+    public void setID(int id){
+        this.ID=id;
+    }
+    public int getID(){
+        return ID;
     }
 
     private void loadImage() {
