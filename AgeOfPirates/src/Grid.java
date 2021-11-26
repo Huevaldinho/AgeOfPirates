@@ -14,7 +14,7 @@ import javax.swing.border.MatteBorder;
 public class Grid extends JPanel implements ActionListener {
     public static final int ROWS = 20;
     public static final int COLUMNS = 20;
-    private ArrayList<Item> items;
+    private ArrayList<CellPane> celdasOcupadas;
     private final int DELAY = 25;
     private Timer timer;
 
@@ -29,7 +29,6 @@ public class Grid extends JPanel implements ActionListener {
      */
     public Grid() {
         crearTablero();
-        items = crearItems();
         //pintarItems();
 
         timer = new Timer(DELAY,this);
@@ -49,9 +48,6 @@ public class Grid extends JPanel implements ActionListener {
         // react to imageUpdate() events triggered by g.drawImage()
 
         // draw our graphics.
-        for (Item item : items) {
-            item.draw(g, this);
-        }
 
         // this smooths out animations on some systems
         Toolkit.getDefaultToolkit().sync();
@@ -68,18 +64,33 @@ public class Grid extends JPanel implements ActionListener {
     private void crearTablero(){
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+
+        String listaItems [] = {"Fuente de Energía ($12000)",
+                                "Mercado ($2000)",
+                                "Mina ($1000)",
+                                "Templo de la Bruja ($2500)",
+                                "Armería ($1500)"};
+        JComboBox cmbBoxItems = new JComboBox(listaItems);
+
+        JButton btnListo = new JButton("Listo");
+        btnListo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 gbc.gridx = col;
                 gbc.gridy = row;
                 CellPane cellPane = new CellPane(new Point(col, row));
-                try {
-                    BufferedImage myPicture = ImageIO.read(new File("images/coin.png"));
-                    JLabel w = new JLabel(new ImageIcon(myPicture));
-                    cellPane.add(w);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    BufferedImage myPicture = ImageIO.read(new File("images/coin.png"));
+//                    JLabel w = new JLabel(new ImageIcon(myPicture));
+//                    cellPane.add(w);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 Border border = null;
                 if (row < ROWS-1) {
                     if (col < ROWS-1) {
