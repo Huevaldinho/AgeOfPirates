@@ -18,7 +18,6 @@ public class Admin {
         System.out.println("Instancia el administrador en controlador");
     }
     public int RegistrarPlayer(Peticion peticion){//Solo le da el ID al player
-        System.out.println("Funcion registrar player");
         if (cantidadPlayersActivos<cantidadMaximaPlayers){
             cantidadPlayersActivos++;
             return cantidadPlayersActivos;
@@ -38,10 +37,15 @@ public class Admin {
         ArrayList<JTextArea> objetos =(ArrayList<JTextArea>) peticion.getDatosEntrada();
         int IDjugador = (int) peticion.getDatosSalida();//Saca el ID del que lo envio
         String mensajeEntrante = objetos.get(1).getText();//Saca el mensaje
+        System.out.println("Mensaje entrante: "+mensajeEntrante);
 
-        objetos.get(0).setText(objetos.get(0).getText()+'\n'+"Mensaje del jugador "+IDjugador+": "+mensajeEntrante);
+        if (mensajeEntrante.compareTo("")==0)//Mensaje vacio == actualiza
+            return paneles;
         for (JTextArea actual: paneles){
-            actual.setText(actual.getText()+'\n'+"Mensaje del jugador "+IDjugador+": "+mensajeEntrante);
+            actual.append('\n'+"Mensaje del jugador "+IDjugador+": "+mensajeEntrante);
+            //actual.paintImmediately(actual.getBounds());
+            //actual.setText(actual.getText()+'\n'+"Mensaje del jugador "+IDjugador+": "+mensajeEntrante);
+            //actual.paintImmediately(actual.getX(), actual.getY(), actual.getWidth(), actual.getHeight());
         }
         return  paneles;
     }

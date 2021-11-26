@@ -4,6 +4,8 @@ import General.Peticion;
 import General.TipoAccion;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +45,7 @@ public class MainWindow extends JFrame {
         //Mi mapa
         Dimension dimension = new Dimension(800,800);
         mapaJugador = new Grid();
+
         mapaJugador.setBackground(Color.CYAN);
         mapaJugador.setEnabled(true);
         mapaJugador.setPreferredSize(dimension);
@@ -51,25 +54,30 @@ public class MainWindow extends JFrame {
 
         //Chat
         mensajes = new JPanel();
+        //Etiqueta mensajes enviados
+        JLabel etiquetaMensajes=new JLabel();
+        etiquetaMensajes.setText("Mensajes enviados");
+        etiquetaMensajes.setPreferredSize(new Dimension(160,100));
+        mensajes.add(etiquetaMensajes);
+
         //Cuadro texto chat de todos
         JTextArea cuadroTextoChat = new JTextArea();
         cuadroTextoChat.setPreferredSize(new Dimension(300,200));
+        cuadroTextoChat.setEditable(false);
         mensajes.add(cuadroTextoChat);
 
         Peticion petiAgregarPanel = new Peticion(TipoAccion.AGREGAR_PANEl_CHAT,cuadroTextoChat);
         Client clienteAgregarPanel = new Client(petiAgregarPanel);
         System.out.println("Respuesta: "+clienteAgregarPanel.getRespuestaServer());
 
-
-        //Mensaje a enviar
         JTextArea mensaje = new JTextArea();
-        mensaje.setPreferredSize(new Dimension(500,200));
+        mensaje.setPreferredSize(new Dimension(150,75));
         mensajes.add(mensaje);
 
         //Boton enviar mensaje
         JButton btnEnviar = new JButton();
-        btnEnviar.setPreferredSize(new Dimension(50,50));
-        btnEnviar.setText("Enviar Mensaje");
+        btnEnviar.setPreferredSize(new Dimension(70,50));
+        btnEnviar.setText("Send");
         mensajes.add(btnEnviar);
         btnEnviar.addActionListener(new ActionListener() {
             @Override
@@ -86,14 +94,21 @@ public class MainWindow extends JFrame {
                 Peticion peticioEnviarMensaje = new Peticion(TipoAccion.ENVIAR_MENSAJE,objetos);
                 peticioEnviarMensaje.setDatosSalida(jugadorID);
 
-                Client cliente = new Client(peticioEnviarMensaje);
+                Client cliente = new Client(peticioEnviarMensaje);//
                 Object respuestaServer = cliente.getRespuestaServer();
-                objetos = (ArrayList<JTextArea>) respuestaServer;
+                objetos = (ArrayList<JTextArea>) respuestaServer;//Castea el panel actualizado
 
-                cuadroTextoChat.setText(objetos.get(0).getText()+'\n');
+                cuadroTextoChat.setText(objetos.get(0).getText()+'\n');//Actualiza el cuadro de texto
+                mensaje.setText("");//Quita el mensaje del cuadro
 
             }
         });
+        //Parte para ingresar los datos del juego
+        JTextArea bitacora = new JTextArea();
+        bitacora.setPreferredSize(new Dimension(300,200));
+        bitacora.setText("Aqui van los datos del juego");
+        bitacora.setEditable(false);
+        mensajes.add(bitacora);
 
 
         mensajes.setBackground(Color.gray);
@@ -101,11 +116,6 @@ public class MainWindow extends JFrame {
         mensajes.setPreferredSize(dimension);
         mensajes.setMinimumSize(dimension);
         mensajes.setMaximumSize(dimension);
-
-
-
-
-
 
         //Mapa enemigos
         mapaRival = new JPanel();
