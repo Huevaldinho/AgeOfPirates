@@ -10,8 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Item implements Serializable {
-    String nombre;
-    int numero;
+    public String nombre;
+    public int numero;
+    public int precio;
+    public BufferedImage imagen;
     ArrayList<Point> puntosUbicacion = new ArrayList<>();
 
     public Item(){

@@ -9,13 +9,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 public class CellPane extends JPanel {
 
     private Color defaultBackground;
     private final Point cellCoordinate;
+    public boolean usada;
 
     public CellPane(Point cellCoordinate) {
+        usada = false;
         this.cellCoordinate = cellCoordinate;
         addMouseListener(new MouseAdapter() {
             @Override
@@ -48,7 +51,8 @@ public class CellPane extends JPanel {
         return new Dimension(32, 32);
     }
 
-    public void draw(ImageIcon image) {
-
+    public void draw(BufferedImage img) {
+        JLabel l = new JLabel(new ImageIcon(img));
+        this.add(l);
     }
 }

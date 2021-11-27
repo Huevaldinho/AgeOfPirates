@@ -4,6 +4,7 @@ import Cliente.Client;
 import GUI.CellPane;
 import General.Peticion;
 import General.TipoAccion;
+import ObjetosJuego.Item;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,7 @@ public class Grid extends JPanel implements ActionListener, Serializable {
     public static final int ROWS = 20;
     public static final int COLUMNS = 20;
     private ArrayList<CellPane> totalCeldas;
+    private AjustesJuego ajustesJuego;
     private final int DELAY = 25;
     private Timer timer;
     private Player jugador;
@@ -58,6 +60,9 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         Object respuesta = conexion.getRespuestaServer();
 
         System.out.println("Respuesta registrar jugador: "+respuesta);
+        ajustesJuego = new AjustesJuego();
+        ajustesJuego.id=jugador.getID();
+        ajustesJuego.setVisible(true);
 
 
     }
@@ -68,15 +73,10 @@ public class Grid extends JPanel implements ActionListener, Serializable {
     @Override
     public void actionPerformed(ActionEvent e) {
 /*
-*       Primer click del tablero es para colocar la fuente de poder
-*       Segundo para el mercado.
-*       Seleccionar celda se autocompleta, para esto tiene que revisar
-*
-*
-* */
-
-
-
+       Primer click del tablero es para colocar la fuente de poder
+       Segundo para el mercado.
+       Seleccionar celda se autocompleta, para esto tiene que revisar
+ */
     }
     @Override
     public void paintComponent(Graphics g) {
@@ -96,20 +96,11 @@ public class Grid extends JPanel implements ActionListener, Serializable {
     private void crearTablero(){
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-
-
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 gbc.gridx = col;
                 gbc.gridy = row;
                 CellPane cellPane = new CellPane(new Point(col, row));
-//                try {
-//                    BufferedImage myPicture = ImageIO.read(new File("images/coin.png"));
-//                    JLabel w = new JLabel(new ImageIcon(myPicture));
-//                    cellPane.add(w);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
                 Border border = null;
                 if (row < ROWS-1) {
                     if (col < ROWS-1) {
@@ -129,23 +120,17 @@ public class Grid extends JPanel implements ActionListener, Serializable {
                 totalCeldas.add(cellPane);
             }
         }
-
-//        String listaItems [] = {"Fuente de Energía ($12000)",
-//                "Mercado ($2000)",
-//                "Mina ($1000)",
-//                "Templo de la Bruja ($2500)",
-//                "Armería ($1500)"};
-//        JComboBox cmbBoxItems = new JComboBox(listaItems);
-//        gbc.gridx=COLUMNS/2;
-//        gbc.gridy=ROWS;
-//        add(cmbBoxItems,gbc);
-//
-//        JButton btnListo = new JButton("Listo");
-//        btnListo.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//            }
-//        });
+    }
+    public boolean dibujarCelda (Point punto , Item item){ //dibuja la imagen en la celda, con el punto y el item
+        for (CellPane celda : totalCeldas)
+            if (celda.getCellCoordinate().x == punto.x && celda.getCellCoordinate().y == punto.y) {
+                if (!celda.usada){
+                    celda.draw(item.imagen);
+                    celda.usada = true;
+                    return true;
+                }
+            }
+        return false;
     }
 }
 

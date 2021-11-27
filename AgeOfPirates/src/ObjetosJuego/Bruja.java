@@ -1,7 +1,26 @@
 package ObjetosJuego;
 
-public class Bruja extends Item{
-    public  Bruja(){
+import Arma.Arma;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class Bruja extends Item{
+    public static Arma tipoArma;
+    Bruja(){
+        loadImage();
+        this.nombre = "Templo de la Bruja";
+        this.precio = 2500;
     }
+    private void loadImage(){
+        try {
+            imagen = ImageIO.read(new File("images/witch.png"));
+        } catch (IOException e) {
+            System.out.println("No se pudo abrir la imagen");
+            e.printStackTrace();
+        }
+    }
+
 }
