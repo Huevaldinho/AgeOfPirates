@@ -8,16 +8,16 @@ import General.TipoAccion;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 
 
-public class Grid extends JPanel implements ActionListener {
+public class Grid extends JPanel implements ActionListener, Serializable {
     public static final int ROWS = 20;
     public static final int COLUMNS = 20;
-    private ArrayList<CellPane> celdasOcupadas;
     private ArrayList<CellPane> totalCeldas;
     private final int DELAY = 25;
     private Timer timer;
@@ -32,8 +32,7 @@ public class Grid extends JPanel implements ActionListener {
      * timer.start() para dar inicio al hilo, lo que esté en el actionPerformed se mantiene durante toda la partida,
      * así que básicamente es la función más importante.
      */
-    public Grid() {
-        celdasOcupadas=new ArrayList<>();
+    public Grid(){
         totalCeldas=new ArrayList<>();
 
         crearTablero();
@@ -46,13 +45,19 @@ public class Grid extends JPanel implements ActionListener {
         Peticion peticionRegistrarJugador = new Peticion(TipoAccion.REGISTRAR_PLAYER,null);
         Client conexionRegistrarJugador = new Client(peticionRegistrarJugador);
         Object respuestaRegistrarJugador = conexionRegistrarJugador.getRespuestaServer();
+
         //ESTE ES EL ID QUE SE LE VA A ASIGNAR AL PLAYER
         jugador = new Player();
         jugador.setID((int)respuestaRegistrarJugador);//Se le pasa el ID al player
-        System.out.println("Jugador tiene ID:"+jugador.getID());
+        System.out.println("Jugador recibe ID del servidor:"+jugador.getID());
+        //Jugador ahora tiene grid
+        //jugador.setGrid(this);
 
-        jugador.setGrid(this);
-        System.out.println(jugador.toString());
+        Peticion petiAgregarJugador = new Peticion(TipoAccion.AGREGAR_JUGADOR,jugador);
+        Client conexion = new Client(petiAgregarJugador);
+        Object respuesta = conexion.getRespuestaServer();
+
+        System.out.println("Respuesta registrar jugador: "+respuesta);
 
 
     }
@@ -62,8 +67,13 @@ public class Grid extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-
+/*
+*       Primer click del tablero es para colocar la fuente de poder
+*       Segundo para el mercado.
+*       Seleccionar celda se autocompleta, para esto tiene que revisar
+*
+*
+* */
 
 
 

@@ -40,6 +40,12 @@ public class Controlador {
             }
             case AGREGAR_ULTIMO_PUNTO:{
                 admin.InsertarUltimoPunto((Point) peticionRecibida.getDatosEntrada());
+                peticionRecibida.setDatosSalida(1);
+                break;
+            }
+            case AGREGAR_JUGADOR:{
+                admin.AgregarJugador(peticionRecibida);
+                peticionRecibida.setDatosSalida(1);
                 break;
             }
         }

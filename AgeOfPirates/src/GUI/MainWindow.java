@@ -68,9 +68,11 @@ public class MainWindow extends JFrame {
         cuadroTextoChat.setEditable(false);
         mensajes.add(cuadroTextoChat);
 
+        System.out.println("AGREGAR PANEL");
         Peticion petiAgregarPanel = new Peticion(TipoAccion.AGREGAR_PANEl_CHAT,cuadroTextoChat);
         Client clienteAgregarPanel = new Client(petiAgregarPanel);
         System.out.println("Respuesta: "+clienteAgregarPanel.getRespuestaServer());
+        System.out.println("TERMINA AGREGAR PANEL");
 
         JTextArea mensaje = new JTextArea();
         mensaje.setPreferredSize(new Dimension(150,75));

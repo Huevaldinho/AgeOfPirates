@@ -1,4 +1,6 @@
 package Comodines;
 
-public class Escudo {
+import java.io.Serializable;
+
+public class Escudo implements Serializable {
 }

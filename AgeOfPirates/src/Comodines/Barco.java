@@ -1,4 +1,6 @@
 package Comodines;
 
-public class Barco {
+import java.io.Serializable;
+
+public class Barco implements Serializable {
 }

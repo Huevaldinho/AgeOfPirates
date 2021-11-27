@@ -1,6 +1,7 @@
 package General;
 
 import java.io.Serializable;
+import GUI.*;
 /**
  * Modelo de una peticion para ser enviada al server o al cliente
  */

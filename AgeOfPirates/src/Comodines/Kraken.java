@@ -1,4 +1,6 @@
 package Comodines;
 
-public class Kraken {
+import java.io.Serializable;
+
+public class Kraken implements Serializable {
 }

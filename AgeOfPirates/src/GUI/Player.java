@@ -1,23 +1,37 @@
 package GUI;
 
 import Arma.Arma;
+import Comodines.Barco;
+import Comodines.Escudo;
+import Comodines.Kraken;
 import GUI.Grid;
 import ObjetosJuego.FuenteEnergia;
 import ObjetosJuego.Item;
 import ObjetosJuego.Mercado;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Serializable {
     private ArrayList<Arma> armas;//Para atacar, se muestran en combobox del mapa rival
     private ArrayList<Item> items;//Cada componente, se muestra en mi mapa
     private Grid grid;
     private int ID;
     private int dinero;
+    private boolean estado;
+    private Barco barco;
+    private Escudo escudo;
+    private Kraken kraken =null;
+
 
 
     public Player() {
+        barco = null;
+        escudo = null;
+        kraken = null;
+        estado=false;//Aun no puede atacar
         items=new ArrayList<>();
+        armas=new ArrayList<>();
         dinero=4000;
 
         items.add(new FuenteEnergia());
@@ -62,6 +76,38 @@ public class Player {
     public void setDinero(int dinero) {
         this.dinero = dinero;
     }
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public Barco getBarco() {
+        return barco;
+    }
+
+    public void setBarco(Barco barco) {
+        this.barco = barco;
+    }
+
+    public Escudo getEscudo() {
+        return escudo;
+    }
+
+    public void setEscudo(Escudo escudo) {
+        this.escudo = escudo;
+    }
+
+    public Kraken getKraken() {
+        return kraken;
+    }
+
+    public void setKraken(Kraken kraken) {
+        this.kraken = kraken;
+    }
+
     @Override
     public String toString() {
         return "Player{" +

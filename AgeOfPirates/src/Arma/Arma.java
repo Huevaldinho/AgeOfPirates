@@ -1,4 +1,6 @@
 package Arma;
 
-public class Arma {
+import java.io.Serializable;
+
+public class Arma implements Serializable {
 }

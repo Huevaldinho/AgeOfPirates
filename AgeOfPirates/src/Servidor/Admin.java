@@ -1,6 +1,7 @@
 package Servidor;
 
 import GUI.Player;
+import General.IConstantes;
 import General.Peticion;
 
 import javax.swing.*;
@@ -17,8 +18,8 @@ public class Admin {
 
     public Admin(){
         ultimoPunto=null;
-        players= new ArrayList<Player>();
-        cantidadMaximaPlayers=4;
+        players= new ArrayList<>();
+        cantidadMaximaPlayers= IConstantes.MAX_PLAYERS;
         paneles = new ArrayList<>();
         System.out.println("Instancia el administrador en controlador");
     }
@@ -35,14 +36,12 @@ public class Admin {
     public void AgregarPanelArrayList(Peticion peticion){
         JTextArea panel = (JTextArea) peticion.getDatosEntrada();
         paneles.add(panel);
-        System.out.println("AGREGA TEXFIELD AL ARRAYLIST");
     }
     public  ArrayList<JTextArea> EscribirEnCuadroTexto(Peticion peticion){
         //Castea el arrayList
         ArrayList<JTextArea> objetos =(ArrayList<JTextArea>) peticion.getDatosEntrada();
         int IDjugador = (int) peticion.getDatosSalida();//Saca el ID del que lo envio
         String mensajeEntrante = objetos.get(1).getText();//Saca el mensaje
-        System.out.println("Mensaje entrante: "+mensajeEntrante);
 
         if (mensajeEntrante.compareTo("")==0)//Mensaje vacio == actualiza
             return paneles;
@@ -57,5 +56,14 @@ public class Admin {
     public void InsertarUltimoPunto(Point punto){
         ultimoPunto=punto;
         System.out.println("Ultimo punto en servidor: "+ultimoPunto);
+        //Buscar el jugador en el array y buscar si el punto esta disponible
+    }
+    public void AgregarJugador(Peticion peti){
+        players.add((Player) peti.getDatosEntrada());
+        ImprimirJugadores();
+    }
+    public void ImprimirJugadores(){
+        for (Player actual:players)
+            System.out.println("Jugador registrado en servidor: "+actual.getID());
     }
 }
