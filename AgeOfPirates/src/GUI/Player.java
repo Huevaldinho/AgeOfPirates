@@ -1,17 +1,12 @@
+package GUI;
+
 import Arma.Arma;
+import GUI.Grid;
 import ObjetosJuego.FuenteEnergia;
 import ObjetosJuego.Item;
 import ObjetosJuego.Mercado;
 
-import java.awt.event.KeyEvent;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.Point;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 
 public class Player {
     private ArrayList<Arma> armas;//Para atacar, se muestran en combobox del mapa rival

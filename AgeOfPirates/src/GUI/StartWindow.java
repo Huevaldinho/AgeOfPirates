@@ -1,4 +1,4 @@
-import com.sun.tools.javac.Main;
+package GUI;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

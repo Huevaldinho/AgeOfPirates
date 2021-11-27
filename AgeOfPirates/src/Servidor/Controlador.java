@@ -2,6 +2,8 @@ package Servidor;
 
 import General.Peticion;
 
+import java.awt.*;
+
 public class Controlador {
     private Admin admin;
     public Controlador() {
@@ -34,6 +36,10 @@ public class Controlador {
             case AGREGAR_PANEl_CHAT:{
                 admin.AgregarPanelArrayList(peticionRecibida);
                 peticionRecibida.setDatosSalida(1);
+                break;
+            }
+            case AGREGAR_ULTIMO_PUNTO:{
+                admin.InsertarUltimoPunto((Point) peticionRecibida.getDatosEntrada());
                 break;
             }
         }

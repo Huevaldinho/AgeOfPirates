@@ -1,3 +1,5 @@
+package GUI;
+
 import Cliente.Client;
 import General.IConstantes;
 import General.Peticion;

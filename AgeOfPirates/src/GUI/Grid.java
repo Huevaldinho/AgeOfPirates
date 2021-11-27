@@ -1,16 +1,14 @@
+package GUI;
+
 import Cliente.Client;
+import GUI.CellPane;
 import General.Peticion;
 import General.TipoAccion;
-import ObjetosJuego.Item;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
@@ -20,6 +18,7 @@ public class Grid extends JPanel implements ActionListener {
     public static final int ROWS = 20;
     public static final int COLUMNS = 20;
     private ArrayList<CellPane> celdasOcupadas;
+    private ArrayList<CellPane> totalCeldas;
     private final int DELAY = 25;
     private Timer timer;
     private Player jugador;
@@ -34,6 +33,8 @@ public class Grid extends JPanel implements ActionListener {
      * así que básicamente es la función más importante.
      */
     public Grid() {
+        celdasOcupadas=new ArrayList<>();
+        totalCeldas=new ArrayList<>();
 
         crearTablero();
         //pintarItems();
@@ -55,12 +56,16 @@ public class Grid extends JPanel implements ActionListener {
 
 
     }
-    public int getPlayerID(){
-        return jugador.getID();
-    }
+//    public int getPlayerID(){
+//        return jugador.getID();
+//    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+
+
+
 
     }
     @Override
@@ -111,8 +116,10 @@ public class Grid extends JPanel implements ActionListener {
                 }
                 cellPane.setBorder(border);
                 add(cellPane, gbc);
+                totalCeldas.add(cellPane);
             }
         }
+
 //        String listaItems [] = {"Fuente de Energía ($12000)",
 //                "Mercado ($2000)",
 //                "Mina ($1000)",

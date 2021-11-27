@@ -1,3 +1,8 @@
+package GUI;
+
+import Cliente.Client;
+import General.Peticion;
+import General.TipoAccion;
 import ObjetosJuego.Item;
 
 import javax.swing.*;
@@ -9,8 +14,6 @@ public class CellPane extends JPanel {
 
     private Color defaultBackground;
     private final Point cellCoordinate;
-    private Point  ultimoClick;
-    private Item item;//Item que le mete desde la GUI
 
     public CellPane(Point cellCoordinate) {
         this.cellCoordinate = cellCoordinate;
@@ -28,15 +31,16 @@ public class CellPane extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 //Here is where it is supposed to be
                 System.out.println("Did click cell @ " + getCellCoordinate().x + "x" + getCellCoordinate().y);
-                ultimoClick=new Point(getCellCoordinate().x,getCellCoordinate().y);
+
+                Peticion peti = new Peticion(TipoAccion.AGREGAR_ULTIMO_PUNTO,cellCoordinate);
+                Client cliente = new Client(peti);
+
+
             }
         });
     }
     public Point getCellCoordinate() {
         return cellCoordinate;
-    }
-    public Point getUltimaCeldaClickeada(){
-        return ultimoClick;
     }
 
     @Override
@@ -47,11 +51,4 @@ public class CellPane extends JPanel {
     public void draw(ImageIcon image) {
 
     }
-    public Item getItemEnCelda(){
-        if (item!=null)
-            return item;
-        return null;
-    }
-
-
 }

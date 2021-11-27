@@ -1,8 +1,10 @@
 package Servidor;
 
+import GUI.Player;
 import General.Peticion;
 
 import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -10,9 +12,12 @@ public class Admin {
     private int cantidadPlayersActivos;
     private int cantidadMaximaPlayers;
     private ArrayList<JTextArea> paneles;
-    //private ArrayList<Player> players;
+    private ArrayList<Player> players;
+    private Point ultimoPunto;
+
     public Admin(){
-        //players= new ArrayList<Player>();
+        ultimoPunto=null;
+        players= new ArrayList<Player>();
         cantidadMaximaPlayers=4;
         paneles = new ArrayList<>();
         System.out.println("Instancia el administrador en controlador");
@@ -48,5 +53,9 @@ public class Admin {
             //actual.paintImmediately(actual.getX(), actual.getY(), actual.getWidth(), actual.getHeight());
         }
         return  paneles;
+    }
+    public void InsertarUltimoPunto(Point punto){
+        ultimoPunto=punto;
+        System.out.println("Ultimo punto en servidor: "+ultimoPunto);
     }
 }
