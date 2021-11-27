@@ -18,7 +18,8 @@ public class Player implements Serializable {
     private Grid grid;
     private int ID;
     private int dinero;
-    private boolean estado;
+    private boolean estado;//Ataca o no
+    private boolean listo;
     private Barco barco;
     private Escudo escudo;
     private Kraken kraken =null;
@@ -26,17 +27,19 @@ public class Player implements Serializable {
 
 
     public Player() {
-        barco = null;
-        escudo = null;
-        kraken = null;
         estado=false;//Aun no puede atacar
+        listo = false;
+        dinero=4000;
+
         items=new ArrayList<>();
         armas=new ArrayList<>();
-        dinero=4000;
 
         items.add(new FuenteEnergia());
         items.add(new Mercado());
-
+        //Estos maes no extienden de item ni arma asi que los manejamos individualmente
+        barco = null;
+        escudo = null;
+        kraken = null;
     }
     public void setID(int id){
         this.ID=id;
