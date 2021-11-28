@@ -119,8 +119,8 @@ public class Grid extends JPanel implements ActionListener, Serializable {
                 totalCeldas.add(cellPane);
             }
         }
-        JOptionPane.showMessageDialog(null,"El primer Click en el tablero es para colocar la Fuente de Energia" +
-                "\nEl segundo Click es para colocar el Mercado");
+//        JOptionPane.showMessageDialog(null,"El primer Click en el tablero es para colocar la Fuente de Energia" +
+//                "\nEl segundo Click es para colocar el Mercado");
     }
     public boolean dibujarCelda (Point punto , Item item){ //dibuja la imagen en la celda, con el punto y el item
         for (CellPane celda : totalCeldas)

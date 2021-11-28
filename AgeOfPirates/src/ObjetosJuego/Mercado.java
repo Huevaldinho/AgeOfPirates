@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Mercado extends Item{
     public static Arma tipoArma;
     public Mercado(){
-        loadImage();
+        //loadImage();
         this.nombre = "Mercado";
         this.precio = 2000;
         super.numero=setIDItem();

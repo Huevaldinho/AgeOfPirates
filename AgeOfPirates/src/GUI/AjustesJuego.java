@@ -18,9 +18,11 @@ public class AjustesJuego extends JFrame implements ActionListener{
     private JLabel lblAcero;
     private JButton comprarButton;
     private JComboBox comboBoxInventario;
+    private JButton insertarItemAlMarButton;
     public int id;
     private final int DELAY = 3000;//3 segundo
     private Timer timer;
+    private boolean cambiosEnInventario;
 
     public AjustesJuego() {
         super("Opciones del Juego");
@@ -28,6 +30,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.pack();
 
+        cambiosEnInventario=true;
         timer = new Timer(DELAY,this);
         timer.start();
 
@@ -45,6 +48,21 @@ public class AjustesJuego extends JFrame implements ActionListener{
 
             }
         });
+        insertarItemAlMarButton.addActionListener(new ActionListener() {//BOTON INSERTAR ITEM AL MAR
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int seleccionado = comboBoxInventario.getSelectedIndex();
+                if (seleccionado>=0){
+                    System.out.println("Item selecionado: "+comboBoxInventario.getItemAt(seleccionado));
+                    //LLAMAR FUNCION PARA AUTOMATIZAR LOS PUNTOS, OTRA PARA HACER LA PETICION Y LLAMAR OTRA VEZ A
+                    //CREAR COMBOBOX DEL INVENTARIO (en hacer la peticion el cambiosEnInventario se pone true)
+
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null,"Debe seleccionar un item del ComboBox...");
+                }
+            }
+        });
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -59,15 +77,19 @@ public class AjustesJuego extends JFrame implements ActionListener{
 //        }
     }
     public void SetComboBoxInventario(){
-        Peticion peticion = new Peticion(TipoAccion.SET_INVENTARIO_COMBOBOX,id);
-        Client conexion = new Client(peticion);
-        String [] items = (String[]) conexion.getRespuestaServer();
-        for (int i=0;i<items.length;i++){
+        if (cambiosEnInventario){
+            Peticion peticion = new Peticion(TipoAccion.SET_INVENTARIO_COMBOBOX,id);
+            Client conexion = new Client(peticion);
+            String [] items = (String[]) conexion.getRespuestaServer();
             System.out.println("CANTIDAD DE ITEMS: "+items.length);
-            comboBoxInventario.addItem(items[i]);
+            for (int i=0;i<items.length;i++){
+                comboBoxInventario.addItem(items[i]);
+            }
+            comboBoxInventario.setVisible(true);
+            comboBoxInventario.setEditable(false);
+            cambiosEnInventario=false;//ESTA VARA SE PONE EN TRUE CUANDO METE EL ITEM A LA INTERFAZ Y
+            //CUANDO COMPRA UN NUEVO ITEM
         }
-        comboBoxInventario.setVisible(true);
-        comboBoxInventario.setEditable(false);
     }
     public void ActualizarDinero(){//ACTUALIZA LA ETIQUETA DEL DINERO
         Peticion peticionActualizaDinero = new Peticion(TipoAccion.ACTUALIZAR_DINERO,id);
