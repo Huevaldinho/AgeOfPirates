@@ -208,4 +208,7 @@ public class Admin {
             }
         }
     }
+    public String ActualizarChat(){
+        return paneles.get(0).getText();
+    }
 }

@@ -89,6 +89,9 @@ public class Controlador {
                 admin.SetPuntosItem(peticionRecibida);
                 peticionRecibida.setDatosSalida(true);
             }
+            case ACTUALIZAR_CHAT:{
+                peticionRecibida.setDatosSalida(admin.ActualizarChat());
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }

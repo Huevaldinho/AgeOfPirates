@@ -13,12 +13,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements ActionListener {
     JFrame frame;
     JPanel mapaJugador;
     JPanel mensajes;
     JPanel mapaRival;
     private int jugadorID;
+    private JTextArea chat;
+    private final int DELAY = 3000;//3 segundo
+    private Timer timer;
 
     MainWindow(){
         //ANTES QUE HAGA CUALQUIER COSA DEBE VERIFICAR QUE PUEDE JUGAR (Hay menos de 4 players)
@@ -31,6 +34,8 @@ public class MainWindow extends JFrame {
             System.exit(0);
         }
         jugadorID=(int)puedeSeguir+1;
+        timer = new Timer(DELAY,this);
+        timer.start();
         createUIComponents();
     }
     /**
@@ -64,6 +69,7 @@ public class MainWindow extends JFrame {
         cuadroTextoChat.setPreferredSize(new Dimension(300,200));
         cuadroTextoChat.setEditable(false);
         mensajes.add(cuadroTextoChat);
+        chat=cuadroTextoChat;
 
         Peticion petiAgregarPanel = new Peticion(TipoAccion.AGREGAR_PANEl_CHAT,cuadroTextoChat);
         Client clienteAgregarPanel = new Client(petiAgregarPanel);
@@ -101,6 +107,9 @@ public class MainWindow extends JFrame {
 
             }
         });
+
+
+
         //Parte para ingresar los datos del juego
         JTextArea bitacora = new JTextArea();
         bitacora.setPreferredSize(new Dimension(300,200));
@@ -134,5 +143,14 @@ public class MainWindow extends JFrame {
         frame.setLayout(null);
         frame.setVisible(true);
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        //Hilo para actualizar el chat
+        Peticion actualizarChat = new Peticion(TipoAccion.ACTUALIZAR_CHAT,null);
+        Client conexion = new Client(actualizarChat);
+        String texto = (String) conexion.getRespuestaServer();
+        chat.setText(texto);
     }
 }
