@@ -66,4 +66,13 @@ public class Admin {
         for (Player actual:players)
             System.out.println("Jugador registrado en servidor: "+actual.getID());
     }
+    public void JugadorListo(Peticion peticion){
+        int idJugador= (int) peticion.getDatosEntrada();
+        for (Player actual:players){
+            if (actual.getID()==idJugador){
+                actual.setListo(true);
+                System.out.println("Jugador listo:"+actual.getID());
+            }
+        }
+    }
 }

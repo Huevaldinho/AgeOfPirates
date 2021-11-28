@@ -35,17 +35,22 @@ public class Controlador {
             }
             case AGREGAR_PANEl_CHAT:{
                 admin.AgregarPanelArrayList(peticionRecibida);
-                peticionRecibida.setDatosSalida(1);
+                peticionRecibida.setDatosSalida(1);//No ocupa pero por aquello
                 break;
             }
             case AGREGAR_ULTIMO_PUNTO:{
                 admin.InsertarUltimoPunto((Point) peticionRecibida.getDatosEntrada());
-                peticionRecibida.setDatosSalida(1);
+                peticionRecibida.setDatosSalida(1);//No ocupa pero por aquello
                 break;
             }
             case AGREGAR_JUGADOR:{
                 admin.AgregarJugador(peticionRecibida);
-                peticionRecibida.setDatosSalida(1);
+                peticionRecibida.setDatosSalida(1);//No ocupa pero por aquello
+                break;
+            }
+            case JUGADOR_LISTO:{
+                admin.JugadorListo(peticionRecibida);
+                peticionRecibida.setDatosSalida(1);//No ocupa pero por aquello
                 break;
             }
         }

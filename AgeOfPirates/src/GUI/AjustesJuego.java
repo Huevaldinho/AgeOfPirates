@@ -1,5 +1,9 @@
 package GUI;
 
+import Cliente.Client;
+import General.Peticion;
+import General.TipoAccion;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,10 +21,11 @@ public class AjustesJuego extends JFrame{
         setContentPane(panel);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.pack();
-        btnListo.addActionListener(new ActionListener() {
+        btnListo.addActionListener(new ActionListener() {//BOTON LISTO JUGADOR
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Listo al server");
+                Peticion peticion= new Peticion(TipoAccion.JUGADOR_LISTO,id);
+                Client conexion = new Client(peticion);
             }
         });
     }

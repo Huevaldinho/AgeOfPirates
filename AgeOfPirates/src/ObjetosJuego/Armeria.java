@@ -13,6 +13,7 @@ public class Armeria extends Item{
         loadImage();
         this.precio = 1500;
         this.nombre = "Armería";
+        super.numero=setIDItem();
     }
     private void loadImage(){
                 try {

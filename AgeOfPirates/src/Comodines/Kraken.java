@@ -6,4 +6,8 @@ import java.util.ArrayList;
 
 public class Kraken implements Serializable {
     ArrayList<Point> puntosUbicacion = new ArrayList<>();
+    String nombre;
+    public Kraken(){
+        nombre="Kraken";
+    }
 }

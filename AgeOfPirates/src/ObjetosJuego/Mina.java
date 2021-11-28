@@ -13,6 +13,7 @@ public class Mina extends Item{
         loadImage();
         this.nombre = "Mina";
         this.precio = 1000;
+        super.numero=setIDItem();
     }
     private void loadImage(){
         try {

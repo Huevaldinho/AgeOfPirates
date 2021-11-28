@@ -13,6 +13,7 @@ public class FuenteEnergia extends Item{
         loadImage();
         this.nombre = "Fuente de Energía";
         this.precio = 12000;
+        super.numero=setIDItem();
     }
     private void loadImage(){
         try {

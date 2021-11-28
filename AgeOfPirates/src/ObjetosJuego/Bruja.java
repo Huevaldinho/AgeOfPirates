@@ -13,6 +13,7 @@ public class Bruja extends Item{
         loadImage();
         this.nombre = "Templo de la Bruja";
         this.precio = 2500;
+        super.numero=setIDItem();
     }
     private void loadImage(){
         try {

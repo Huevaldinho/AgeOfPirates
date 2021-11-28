@@ -13,6 +13,7 @@ public class Mercado extends Item{
         loadImage();
         this.nombre = "Mercado";
         this.precio = 2000;
+        super.numero=setIDItem();
     }
     private void loadImage(){
         try {

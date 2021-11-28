@@ -6,4 +6,8 @@ import java.util.ArrayList;
 
 public class Escudo implements Serializable {
     ArrayList<Point> puntosUbicacion = new ArrayList<>();
+    String nombre;
+    public Escudo(){
+        nombre="Escudo";
+    }
 }

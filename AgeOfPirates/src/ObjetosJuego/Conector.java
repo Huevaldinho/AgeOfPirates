@@ -13,6 +13,7 @@ public class Conector extends Item{
         loadImage();
         this.nombre = "Conectores";
         this.precio = 100;
+        super.numero=setIDItem();
     }
     private void loadImage(){
         try {
