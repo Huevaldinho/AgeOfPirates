@@ -26,12 +26,9 @@ public class MainWindow extends JFrame {
         Client petiParaContinuar = new Client(peticionParaVerSiContinua);
         Object puedeSeguir = petiParaContinuar.getRespuestaServer();
         if ((int)puedeSeguir >= IConstantes.MAX_PLAYERS){
-            System.out.println("\nYA ESTAN TODOS  LOS JUGADORES CONECTADOS, ASI QUE NO PUEDE JUGAR");
             JOptionPane.showMessageDialog(this,"Maxima cantidad  de usuarios alcanzada","Error de cantidad de usuarios",
                     JOptionPane.ERROR_MESSAGE);
             System.exit(0);
-        }else{
-            System.out.println("\nPuede jugar, actualmente hay: "+(int)puedeSeguir+" jugadores conectados");
         }
         jugadorID=(int)puedeSeguir+1;
         createUIComponents();
@@ -68,11 +65,8 @@ public class MainWindow extends JFrame {
         cuadroTextoChat.setEditable(false);
         mensajes.add(cuadroTextoChat);
 
-        System.out.println("AGREGAR PANEL");
         Peticion petiAgregarPanel = new Peticion(TipoAccion.AGREGAR_PANEl_CHAT,cuadroTextoChat);
         Client clienteAgregarPanel = new Client(petiAgregarPanel);
-        System.out.println("Respuesta: "+clienteAgregarPanel.getRespuestaServer());
-        System.out.println("TERMINA AGREGAR PANEL");
 
         JTextArea mensaje = new JTextArea();
         mensaje.setPreferredSize(new Dimension(150,75));

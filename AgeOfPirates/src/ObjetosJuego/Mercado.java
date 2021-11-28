@@ -11,9 +11,10 @@ public class Mercado extends Item{
     public static Arma tipoArma;
     public Mercado(){
         //loadImage();
-        this.nombre = "Mercado";
-        this.precio = 2000;
+        super.nombre = "Mercado";
+        super.precio = 2000;
         super.numero=setIDItem();
+        super.cantidadDeEspacios=2;
     }
     private void loadImage(){
         try {

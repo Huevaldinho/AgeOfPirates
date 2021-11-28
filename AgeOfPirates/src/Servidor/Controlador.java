@@ -39,7 +39,7 @@ public class Controlador {
                 break;
             }
             case AGREGAR_ULTIMO_PUNTO:{
-                admin.InsertarUltimoPunto((Point) peticionRecibida.getDatosEntrada());
+                admin.InsertarUltimoPunto(peticionRecibida);
                 peticionRecibida.setDatosSalida(1);//No ocupa pero por aquello
                 break;
             }
@@ -70,6 +70,20 @@ public class Controlador {
             }
             case SET_INVENTARIO_COMBOBOX:{
                 peticionRecibida.setDatosSalida(admin.SetComboBoxInventario(peticionRecibida));
+                break;
+            }
+            case INSERTAR_ITEM_EN_GRID:{
+                peticionRecibida.setDatosSalida(admin.InsertarItemEnGrid(peticionRecibida));
+                break;
+            }
+            case OBTENER_ULTIMO_PUNTO:{
+                peticionRecibida.setDatosSalida(admin.GetUltimoPunto(peticionRecibida));
+                break;
+            }
+            case CONSULTA_CELDA_DISPONIBLE:{
+                //True es que esta disponible y false es que esta ocupada
+                peticionRecibida.setDatosSalida(admin.ConsultarPuntoDisponible(peticionRecibida));
+                break;
             }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados

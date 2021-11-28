@@ -3,6 +3,7 @@ package Servidor;
 import GUI.Player;
 import General.IConstantes;
 import General.Peticion;
+import ObjetosJuego.Item;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,10 @@ public class Admin {
     private ArrayList<JTextArea> paneles;
     private ArrayList<Player> players;
     private Point ultimoPunto;
+    private Point ultimoPuntoJugador1;
+    private Point ultimoPuntoJugador2;
+    private Point ultimoPuntoJugador3;
+    private Point ultimoPuntoJugador4;
 
     public Admin(){
         ultimoPunto=null;
@@ -53,10 +58,40 @@ public class Admin {
         }
         return  paneles;
     }
-    public void InsertarUltimoPunto(Point punto){
-        ultimoPunto=punto;
-        System.out.println("Ultimo punto en servidor: "+ultimoPunto);
-        //Buscar el jugador en el array y buscar si el punto esta disponible
+    public void InsertarUltimoPunto(Peticion peticion){
+        int jugador = (int)peticion.getDatosSalida();
+        Point punto =(Point)peticion.getDatosEntrada();
+        switch (jugador){
+            case 1:{
+                ultimoPuntoJugador1=punto;
+                System.out.println("Ultimo punto jugador 1: "+punto);
+                break;
+            }
+            case 2:{
+                ultimoPuntoJugador2=punto;
+                System.out.println("Ultimo punto jugador 2: "+punto);
+                break;
+            } case 3:{
+                ultimoPuntoJugador3=punto;
+                System.out.println("Ultimo punto jugador 3: "+punto);
+                break;
+            }
+            case 4:{
+                ultimoPuntoJugador4=punto;
+                System.out.println("Ultimo punto jugador 4: "+punto);
+                break;
+            }
+        }
+    }
+    public Point GetUltimoPunto(Peticion peticion){
+        int jugadorQuePide = (int) peticion.getDatosEntrada();
+        switch (jugadorQuePide){
+            case 1: return ultimoPuntoJugador1;
+            case 2: return ultimoPuntoJugador2;
+            case 3: return ultimoPuntoJugador3;
+            case 4: return ultimoPuntoJugador4;
+        }
+        return null;
     }
     public void AgregarJugador(Peticion peti){
         players.add((Player) peti.getDatosEntrada());
@@ -123,4 +158,33 @@ public class Admin {
         }
         return null;
     }
+    public boolean InsertarItemEnGrid(Peticion peticion){
+
+        return false;
+    }
+    public boolean ConsultarPuntoDisponible(Peticion peticion){
+        //Busca al jugador
+        Player jugadorBuscado = BuscarJugadorPorID((int) peticion.getDatosEntrada());
+        //Castea el punto que preguntan si esta disponible
+        Point puntoBuscado = (Point)peticion.getDatosSalida();
+        //For para recorrer los items del jugador
+        for (Item actual:jugadorBuscado.getItems()){
+            //Pregunta si el item actual tiene ese punto en sus puntos ubicacion
+            ArrayList<Point> puntosDeActual = actual.getPuntosUbicacion();
+            for (Point punto:puntosDeActual){
+                if (punto.equals(puntoBuscado)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public Player BuscarJugadorPorID(int id){
+        for (Player actual: players){
+            if (actual.getID()==id)
+                return actual;
+        }
+        return null;
+    }
+
 }

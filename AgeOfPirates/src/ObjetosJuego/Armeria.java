@@ -11,9 +11,10 @@ public class Armeria extends Item{
     public static Arma tipoArma;
     public Armeria(){
         loadImage();
-        this.precio = 1500;
-        this.nombre = "Armería";
+        super.precio = 1500;
+        super.nombre = "Armería";
         super.numero=setIDItem();
+        //super.cantidadDeEspacios=1;
     }
     private void loadImage(){
                 try {

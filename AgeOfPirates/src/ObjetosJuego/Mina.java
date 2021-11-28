@@ -9,11 +9,14 @@ import java.io.IOException;
 
 public class Mina extends Item{
     public static Arma tipoArma;
+    private int velocidad;
+    private int cantidadProcesamiento;
     public Mina(){
         loadImage();
-        this.nombre = "Mina";
-        this.precio = 1000;
+        super.nombre = "Mina";
+        super.precio = 1000;
         super.numero=setIDItem();
+        super.cantidadDeEspacios=2;
     }
     private void loadImage(){
         try {

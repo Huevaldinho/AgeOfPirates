@@ -35,14 +35,6 @@ public class Grid extends JPanel implements ActionListener, Serializable {
      * así que básicamente es la función más importante.
      */
     public Grid(){
-        totalCeldas=new ArrayList<>();
-
-        crearTablero();
-        //pintarItems();
-
-        timer = new Timer(DELAY,this);
-        timer.start();
-
         //REGISTRA EL JUGADOR 1
         Peticion peticionRegistrarJugador = new Peticion(TipoAccion.REGISTRAR_PLAYER,null);
         Client conexionRegistrarJugador = new Client(peticionRegistrarJugador);
@@ -53,6 +45,16 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         jugador.setID((int)respuestaRegistrarJugador);//Se le pasa el ID al player
         //Jugador ahora tiene grid
         //jugador.setGrid(this);
+
+        totalCeldas=new ArrayList<>();
+
+        crearTablero();
+        //pintarItems();
+
+        timer = new Timer(DELAY,this);
+        timer.start();
+
+
 
         Peticion petiAgregarJugador = new Peticion(TipoAccion.AGREGAR_JUGADOR,jugador);
         Client conexion = new Client(petiAgregarJugador);
@@ -116,6 +118,7 @@ public class Grid extends JPanel implements ActionListener, Serializable {
                 }
                 cellPane.setBorder(border);
                 add(cellPane, gbc);
+                cellPane.IDJugador=jugador.getID();
                 totalCeldas.add(cellPane);
             }
         }

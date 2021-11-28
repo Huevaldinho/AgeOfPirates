@@ -16,6 +16,7 @@ public class CellPane extends JPanel {
     private Color defaultBackground;
     private final Point cellCoordinate;
     public boolean usada;
+    public int IDJugador;
 
     public CellPane(Point cellCoordinate) {
         usada = false;
@@ -36,6 +37,7 @@ public class CellPane extends JPanel {
                 System.out.println("Did click cell @ " + getCellCoordinate().x + "x" + getCellCoordinate().y);
 
                 Peticion peti = new Peticion(TipoAccion.AGREGAR_ULTIMO_PUNTO,cellCoordinate);
+                peti.setDatosSalida(IDJugador);
                 Client cliente = new Client(peti);
 
 

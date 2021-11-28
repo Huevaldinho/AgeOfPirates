@@ -11,9 +11,10 @@ public class Conector extends Item{
     public static Arma tipoArma;
     public Conector(){
         loadImage();
-        this.nombre = "Conectores";
-        this.precio = 100;
+        super.nombre = "Conectores";
+        super.precio = 100;
         super.numero=setIDItem();
+        super.cantidadDeEspacios=1;
     }
     private void loadImage(){
         try {

@@ -11,9 +11,10 @@ public class FuenteEnergia extends Item{
     public static Arma tipoArma;
     public FuenteEnergia(){
         //loadImage();
-        this.nombre = "Fuente de Energía";
-        this.precio = 12000;
+        super.nombre = "Fuente de Energía";
+        super.precio=12000;
         super.numero=setIDItem();
+        super.cantidadDeEspacios=4;
     }
     private void loadImage(){
         try {
