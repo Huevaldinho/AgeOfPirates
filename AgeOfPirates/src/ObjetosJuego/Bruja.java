@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Bruja extends Item{
     public static Arma tipoArma;
-    Bruja(){
+    public Bruja(){
         loadImage();
         this.nombre = "Templo de la Bruja";
         this.precio = 2500;

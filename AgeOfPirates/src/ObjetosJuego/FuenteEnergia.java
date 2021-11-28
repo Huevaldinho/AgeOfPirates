@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class FuenteEnergia extends Item{
     public static Arma tipoArma;
-    FuenteEnergia(){
+    public FuenteEnergia(){
         loadImage();
         this.nombre = "Fuente de Energía";
         this.precio = 12000;

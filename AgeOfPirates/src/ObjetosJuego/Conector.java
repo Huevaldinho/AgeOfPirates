@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Conector extends Item{
     public static Arma tipoArma;
-    Conector(){
+    public Conector(){
         loadImage();
         this.nombre = "Conectores";
         this.precio = 100;

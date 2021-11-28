@@ -23,23 +23,40 @@ public class Player implements Serializable {
 
     private int ID;
     private int dinero;
+    private int acero;
+
     private boolean estado;//Ataca o no
     private boolean listo;
+    private boolean vivo;
 
     public Player() {
+        vivo=true;//Se muere cuando se queda sin items
         estado=false;//Aun no puede atacar
         listo = false;
         dinero=4000;
+        acero=0;
 
         items=new ArrayList<>();
         armas=new ArrayList<>();
 
-//      items.add(new FuenteEnergia());
-//      items.add(new Mercado());
+        //items.add(new FuenteEnergia());
+        //items.add(new Mercado());
         //Estos objetos no extienden de item ni arma, asi que los manejamos individualmente
         barco = null;
         escudo = null;
         kraken = null;
+    }
+    public void setAcero(int acero){
+        this.acero=acero;
+    }
+    public int getAcero(){
+        return acero;
+    }
+    public boolean isVivo(){
+        return vivo;
+    }
+    public void setVivo(boolean vivo){
+        this.vivo=vivo;
     }
     public boolean isListo() {
         return listo;
@@ -109,7 +126,7 @@ public class Player implements Serializable {
                 ", dinero=" + dinero +
                 ", estado=" + estado +
                 ", listo=" + listo +
-                "armas=" + armas +
+                ", armas=" + armas +
                 ", items=" + items +
                 ", grid=" + grid +
                 '}';

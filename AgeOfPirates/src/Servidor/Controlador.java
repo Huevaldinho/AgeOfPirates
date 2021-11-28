@@ -53,6 +53,24 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(1);//No ocupa pero por aquello
                 break;
             }
+            case ACTUALIZAR_DINERO:{
+                peticionRecibida.setDatosSalida(admin.ActualizarDinero(peticionRecibida));
+                break;
+            }
+            case ACTUALIZAR_ACERO:{
+                peticionRecibida.setDatosSalida(admin.ActualizarAcero(peticionRecibida));
+            }
+            case ELIMINAR_JUGADOR_POR_ITEMS:{
+                admin.EliminarJugadorPorItems();
+                break;
+            }
+            case ELIMINAR_JUGADOR_POR_ID:{
+                admin.EliminarJugadorPorID(peticionRecibida);
+                break;
+            }
+            case SET_INVENTARIO_COMBOBOX:{
+                peticionRecibida.setDatosSalida(admin.SetComboBoxInventario(peticionRecibida));
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }

@@ -51,7 +51,6 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         //ESTE ES EL ID QUE SE LE VA A ASIGNAR AL PLAYER
         jugador = new Player();
         jugador.setID((int)respuestaRegistrarJugador);//Se le pasa el ID al player
-        System.out.println("Jugador recibe ID del servidor:"+jugador.getID());
         //Jugador ahora tiene grid
         //jugador.setGrid(this);
 
@@ -59,11 +58,11 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         Client conexion = new Client(petiAgregarJugador);
         Object respuesta = conexion.getRespuestaServer();
 
-        System.out.println("Respuesta registrar jugador: "+respuesta);
         ajustesJuego = new AjustesJuego();
+
         ajustesJuego.id=jugador.getID();
         ajustesJuego.setVisible(true);
-
+        ajustesJuego.lblAjustesJugador.setText("Ajustes jugador: "+jugador.getID());
 
     }
 //    public int getPlayerID(){
@@ -120,6 +119,8 @@ public class Grid extends JPanel implements ActionListener, Serializable {
                 totalCeldas.add(cellPane);
             }
         }
+        JOptionPane.showMessageDialog(null,"El primer Click en el tablero es para colocar la Fuente de Energia" +
+                "\nEl segundo Click es para colocar el Mercado");
     }
     public boolean dibujarCelda (Point punto , Item item){ //dibuja la imagen en la celda, con el punto y el item
         for (CellPane celda : totalCeldas)

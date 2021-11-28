@@ -75,4 +75,52 @@ public class Admin {
             }
         }
     }
+    public int ActualizarDinero(Peticion peticion){
+        int IDJugador = (int) peticion.getDatosEntrada();
+        for (Player actual:players){
+            if (actual.getID()==IDJugador){
+                return actual.getDinero();
+            }
+        }
+        return 0;
+    }
+    public int ActualizarAcero(Peticion peticion){
+        int IDJugador=(int)peticion.getDatosEntrada();
+        for (Player actual:players){
+            if (actual.getID()==IDJugador){
+                int acero = actual.getAcero();
+                return acero;
+            }
+        }
+        return 0;
+    }
+    public void EliminarJugadorPorID(Peticion peticion){
+        int buscado= (int) peticion.getDatosEntrada();//Castea el numero que le pasan
+        for (Player actual:players){//Busca en lista de jugadores
+            if (actual.getID()==buscado){//Lo encuentra
+                actual.setVivo(false);//Lo mata
+            }
+        }
+    }
+    public void EliminarJugadorPorItems(){
+        for (int i=0;i<players.size();i++){
+            if (players.get(i).getItems().size()==0){//Se quedo sin items
+                players.get(i).setVivo(false);//Lo mata
+            }
+        }
+    }
+    public String [] SetComboBoxInventario(Peticion peticion){
+        int buscado = (int) peticion.getDatosEntrada();
+        for (Player actual:players){
+            if (actual.getID()==buscado){
+                //Llena el array con los nombres de los items que tiene el player
+                String [] items = new String[actual.getItems().size()];
+                for (int i=0;i<items.length;i++){
+                    items[i] = actual.getItems().get(i).nombre;
+                }
+                return items;
+            }
+        }
+        return null;
+    }
 }

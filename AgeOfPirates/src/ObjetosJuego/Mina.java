@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Mina extends Item{
     public static Arma tipoArma;
-    Mina(){
+    public Mina(){
         loadImage();
         this.nombre = "Mina";
         this.precio = 1000;
