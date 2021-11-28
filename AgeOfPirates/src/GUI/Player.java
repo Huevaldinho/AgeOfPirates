@@ -28,8 +28,10 @@ public class Player implements Serializable {
     private boolean estado;//Ataca o no
     private boolean listo;
     private boolean vivo;
+    private boolean cambiosEnInventario;
 
     public Player() {
+        cambiosEnInventario=false;
         vivo=true;//Se muere cuando se queda sin items
         estado=false;//Aun no puede atacar
         listo = false;
@@ -46,6 +48,14 @@ public class Player implements Serializable {
         escudo = null;
         kraken = null;
     }
+
+    public boolean isCambiosEnInventario() {
+        return cambiosEnInventario;
+    }
+    public void setCambiosEnInventario(boolean cambiosEnInventario) {
+        this.cambiosEnInventario = cambiosEnInventario;
+    }
+
     public void setAcero(int acero){
         this.acero=acero;
     }

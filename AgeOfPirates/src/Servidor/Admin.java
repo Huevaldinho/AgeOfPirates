@@ -206,10 +206,16 @@ public class Admin {
                 actual.setPuntosUbicacion(puntos);//Agrega los puntos
                 actual.setAgregadoAlGrid(true);//Cambia el estado a true porque ya se le agrego al grid o se va a hacer
                 System.out.println("Inserto los puntos al item: "+actual.getNombre()+" "+actual.getPuntosUbicacion());
+                jugador.setCambiosEnInventario(true);
+                System.out.println("CAMBIOS EN INVENTARIO JUGADOR: "+jugador.getID()+" "+jugador.isCambiosEnInventario());
             }
         }
     }
     public String ActualizarChat(){
         return paneles.get(0).getText();
+    }
+    public void SetCambiosEnInventarioJugador(Peticion peticion){
+        Player jugador = BuscarJugadorPorID((int)peticion.getDatosEntrada());
+        jugador.setCambiosEnInventario(false);
     }
 }

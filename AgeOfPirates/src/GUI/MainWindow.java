@@ -146,7 +146,7 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {//ACTUALIZAR CHAT EN TIEMPO REAL
         //Hilo para actualizar el chat
         Peticion actualizarChat = new Peticion(TipoAccion.ACTUALIZAR_CHAT,null);
         Client conexion = new Client(actualizarChat);

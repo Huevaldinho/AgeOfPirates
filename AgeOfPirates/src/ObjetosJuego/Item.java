@@ -17,6 +17,7 @@ public class Item implements Serializable {
     public int cantidadDeEspacios;
     public BufferedImage imagen;
     ArrayList<Point> puntosUbicacion;
+    public String rutaImage;
 
     public Item(){
 
@@ -39,6 +40,15 @@ public class Item implements Serializable {
     }
     public String getNombre(){
         return nombre;
+    }
+    public BufferedImage loadImage(){
+        try {
+            return ImageIO.read(new File(rutaImage));
+        } catch (IOException e) {
+            System.out.println("No se pudo abrir la imagen");
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

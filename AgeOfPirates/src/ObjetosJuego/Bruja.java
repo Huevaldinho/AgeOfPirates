@@ -11,20 +11,11 @@ import java.util.ArrayList;
 public class Bruja extends Item{
     public static Arma tipoArma;
     public Bruja(){
-        loadImage();
         this.nombre = "Templo de la Bruja";
         this.precio = 2500;
         super.numero=setIDItem();
         super.agregadoAlGrid=false;
         super.puntosUbicacion= new ArrayList<>();
+        super.rutaImage="images/witch.png";
     }
-    private void loadImage(){
-        try {
-            imagen = ImageIO.read(new File("images/witch.png"));
-        } catch (IOException e) {
-            System.out.println("No se pudo abrir la imagen");
-            e.printStackTrace();
-        }
-    }
-
 }

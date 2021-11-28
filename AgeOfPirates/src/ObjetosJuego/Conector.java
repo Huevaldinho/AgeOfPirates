@@ -11,21 +11,12 @@ import java.util.ArrayList;
 public class Conector extends Item{
     public static Arma tipoArma;
     public Conector(){
-        loadImage();
         super.nombre = "Conector";
         super.precio = 100;
         super.numero=setIDItem();
         super.cantidadDeEspacios=1;
         super.agregadoAlGrid=false;
         super.puntosUbicacion= new ArrayList<>();
+        super.rutaImage="images/conector.png";
     }
-    private void loadImage(){
-        try {
-            imagen = ImageIO.read(new File("images/conector.png"));
-        } catch (IOException e) {
-            System.out.println("No se pudo abrir la imagen");
-            e.printStackTrace();
-        }
-    }
-
 }

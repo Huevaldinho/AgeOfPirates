@@ -88,9 +88,20 @@ public class Controlador {
             case SET_PUNTOS_ITEM:{
                 admin.SetPuntosItem(peticionRecibida);
                 peticionRecibida.setDatosSalida(true);
+                break;
             }
             case ACTUALIZAR_CHAT:{
                 peticionRecibida.setDatosSalida(admin.ActualizarChat());
+                break;
+            }
+            case GET_JUGADOR_POR_ID:{
+                peticionRecibida.setDatosSalida(admin.BuscarJugadorPorID((int)peticionRecibida.getDatosEntrada()));
+                break;
+            }
+            case SET_CAMBIOS_JUGADOR_ITEMS:{
+                admin.SetCambiosEnInventarioJugador(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
             }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados

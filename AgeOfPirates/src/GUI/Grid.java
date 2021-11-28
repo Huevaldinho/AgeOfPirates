@@ -73,11 +73,12 @@ public class Grid extends JPanel implements ActionListener, Serializable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-/*
-       Primer click del tablero es para colocar la fuente de poder
-       Segundo para el mercado.
-       Seleccionar celda se autocompleta, para esto tiene que revisar
- */
+
+        Peticion peti = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,jugador.getID());
+        Client conexion = new Client(peti);
+        jugador = (Player) conexion.getRespuestaServer();
+
+        dibujarCelda();
     }
     @Override
     public void paintComponent(Graphics g) {
@@ -122,19 +123,31 @@ public class Grid extends JPanel implements ActionListener, Serializable {
                 totalCeldas.add(cellPane);
             }
         }
-//        JOptionPane.showMessageDialog(null,"El primer Click en el tablero es para colocar la Fuente de Energia" +
-//                "\nEl segundo Click es para colocar el Mercado");
     }
-    public boolean dibujarCelda (Point punto , Item item){ //dibuja la imagen en la celda, con el punto y el item
-        for (CellPane celda : totalCeldas)
-            if (celda.getCellCoordinate().x == punto.x && celda.getCellCoordinate().y == punto.y) {
-                if (!celda.usada){
-                    celda.draw(item.imagen);
-                    celda.usada = true;
-                    return true;
+    public void dibujarCelda(){
+        if (jugador.isCambiosEnInventario()){
+            System.out.println("\nDIBUJAR CELDA");
+            for (Item itemActual: jugador.getItems()){
+                if (itemActual.getAgregadoAlGrid()){
+                    for (Point puntoActual:itemActual.getPuntosUbicacion()){
+                        CellPane celdaItem = obtenerCelda(puntoActual);
+                        celdaItem.draw(itemActual.loadImage());
+
+                    }
                 }
             }
-        return false;
+            jugador.setCambiosEnInventario(false);
+            Peticion cambiarEstadoJugador = new Peticion(TipoAccion.SET_CAMBIOS_JUGADOR_ITEMS,jugador.getID());
+            Client conexion = new Client(cambiarEstadoJugador);
+        }
+    }
+    public CellPane obtenerCelda(Point punto){
+
+        for (CellPane celda : totalCeldas){
+            if (celda.getCellCoordinate().equals(punto))
+                return celda;
+        }
+        return null;
     }
 }
 

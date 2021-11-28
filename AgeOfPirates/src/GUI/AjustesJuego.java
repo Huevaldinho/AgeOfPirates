@@ -122,7 +122,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 peti.setDatosSalida(puntos);//Puntos
                 peti.setDatosExtra(comboBoxInventario.getSelectedItem().toString());//Nombre item
                 Client cliente = new Client(peti);
-                cambiosEnInventario=true;
+                cambiosEnInventario=true;//Se utiliza para actualizar el combobox de inventario
             }
         }else{
             System.out.println("TIENE QUE SELECIONAR EL ITEM, LUEGO EL PUNTO Y POR ULTIMO DARLE AL BOTON");
@@ -140,6 +140,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
                     System.out.println("SELECCIONO FUENTE DE ENERGIA SACAR LOS PUNTOS QUE FALTAN");
                     puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
                     //hasta que confirme los 4 puntos
+                    //puntos = //funcion para sacar puntos necesarios.
                     break;
                 }
                 case "Mercado":{//Usa 2 puntos
@@ -184,5 +185,8 @@ public class AjustesJuego extends JFrame implements ActionListener{
         peticion.setDatosSalida(punto);
         Client client = new Client(peticion);
         return (boolean) client.getRespuestaServer();
+    }
+    public ArrayList<Point> AgregarPuntosFaltantes(ArrayList<Point> puntoInicial){
+        return puntoInicial;
     }
 }
