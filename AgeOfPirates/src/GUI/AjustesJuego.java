@@ -83,9 +83,10 @@ public class AjustesJuego extends JFrame implements ActionListener{
     }
     public void SetComboBoxInventario(){
         if (cambiosEnInventario){
+            comboBoxInventario.removeAllItems();//Lo limpia
             Peticion peticion = new Peticion(TipoAccion.SET_INVENTARIO_COMBOBOX,id);
             Client conexion = new Client(peticion);
-            String [] items = (String[]) conexion.getRespuestaServer();
+            String [] items = (String[]) conexion.getRespuestaServer();//Nuevos items para el combobox
             //System.out.println("CANTIDAD DE ITEMS: "+items.length);
             for (int i=0;i<items.length;i++){
                 comboBoxInventario.addItem(items[i]);
@@ -109,11 +110,11 @@ public class AjustesJuego extends JFrame implements ActionListener{
     public void InsertarItemEnGrid(){
         //Pide el punto seleccionado
 
+        //Obtiene ultimo punto seleccionado
         Peticion peticionPunto = new Peticion(TipoAccion.OBTENER_ULTIMO_PUNTO,id);
         Client conexion = new Client(peticionPunto);
-        Point puntoSeleccionado = (Point) conexion.getRespuestaServer();
+        Point puntoSeleccionado = (Point) conexion.getRespuestaServer();//Punto seleccionado
         if (puntoSeleccionado!=null){
-            System.out.println("PUNTO SELECCIONADO PARA INSERTAR: "+puntoSeleccionado);
             ArrayList<Point> puntos= SeleccionarPuntosParaItem(puntoSeleccionado);//Saca los puntos faltantes
             if (puntos!=null){//Si es null es porque el punto no estaba disponible
                 //Peticion llega, puntos, id jugador y el nombre del item
@@ -121,9 +122,11 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 peti.setDatosSalida(puntos);//Puntos
                 peti.setDatosExtra(comboBoxInventario.getSelectedItem().toString());//Nombre item
                 Client cliente = new Client(peti);
+                cambiosEnInventario=true;
             }
         }else{
             System.out.println("TIENE QUE SELECIONAR EL ITEM, LUEGO EL PUNTO Y POR ULTIMO DARLE AL BOTON");
+            JOptionPane.showMessageDialog(null,"Celda ocupada, intente en otra celda!");
         }
     }
     public ArrayList<Point> SeleccionarPuntosParaItem(Point puntoClickeado){
@@ -141,14 +144,17 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 }
                 case "Mercado":{//Usa 2 puntos
                     System.out.println("SELECCIONO MERCADO SACAR PUNTO QUE FALTA");
+                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
                     break;
                 }
                 case "Mina":{//Usa 2 puntos
                     System.out.println("SELECCIONO MINA, SACAR PUNTO QUE FALTA");
+                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
                     break;
                 }
                 case "Templo de la Bruja":{//Usa 2 puntos
                     System.out.println("SELECCIONO TEMPO BURJA,  SACAR PUNTO QUE FALTA");
+                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
                     break;
                 }
                 case "Conector":{//Usa 1 conector
@@ -158,12 +164,13 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 }
                 case "Armería":{//Usa 2 conectores
                     System.out.println("SELECCIONO ARMERIA, SACAR PUNTO QUE FALTA");
+                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
                     break;
                 }
-
             }
             return puntos;
         }else{//No esta disponible
+
             return null;
         }
     }
@@ -178,5 +185,4 @@ public class AjustesJuego extends JFrame implements ActionListener{
         Client client = new Client(peticion);
         return (boolean) client.getRespuestaServer();
     }
-
 }

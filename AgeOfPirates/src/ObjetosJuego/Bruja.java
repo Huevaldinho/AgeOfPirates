@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Bruja extends Item{
     public static Arma tipoArma;
@@ -15,6 +16,7 @@ public class Bruja extends Item{
         this.precio = 2500;
         super.numero=setIDItem();
         super.agregadoAlGrid=false;
+        super.puntosUbicacion= new ArrayList<>();
     }
     private void loadImage(){
         try {

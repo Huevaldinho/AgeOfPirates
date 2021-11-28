@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FuenteEnergia extends Item{
     public FuenteEnergia(){
@@ -14,6 +15,7 @@ public class FuenteEnergia extends Item{
         super.precio=12000;
         super.numero=setIDItem();
         super.cantidadDeEspacios=4;
+        super.puntosUbicacion= new ArrayList<>();
     }
     private void loadImage(){
         try {

@@ -147,13 +147,14 @@ public class Admin {
     public String [] SetComboBoxInventario(Peticion peticion){
         int buscado = (int) peticion.getDatosEntrada();
         for (Player actual:players){
-            if (actual.getID()==buscado){
+            if (actual.getID()==buscado){//Jugador buscado
                 //Llena el array con los nombres de los items que tiene el player
+                ArrayList<Item> itemsPlayer = actual.getItems();
                 String [] items = new String[actual.getItems().size()];
-                for (int i=0;i<items.length;i++){
-                    //REVISAR SI EL ITEM YA ESTA EN EL GRID ()
-                    if (actual.getItems().get(i).getAgregadoAlGrid()==false){
-                        items[i] = actual.getItems().get(i).nombre;
+                for (int i=0;i<items.length;i++){//Recorre los items buscando cuales estan disponibles
+                    if (itemsPlayer.get(i).getAgregadoAlGrid()==false){//Si esta false es porque esta disponible
+                        items[i] = actual.getItems().get(i).nombre;//Lo mete al array
+                        System.out.println("ITEMS DISPONIBLES PARA EL COMBOBOX: "+itemsPlayer.get(i).getNombre());
                     }
                 }
                 return items;

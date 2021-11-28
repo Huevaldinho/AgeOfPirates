@@ -16,7 +16,7 @@ public class Item implements Serializable {
     public int precio;
     public int cantidadDeEspacios;
     public BufferedImage imagen;
-    ArrayList<Point> puntosUbicacion = new ArrayList<>();
+    ArrayList<Point> puntosUbicacion;
 
     public Item(){
 
