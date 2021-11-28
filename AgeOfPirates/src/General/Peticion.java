@@ -10,6 +10,7 @@ public class Peticion implements Serializable{
     private TipoAccion accion;
     private Object datosEntrada;
     private Object datosSalida;
+    private Object datosExtra;
 
     public Peticion() {
     }
@@ -19,6 +20,12 @@ public class Peticion implements Serializable{
     public Peticion(TipoAccion accion, Object datosEntrada) {
         this.accion = accion;
         this.datosEntrada = datosEntrada;
+    }
+    public void setDatosExtra(Object obj){
+        datosExtra=obj;
+    }
+    public Object getDatosExtra(){
+        return datosExtra;
     }
     public void setAccion(TipoAccion accion) {
         this.accion = accion;

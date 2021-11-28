@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class FuenteEnergia extends Item{
-    public static Arma tipoArma;
     public FuenteEnergia(){
         //loadImage();
         super.nombre = "Fuente de Energía";

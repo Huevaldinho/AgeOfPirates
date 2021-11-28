@@ -15,6 +15,7 @@ public class Mercado extends Item{
         super.precio = 2000;
         super.numero=setIDItem();
         super.cantidadDeEspacios=2;
+        super.agregadoAlGrid=false;
     }
     private void loadImage(){
         try {

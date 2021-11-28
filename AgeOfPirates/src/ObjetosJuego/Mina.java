@@ -17,6 +17,7 @@ public class Mina extends Item{
         super.precio = 1000;
         super.numero=setIDItem();
         super.cantidadDeEspacios=2;
+        super.agregadoAlGrid=false;
     }
     private void loadImage(){
         try {

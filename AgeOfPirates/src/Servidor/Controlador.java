@@ -85,6 +85,10 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(admin.ConsultarPuntoDisponible(peticionRecibida));
                 break;
             }
+            case SET_PUNTOS_ITEM:{
+                admin.SetPuntosItem(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }

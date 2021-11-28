@@ -151,7 +151,10 @@ public class Admin {
                 //Llena el array con los nombres de los items que tiene el player
                 String [] items = new String[actual.getItems().size()];
                 for (int i=0;i<items.length;i++){
-                    items[i] = actual.getItems().get(i).nombre;
+                    //REVISAR SI EL ITEM YA ESTA EN EL GRID ()
+                    if (actual.getItems().get(i).getAgregadoAlGrid()==false){
+                        items[i] = actual.getItems().get(i).nombre;
+                    }
                 }
                 return items;
             }
@@ -186,5 +189,23 @@ public class Admin {
         }
         return null;
     }
-
+    public void SetPuntosItem(Peticion peticion){
+        //Puntos en donde se va a agregar el item
+        ArrayList<Point> puntos = (ArrayList<Point>) peticion.getDatosSalida();
+        //Jugador quien va a agregar
+        Player jugador = BuscarJugadorPorID( (int) peticion.getDatosEntrada());
+        //Items del jugador
+        ArrayList<Item> itemsJugador = jugador.getItems();
+        //Nombre del item que se va a agregar
+        String nombreItem = (String) peticion.getDatosExtra();
+        //Busca en los items del jugador
+        for (Item actual:itemsJugador){
+            //Revisa si tiene el mismo nombre y si esta disponible
+            if ((actual.getNombre().compareTo(nombreItem)==0 )&&(actual.getAgregadoAlGrid()==false)){
+                actual.setPuntosUbicacion(puntos);//Agrega los puntos
+                actual.setAgregadoAlGrid(true);//Cambia el estado a true porque ya se le agrego al grid o se va a hacer
+                System.out.println("Inserto los puntos al item: "+actual.getNombre()+" "+actual.getPuntosUbicacion());
+            }
+        }
+    }
 }

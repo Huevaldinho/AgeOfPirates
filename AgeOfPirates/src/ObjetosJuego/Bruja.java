@@ -14,6 +14,7 @@ public class Bruja extends Item{
         this.nombre = "Templo de la Bruja";
         this.precio = 2500;
         super.numero=setIDItem();
+        super.agregadoAlGrid=false;
     }
     private void loadImage(){
         try {

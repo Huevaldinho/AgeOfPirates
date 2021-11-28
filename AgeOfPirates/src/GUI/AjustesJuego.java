@@ -114,12 +114,14 @@ public class AjustesJuego extends JFrame implements ActionListener{
         Point puntoSeleccionado = (Point) conexion.getRespuestaServer();
         if (puntoSeleccionado!=null){
             System.out.println("PUNTO SELECCIONADO PARA INSERTAR: "+puntoSeleccionado);
-            //Primero revisa si esta disponible
-            ArrayList<Point> puntos=SeleccionarPuntosParaItem(puntoSeleccionado);
-            //El arrayList puede no tener puntos y es porque no estaba disponible o era una esquina o algo asi
-
-
-
+            ArrayList<Point> puntos= SeleccionarPuntosParaItem(puntoSeleccionado);//Saca los puntos faltantes
+            if (puntos!=null){//Si es null es porque el punto no estaba disponible
+                //Peticion llega, puntos, id jugador y el nombre del item
+                Peticion peti = new Peticion(TipoAccion.SET_PUNTOS_ITEM,id);//Jugador
+                peti.setDatosSalida(puntos);//Puntos
+                peti.setDatosExtra(comboBoxInventario.getSelectedItem().toString());//Nombre item
+                Client cliente = new Client(peti);
+            }
         }else{
             System.out.println("TIENE QUE SELECIONAR EL ITEM, LUEGO EL PUNTO Y POR ULTIMO DARLE AL BOTON");
         }
@@ -128,10 +130,42 @@ public class AjustesJuego extends JFrame implements ActionListener{
         ArrayList<Point> puntos = new ArrayList<>();
         if (RevisarSiElPuntoEstaDisponible(puntoClickeado)){//Si esta disponible
             //Calcula los puntos automaticamente
+            //Segun tipo de Item
+            String seleccion =comboBoxInventario.getSelectedItem().toString();
+            switch (seleccion){
+                case "Fuente de Energía":{//Usa 4 puntos
+                    System.out.println("SELECCIONO FUENTE DE ENERGIA SACAR LOS PUNTOS QUE FALTAN");
+                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
+                    //hasta que confirme los 4 puntos
+                    break;
+                }
+                case "Mercado":{//Usa 2 puntos
+                    System.out.println("SELECCIONO MERCADO SACAR PUNTO QUE FALTA");
+                    break;
+                }
+                case "Mina":{//Usa 2 puntos
+                    System.out.println("SELECCIONO MINA, SACAR PUNTO QUE FALTA");
+                    break;
+                }
+                case "Templo de la Bruja":{//Usa 2 puntos
+                    System.out.println("SELECCIONO TEMPO BURJA,  SACAR PUNTO QUE FALTA");
+                    break;
+                }
+                case "Conector":{//Usa 1 conector
+                    System.out.println("SELECCIONO CONECTOR, SOLO USA EL PUNTO SELECCIONADO");
+                    puntos.add(puntoClickeado);//Solo el que selecciono
+                    break;
+                }
+                case "Armería":{//Usa 2 conectores
+                    System.out.println("SELECCIONO ARMERIA, SACAR PUNTO QUE FALTA");
+                    break;
+                }
 
+            }
+            return puntos;
         }else{//No esta disponible
+            return null;
         }
-        return puntos;
     }
     public boolean RevisarSiElPuntoEstaDisponible(Point punto){
         //Revisar si el punto esta disponible, o sea, si ya hay un item ahi (Recorrer items del player)

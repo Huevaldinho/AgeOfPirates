@@ -14,6 +14,7 @@ public class Armeria extends Item{
         super.precio = 1500;
         super.nombre = "Armería";
         super.numero=setIDItem();
+        super.agregadoAlGrid=false;
         //super.cantidadDeEspacios=1;
     }
     private void loadImage(){

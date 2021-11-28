@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class Item implements Serializable {
     public String nombre;
+    public boolean agregadoAlGrid;
     public int numero=0;
     public int precio;
     public int cantidadDeEspacios;
@@ -30,4 +31,14 @@ public class Item implements Serializable {
     public void setPuntosUbicacion(ArrayList<Point> puntos){
         this.puntosUbicacion=puntos;
     }
+    public void setAgregadoAlGrid(boolean estado){
+        agregadoAlGrid=estado;
+    }
+    public boolean getAgregadoAlGrid(){
+        return agregadoAlGrid;
+    }
+    public String getNombre(){
+        return nombre;
+    }
 }
+
