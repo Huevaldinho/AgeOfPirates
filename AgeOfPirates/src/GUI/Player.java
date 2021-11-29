@@ -1,10 +1,9 @@
 package GUI;
 
 import Arma.Arma;
-import Comodines.Barco;
+import ObjetosJuego.Barco;
 import Comodines.Escudo;
 import Comodines.Kraken;
-import GUI.Grid;
 import ObjetosJuego.FuenteEnergia;
 import ObjetosJuego.Item;
 import ObjetosJuego.Mercado;
@@ -128,7 +127,9 @@ public class Player implements Serializable {
     public void setKraken(Kraken kraken) {
         this.kraken = kraken;
     }
-
+    public void agregarNuevoItem(Item nuevo){
+        items.add(nuevo);
+    }
     @Override
     public String toString() {
         return "Player{" +

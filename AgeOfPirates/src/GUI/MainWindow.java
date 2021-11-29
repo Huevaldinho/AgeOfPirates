@@ -152,5 +152,7 @@ public class MainWindow extends JFrame implements ActionListener {
         Client conexion = new Client(actualizarChat);
         String texto = (String) conexion.getRespuestaServer();
         chat.setText(texto);
+
+        //ACTUALIZAR LA BITACORA
     }
 }

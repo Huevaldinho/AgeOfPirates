@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class Item implements Serializable {
     public String nombre;
+    public boolean vivo;//Si no lo han destruido , false es que ya lo despicharon
     public boolean agregadoAlGrid;
     public int numero=0;
     public int precio;
@@ -49,6 +50,15 @@ public class Item implements Serializable {
             e.printStackTrace();
         }
         return null;
+    }
+    public void setVivo(boolean estado){
+        this.vivo=estado;
+    }
+    public boolean isVivo(){
+        return vivo;
+    }
+    public int getPrecio(){
+        return precio;
     }
 }
 

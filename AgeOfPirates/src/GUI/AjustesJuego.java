@@ -1,6 +1,7 @@
 package GUI;
 
 import Cliente.Client;
+import ObjetosJuego.*;
 import General.Peticion;
 import General.TipoAccion;
 
@@ -46,8 +47,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
         comprarButton.addActionListener(new ActionListener() {//BOTON COMPRAR
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
+                comprarItem();
             }
         });
         insertarItemAlMarButton.addActionListener(new ActionListener() {//BOTON INSERTAR ITEM AL MAR
@@ -55,7 +55,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
             public void actionPerformed(ActionEvent e) {
                 int seleccionado = comboBoxInventario.getSelectedIndex();
                 if (seleccionado>=0){
-                    System.out.println("Item selecionado: "+comboBoxInventario.getItemAt(seleccionado));
                     InsertarItemEnGrid();//Funcion hace peticion del punto seleccionado
                     /*
                         Pasos para insetar un item: Seleccionar el item del comboBox, Clickear el boton "Insertar Item",
@@ -71,15 +70,9 @@ public class AjustesJuego extends JFrame implements ActionListener{
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        SetComboBoxInventario();
+        SetComboBoxInventario();//Actualiza constantemente el combobox de items del player
         ActualizarDinero();//Actualiza constantemente la etiqueta del dinero del player
         ActualizarAcero();//Actualiza el acero
-//        try {
-//            System.out.println("Hilo de ventana ajustes dormido");
-//            Thread.sleep(3500);
-//        } catch (InterruptedException ex) {
-//            ex.printStackTrace();
-//        }
     }
     public void SetComboBoxInventario(){
         if (cambiosEnInventario){
@@ -87,7 +80,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
             Peticion peticion = new Peticion(TipoAccion.SET_INVENTARIO_COMBOBOX,id);
             Client conexion = new Client(peticion);
             String [] items = (String[]) conexion.getRespuestaServer();//Nuevos items para el combobox
-            //System.out.println("CANTIDAD DE ITEMS: "+items.length);
+            System.out.println("CANTIDAD DE ITEMS: "+items.length);
             for (int i=0;i<items.length;i++){
                 comboBoxInventario.addItem(items[i]);
             }
@@ -161,15 +154,30 @@ public class AjustesJuego extends JFrame implements ActionListener{
                     puntos = AgregarPuntosFaltantes(puntoClickeado,1);
                     break;
                 }
-                case "Armería":{//Usa 2 conectores
-                    System.out.println("SELECCIONO ARMERIA, SACAR PUNTO QUE FALTA");
+                case "Armería Cannon":{//Usa 2 conectores
+                    System.out.println("SELECCIONO ARMERIA CANNON, SACAR PUNTO QUE FALTA");
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,2);
+                    break;
+                }
+                case "Armería Cannon Multiple":{//Usa 2 conectores
+                    System.out.println("SELECCIONO ARMERIA CANNON MULTIPLE, SACAR PUNTO QUE FALTA");
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,2);
+                    break;
+                }
+                case "Armería Bomba":{//Usa 2 conectores
+                    System.out.println("SELECCIONO ARMERIA BOMBA, SACAR PUNTO QUE FALTA");
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,2);
+                    break;
+                }
+                case "Armería Cannon Barba Roja":{//Usa 2 conectores
+                    System.out.println("SELECCIONO ARMERIA CANNON BARBA ROJA, SACAR PUNTO QUE FALTA");
                     puntos = AgregarPuntosFaltantes(puntoClickeado,2);
                     break;
                 }
             }
             return puntos;
         }else{//No esta disponible
-
+            JOptionPane.showMessageDialog(null,"La celda seleccionada ya contiene un item, intente en otra...");
             return null;
         }
     }
@@ -308,5 +316,107 @@ public class AjustesJuego extends JFrame implements ActionListener{
         }
 
     }
+    public void comprarItem(){//Solo filtra si selecciono el item, si tiene mercado y manda a hacer la compra
+        int seleccionado = cmbBoxItems.getSelectedIndex();
+        if (seleccionado>=0){
+            //Revisar si tiene Mercado para poder comprar o vender
+            Peticion peticion = new Peticion(TipoAccion.BUSCAR_ITEM_VIVO, "Mercado");//Nombre del Item
+            peticion.setDatosSalida(id);
+            Client conexion = new Client(peticion);
+            boolean respuesta = (boolean)conexion.getRespuestaServer();
+            if (respuesta){
+                realizarCompra(nombreItemSinPrecio(cmbBoxItems.getSelectedItem().toString()));//Saca el nombre del item
+            }else{
+             JOptionPane.showMessageDialog(null,"Para comprar o vender items se necesita el Mercado");
+            }
+        }else{
+          JOptionPane.showMessageDialog(null,"Debe seleccionar un item del ComboBox del Mercado");
+        }
+    }
+    public String nombreItemSinPrecio (String nombreConPrecio){
+        switch (nombreConPrecio){
+            case "Fuente de Energía ($12000)":return "Fuente de Energía";
+            case "Conectores ($100)": return "Conector";
+            case "Mina ($1000)": return "Mina";
+            case "Templo de la Bruja ($2500)": return "Templo de la Bruja";
+            case "Barco Fantasma ($2500)": return "Barco Fantasma";
+            case "Armería Cannon ($1500)": return "Armería Cannon";
+            case "Armería Cannon Multiple ($1500)": return "Armería Cannon Multiple";
+            case "Armería Bomba ($1500)": return "Armería Bomba";
+            case "Armería Cannon Barba Roja ($1500)": return "Armería Cannon Barba Roja";
+        }
+        return null;
+    }
+    public void realizarCompra(String nombreItemAComprar){
+        //MANEJAR EL PRECIO Y ID JUGADOR PARA REALIZAR LA COMPRA
+        Peticion peti = null;
+        Item nuevo = null;
+        switch (nombreItemAComprar){
+            case "Fuente de Energía":{//12k
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(12000);
+                nuevo = new FuenteEnergia();
+                break;
+            }
+            case "Conector":{//100
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(100);
+                nuevo = new Conector();
+                break;
+            }
+            case "Templo de la Bruja":{//2500
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(2500);
+                nuevo = new Bruja();
+                break;
+            }
+            case "Barco Fantasma":{
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(2500);
+                nuevo = new Barco();
+                break;
+            }
+            case "Mina":{//1k
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(1000);
+                nuevo = new Mina();
+                break;
+            }
+            case "Armería Cannon":{//1500
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(1500);
+                nuevo = new ArmeriaCannon();
+                break;
+            }
+            case "Armería Cannon Multiple":{
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(1500);
+                nuevo = new ArmeriaCannonMultiple();
+                break;
+            }
+            case "Armería Bomba":{
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(1500);
+                nuevo = new ArmeriaBomba();
+                break;
+            }
+            case "Armería Cannon Barba Roja":{
+                peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
+                peti.setDatosSalida(1500);
+                nuevo = new ArmeriaCannonBarbaRoja();
+                break;
+            }
+        }
 
+        Client conexion = new Client(peti);
+        if ((boolean)conexion.getRespuestaServer()){
+            //Realizar la compra
+            Peticion peticionInsertarCompraNueva = new Peticion(TipoAccion.REALIZAR_COMPRA_ITEM,nuevo);
+            peticionInsertarCompraNueva.setDatosSalida(id);
+            Client conexionCompra = new Client(peticionInsertarCompraNueva);
+            cambiosEnInventario=true;
+        }else{
+            JOptionPane.showMessageDialog(null,"No tiene sufuciente dinero para comprar ese item...");
+        }
+    }
 }

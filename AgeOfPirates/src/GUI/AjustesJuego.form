@@ -16,11 +16,13 @@
           <model>
             <item value="Fuente de Energía ($12000)"/>
             <item value="Conectores ($100)"/>
-            <item value="Mercado ($2000)"/>
             <item value="Mina ($1000)"/>
             <item value="Templo de la Bruja ($2500)"/>
-            <item value="Armería ($1500)"/>
             <item value="Barco Fantasma ($2500)"/>
+            <item value="Armería Cannon ($1500)"/>
+            <item value="Armería Cannon Multiple ($1500)"/>
+            <item value="Armería Bomba ($1500)"/>
+            <item value="Armería Cannon Barba Roja ($1500)"/>
           </model>
         </properties>
       </component>

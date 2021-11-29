@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class FuenteEnergia extends Item{
     public FuenteEnergia(){
+        super.vivo=true;
         super.nombre = "Fuente de Energía";
         super.precio=12000;
         super.numero=setIDItem();

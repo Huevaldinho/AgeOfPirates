@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Conector extends Item{
     public static Arma tipoArma;
     public Conector(){
+        super.vivo=true;
         super.nombre = "Conector";
         super.precio = 100;
         super.numero=setIDItem();

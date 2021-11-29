@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Bruja extends Item{
     public static Arma tipoArma;
     public Bruja(){
+        super.vivo=true;
         this.nombre = "Templo de la Bruja";
         this.precio = 2500;
         super.numero=setIDItem();

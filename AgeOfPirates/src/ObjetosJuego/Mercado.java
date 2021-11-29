@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Mercado extends Item{
     public static Arma tipoArma;
     public Mercado(){
+        super.vivo=true;
         super.nombre = "Mercado";
         super.precio = 2000;
         super.numero=setIDItem();

@@ -103,6 +103,20 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(true);
                 break;
             }
+            case BUSCAR_ITEM_VIVO:{
+                peticionRecibida.setDatosSalida(admin.BuscarItemVivo(peticionRecibida));
+                break;
+            }
+            case REALIZAR_COMPRA_ITEM:{
+                admin.ComprarItem(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
+            case CONSULTAR_CANTIDAD_SUFICIENTE_DINERO:{
+                peticionRecibida.setDatosSalida(admin.DineroSufiente((int)peticionRecibida.getDatosEntrada(),
+                        (int)peticionRecibida.getDatosSalida()));
+                break;
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }

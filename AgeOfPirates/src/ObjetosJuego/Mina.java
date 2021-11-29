@@ -13,6 +13,7 @@ public class Mina extends Item{
     private int velocidad;
     private int cantidadProcesamiento;
     public Mina(){
+        super.vivo=true;
         super.nombre = "Mina";
         super.precio = 1000;
         super.numero=setIDItem();

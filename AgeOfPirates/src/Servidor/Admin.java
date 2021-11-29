@@ -217,4 +217,41 @@ public class Admin {
         Player jugador = BuscarJugadorPorID((int)peticion.getDatosEntrada());
         jugador.setCambiosEnInventario(false);
     }
+    public boolean BuscarItemVivo(Peticion peticion){
+        String nombreItem = (String) peticion.getDatosEntrada();//Nombre del item que se busca (especialmente el Mercado)
+        Player jugador = BuscarJugadorPorID((int) peticion.getDatosSalida());//El mae que quiere comprar o algo asi
+        ArrayList<Item> itemsJugador = jugador.getItems();//Items donde busca si tiene el que buscan
+        for (Item actual:itemsJugador){
+            System.out.println("\nItem actual nombre: "+actual.getNombre()+"- Item buscado: "+nombreItem);
+            System.out.println("Comparacion nombres: "+(actual.getNombre().compareTo(nombreItem)==0));
+            System.out.println("Item actual agregado al grid: "+actual.getAgregadoAlGrid());
+            System.out.println("Item actual esta vivo: "+actual.isVivo()+'\n');
+            if ((actual.isVivo())&&(actual.getNombre().compareTo(nombreItem)==0)&&(actual.getAgregadoAlGrid()==true)){
+                System.out.println("\nITEM BUSCADO SI ESTA VIVO\n");
+                return true;
+            }
+        }
+        return false;
+    }
+    public void ComprarItem(Peticion peticion){
+        Item nuevoItem = (Item) peticion.getDatosEntrada();
+        Player jugador = BuscarJugadorPorID((int)peticion.getDatosSalida());
+        jugador.agregarNuevoItem(nuevoItem);
+        //Antes de llegar a este punto ya se valido que tenga toda la plata
+        System.out.println("\n\n\nJUGADOR: "+jugador.getID());
+        System.out.println("ITEM NUEVO: "+nuevoItem.getNombre());
+        QuitarDineroAJugador(jugador.getID(),nuevoItem.getPrecio());
+    }
+    public boolean DineroSufiente(int idJugador,int cantidadAPreguntar){
+        Player jugador = BuscarJugadorPorID(idJugador);
+        if (jugador.getDinero()>=cantidadAPreguntar)
+            return true;//Tiene mas o igual cantidad de plata de la que preguntan
+        return false;
+    }
+    public void QuitarDineroAJugador(int idJugador,int cantidadQuitar){
+        Player jugador = BuscarJugadorPorID(idJugador);
+        int dineroActual = jugador.getDinero();
+        jugador.setDinero(dineroActual-cantidadQuitar);
+    }
+
 }
