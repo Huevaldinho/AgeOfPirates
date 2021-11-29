@@ -222,12 +222,7 @@ public class Admin {
         Player jugador = BuscarJugadorPorID((int) peticion.getDatosSalida());//El mae que quiere comprar o algo asi
         ArrayList<Item> itemsJugador = jugador.getItems();//Items donde busca si tiene el que buscan
         for (Item actual:itemsJugador){
-            System.out.println("\nItem actual nombre: "+actual.getNombre()+"- Item buscado: "+nombreItem);
-            System.out.println("Comparacion nombres: "+(actual.getNombre().compareTo(nombreItem)==0));
-            System.out.println("Item actual agregado al grid: "+actual.getAgregadoAlGrid());
-            System.out.println("Item actual esta vivo: "+actual.isVivo()+'\n');
             if ((actual.isVivo())&&(actual.getNombre().compareTo(nombreItem)==0)&&(actual.getAgregadoAlGrid()==true)){
-                System.out.println("\nITEM BUSCADO SI ESTA VIVO\n");
                 return true;
             }
         }
@@ -238,8 +233,6 @@ public class Admin {
         Player jugador = BuscarJugadorPorID((int)peticion.getDatosSalida());
         jugador.agregarNuevoItem(nuevoItem);
         //Antes de llegar a este punto ya se valido que tenga toda la plata
-        System.out.println("\n\n\nJUGADOR: "+jugador.getID());
-        System.out.println("ITEM NUEVO: "+nuevoItem.getNombre());
         QuitarDineroAJugador(jugador.getID(),nuevoItem.getPrecio());
     }
     public boolean DineroSufiente(int idJugador,int cantidadAPreguntar){
@@ -253,5 +246,26 @@ public class Admin {
         int dineroActual = jugador.getDinero();
         jugador.setDinero(dineroActual-cantidadQuitar);
     }
+    public void VenderAlMercado(Peticion peticion){
+        //Se le rebaja el 10% del valor original del item para que tenga sentido
+        //Dato entrada peti = ID jugador
+        //Dato salida peti = item
+        Player jugador = BuscarJugadorPorID((int)peticion.getDatosEntrada());
+        String nombreItem = (String) peticion.getDatosSalida();
 
+        ArrayList<Item> itemsJugador = jugador.getItems();
+
+        for (int i =0;i<itemsJugador.size();i++){
+            if ((itemsJugador.get(i).isVivo())&&(itemsJugador.get(i).getNombre().equals(nombreItem))){
+                System.out.println("ENCONTRAMOS EL ITEM QUE SE VA A VENDER: "+itemsJugador.get(i).getNombre());
+                int precioItem = itemsJugador.get(i).getPrecio();
+                //SE LE REBAJA 50% AL VENDER
+                int precioRebajado = (int) (precioItem-(precioItem * IConstantes.PORCENTAJE_REBAJA_VENDER_ITEM));
+                System.out.println("PRECIO REBAJADO"+precioRebajado+" PRECIO ITEM: "+precioItem);
+                jugador.setDinero(jugador.getDinero()+precioRebajado);
+                itemsJugador.remove(i);//QUITA LOS ITEMS QUE ESTAN EN EL INVENTARIO  (NO CUENTA LOS DEL GRID)
+                break;
+            }
+        }
+    }
 }

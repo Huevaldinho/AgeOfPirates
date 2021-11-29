@@ -22,6 +22,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
     private JButton comprarButton;
     private JComboBox comboBoxInventario;
     private JButton insertarItemAlMarButton;
+    private JButton btnVenderAMercado;
     public int id;
     private final int DELAY = 3000;//3 segundo
     private Timer timer;
@@ -65,6 +66,12 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 }else{
                     JOptionPane.showMessageDialog(null,"Debe seleccionar un ítem del ComboBox...");
                 }
+            }
+        });
+        btnVenderAMercado.addActionListener(new ActionListener() {//VENDER A MERCADO
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                venderAMercado();
             }
         });
     }
@@ -417,6 +424,27 @@ public class AjustesJuego extends JFrame implements ActionListener{
             cambiosEnInventario=true;
         }else{
             JOptionPane.showMessageDialog(null,"No tiene sufuciente dinero para comprar ese item...");
+        }
+    }
+    public void venderAMercado(){
+        int seleccionado = comboBoxInventario.getSelectedIndex();
+        if (seleccionado>=0){
+            //Revisar si tiene Mercado para poder comprar o vender
+            Peticion peticion = new Peticion(TipoAccion.BUSCAR_ITEM_VIVO, "Mercado");//Nombre del Item
+            peticion.setDatosSalida(id);
+            Client conexion = new Client(peticion);
+            boolean respuesta = (boolean)conexion.getRespuestaServer();
+            if (respuesta){
+                System.out.println("PUEDE VENDER EL: "+comboBoxInventario.getItemAt(seleccionado));
+                Peticion peti = new Peticion(TipoAccion.VENDER_AL_MERCADO,id);
+                peti.setDatosSalida(comboBoxInventario.getItemAt(seleccionado).toString());
+                Client clienteVender = new Client(peti);
+                cambiosEnInventario=true;
+            }else{
+                JOptionPane.showMessageDialog(null,"Para comprar o vender items se necesita el Mercado");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null,"Debe seleccionar un item del ComboBox del Mercado");
         }
     }
 }

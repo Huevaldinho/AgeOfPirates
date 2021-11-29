@@ -60,5 +60,8 @@ public class Item implements Serializable {
     public int getPrecio(){
         return precio;
     }
+    public int getNumero(){
+        return numero;
+    }
 }
 

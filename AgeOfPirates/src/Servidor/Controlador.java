@@ -117,6 +117,11 @@ public class Controlador {
                         (int)peticionRecibida.getDatosSalida()));
                 break;
             }
+            case VENDER_AL_MERCADO:{
+                admin.VenderAlMercado(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }
