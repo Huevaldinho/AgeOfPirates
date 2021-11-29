@@ -64,7 +64,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
                     //Hay que cambiar el estado del item para que no aparezca otra vez en el combobox
 
                 }else{
-                    JOptionPane.showMessageDialog(null,"Debe seleccionar un item del ComboBox...");
+                    JOptionPane.showMessageDialog(null,"Debe seleccionar un ítem del ComboBox...");
                 }
             }
         });
@@ -138,34 +138,32 @@ public class AjustesJuego extends JFrame implements ActionListener{
             switch (seleccion){
                 case "Fuente de Energía":{//Usa 4 puntos
                     System.out.println("SELECCIONO FUENTE DE ENERGIA SACAR LOS PUNTOS QUE FALTAN");
-                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
-                    //hasta que confirme los 4 puntos
-                    //puntos = //funcion para sacar puntos necesarios.
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,4);
                     break;
                 }
                 case "Mercado":{//Usa 2 puntos
                     System.out.println("SELECCIONO MERCADO SACAR PUNTO QUE FALTA");
-                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,3);
                     break;
                 }
                 case "Mina":{//Usa 2 puntos
                     System.out.println("SELECCIONO MINA, SACAR PUNTO QUE FALTA");
-                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,2);
                     break;
                 }
                 case "Templo de la Bruja":{//Usa 2 puntos
                     System.out.println("SELECCIONO TEMPO BURJA,  SACAR PUNTO QUE FALTA");
-                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,2);
                     break;
                 }
                 case "Conector":{//Usa 1 conector
                     System.out.println("SELECCIONO CONECTOR, SOLO USA EL PUNTO SELECCIONADO");
-                    puntos.add(puntoClickeado);//Solo el que selecciono
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,1);
                     break;
                 }
                 case "Armería":{//Usa 2 conectores
                     System.out.println("SELECCIONO ARMERIA, SACAR PUNTO QUE FALTA");
-                    puntos.add(puntoClickeado);//Se agrega solo para probar porque se tienen que agregar
+                    puntos = AgregarPuntosFaltantes(puntoClickeado,2);
                     break;
                 }
             }
@@ -175,7 +173,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
             return null;
         }
     }
-    public boolean RevisarSiElPuntoEstaDisponible(Point punto){
+    public boolean RevisarSiElPuntoEstaDisponible(Point punto ){
         //Revisar si el punto esta disponible, o sea, si ya hay un item ahi (Recorrer items del player)
         /*
             Este mae llama al servidor con le id del jugador que esta intentando insertar el item en el grid,
@@ -186,7 +184,129 @@ public class AjustesJuego extends JFrame implements ActionListener{
         Client client = new Client(peticion);
         return (boolean) client.getRespuestaServer();
     }
-    public ArrayList<Point> AgregarPuntosFaltantes(ArrayList<Point> puntoInicial){
-        return puntoInicial;
+    public ArrayList<Point> AgregarPuntosFaltantes(Point punto,int tipoItem){
+        /*
+          -------- Dependiendo de como se llama en el switch de SeleccionarPuntosParaItem(Point) --------
+
+          Casillas 4x4 (Fuente de poder)---------> tipoItem = 4;
+          Casillas 1x2 (Mercado)-----------------> tipoItem = 3;
+          Casillas 2x1 (Mina, Templo, etc...) ---> tipoItem = 2;
+          Casillas 1x1 --------------------------> tipoItem = 1;
+
+         */
+        ArrayList <Point> points = new ArrayList<>();
+        Point puntoValido = new Point();
+
+        if (tipoItem == 4){ //4x4
+            if (punto.x>=0 && punto.x<=9 && punto.y>=0 && punto.y<=9) { //c1
+                puntoValido = devolverPuntosParaDibujar(punto, 1);
+                points.add(puntoValido);
+                points.add(new Point(puntoValido.x+1,puntoValido.y));
+                points.add(new Point(puntoValido.x,puntoValido.y+1));
+                points.add(new Point(puntoValido.x+1,puntoValido.y+1));
+            }
+            else if (punto.x>=0 && punto.x<=9 && punto.y>=10 && punto.y<=19) { //c2
+                puntoValido = devolverPuntosParaDibujar(punto, 2);
+                points.add(puntoValido);
+                points.add(new Point(puntoValido.x+1,puntoValido.y));
+                points.add(new Point(puntoValido.x,puntoValido.y-1));
+                points.add(new Point(puntoValido.x+1,puntoValido.y-1));
+            }
+            else if (punto.x>=10 && punto.x<=19 && punto.y>=0 && punto.y<=9) { //c3
+                puntoValido = devolverPuntosParaDibujar(punto, 3);
+                points.add(puntoValido);
+                points.add(new Point(puntoValido.x-1,puntoValido.y));
+                points.add(new Point(puntoValido.x,puntoValido.y+1));
+                points.add(new Point(puntoValido.x-1,puntoValido.y+1));
+            }
+            else { //c4
+                puntoValido = devolverPuntosParaDibujar(punto, 4);
+                points.add(puntoValido);
+                points.add(new Point(puntoValido.x-1,puntoValido.y));
+                points.add(new Point(puntoValido.x,puntoValido.y-1));
+                points.add(new Point(puntoValido.x-1,puntoValido.y-1));
+            }
+        }else if (tipoItem == 3) {
+            puntoValido = devolverPuntosParaDibujar(punto, 5);
+            points.add(puntoValido);
+            points.add(new Point(puntoValido.x,puntoValido.y+1));
+        }else if (tipoItem == 2) {
+            puntoValido = devolverPuntosParaDibujar(punto, 6);
+            points.add(puntoValido);
+            points.add(new Point(puntoValido.x+1,puntoValido.y));
+        }else{
+            puntoValido = devolverPuntosParaDibujar(punto , 7);
+            points.add(puntoValido);
+         }
+        return points;
     }
+    public Point devolverPuntosParaDibujar(Point punto , double tipoError){
+        /*                  TIPO DE ERROR
+                1   --> 4X4 ; cuadrante 1 (0 , 0) ; (0 , 9) ; (9 , 0) ; (9 , 9)
+                2   --> 4x4 ; cuadrante 2 (0 , 10) ; (0 , 19) ; (9 , 10) ; (9 , 19)
+                3   --> 4x4 ; cuadrante 3 (10 , 0) ; (10 , 9) ; (19 , 0) ; (19 , 9)
+                4   --> 4x4 ; cuadrante 4 (10 , 10) ; (10 , 19) ; (19 , 10) ; (19 , 19)
+                5   --> 1x2 ; (n , 19)
+                6   --> 2x1 ; (19 , n)
+                7   --> 1x1 ; *no es un error, solo busca en diagonal*
+         */
+        if (tipoError == 1){
+            if (RevisarSiElPuntoEstaDisponible(punto)&&
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x+1,punto.y))&& //derecha
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x,punto.y+1))&& //abajo
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x+1,punto.y+1))) //diagonal derecha abajo
+                    return punto;
+            else
+                return devolverPuntosParaDibujar(new Point (punto.x+1,punto.y+1),tipoError);
+
+        } else if (tipoError == 2){
+            if (RevisarSiElPuntoEstaDisponible(punto)&&
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x+1,punto.y))&& //derecha
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x,punto.y-1))&& //arriba
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x+1,punto.y-1))) //diagonal derecha arriba
+                    return punto;
+            else
+                return devolverPuntosParaDibujar(new Point (punto.x+1,punto.y-1),tipoError);
+
+        } else if (tipoError == 3){
+            if (RevisarSiElPuntoEstaDisponible(punto)&&
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x-1,punto.y))&& //izquierda
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x,punto.y+1))&& //abajo
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x-1,punto.y+1))) //diagonal izquierda abajo
+                    return punto;
+            else
+                return devolverPuntosParaDibujar(new Point (punto.x-1,punto.y+1),tipoError);
+
+
+        } else if (tipoError == 4){
+            if (RevisarSiElPuntoEstaDisponible(punto)&&
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x-1,punto.y))&& //izquierda
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x,punto.y-1))&& //arriba
+                RevisarSiElPuntoEstaDisponible(new Point(punto.x-1,punto.y-1))) //diagonal izquierda arriba
+                    return punto;
+            else
+                return devolverPuntosParaDibujar(new Point (punto.x-1,punto.y-1),tipoError);
+        } else if (tipoError == 5){
+            if (punto.x == 19 && punto.y == 19)
+                return devolverPuntosParaDibujar(new Point(19,0),tipoError);
+            else if (RevisarSiElPuntoEstaDisponible(punto) && RevisarSiElPuntoEstaDisponible(new Point(punto.x , punto.y+1)))
+                return punto;
+            else
+                return devolverPuntosParaDibujar(new Point(punto.x , punto.y+1),tipoError);
+        } else if (tipoError == 6){
+            if (punto.x == 19 && punto.y == 19)
+                return devolverPuntosParaDibujar(new Point(0,19),tipoError);
+            else if (RevisarSiElPuntoEstaDisponible(punto) && RevisarSiElPuntoEstaDisponible(new Point(punto.x+1 , punto.y)))
+                return punto;
+            else
+                return devolverPuntosParaDibujar(new Point(punto.x+1 , punto.y),tipoError);
+        } else {
+            if (RevisarSiElPuntoEstaDisponible(punto))
+                return punto;
+            else
+                return devolverPuntosParaDibujar(new Point(punto.x+1,punto.y+1),tipoError);
+        }
+
+    }
+
 }

@@ -33,7 +33,6 @@ public class Server {
                 ObjectInputStream flujoEntrada = new ObjectInputStream(auxEntrada);
                 //Espera peticion de la GUI
                 Peticion peticionRecibida = (Peticion) flujoEntrada.readObject();
-                System.out.println("Peticion recibida: " + peticionRecibida);
                 // transfiere la petición a la logica de aplicación y esta le devuelve la respuesta en la misma peticion
                 //Se va a Controlador para atender la peti
                 peticionRecibida = accesoApp.procesarPeticion(peticionRecibida);

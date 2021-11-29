@@ -26,7 +26,6 @@ public class Admin {
         players= new ArrayList<>();
         cantidadMaximaPlayers= IConstantes.MAX_PLAYERS;
         paneles = new ArrayList<>();
-        System.out.println("Instancia el administrador en controlador");
     }
     public int RegistrarPlayer(Peticion peticion){//Solo le da el ID al player
         if (cantidadPlayersActivos<cantidadMaximaPlayers){
@@ -154,7 +153,6 @@ public class Admin {
                 for (int i=0;i<items.length;i++){//Recorre los items buscando cuales estan disponibles
                     if (itemsPlayer.get(i).getAgregadoAlGrid()==false){//Si esta false es porque esta disponible
                         items[i] = actual.getItems().get(i).nombre;//Lo mete al array
-                        System.out.println("ITEMS DISPONIBLES PARA EL COMBOBOX: "+itemsPlayer.get(i).getNombre());
                     }
                 }
                 return items;
@@ -199,6 +197,7 @@ public class Admin {
         ArrayList<Item> itemsJugador = jugador.getItems();
         //Nombre del item que se va a agregar
         String nombreItem = (String) peticion.getDatosExtra();
+
         //Busca en los items del jugador
         for (Item actual:itemsJugador){
             //Revisa si tiene el mismo nombre y si esta disponible
@@ -207,10 +206,10 @@ public class Admin {
                 actual.setAgregadoAlGrid(true);//Cambia el estado a true porque ya se le agrego al grid o se va a hacer
                 System.out.println("Inserto los puntos al item: "+actual.getNombre()+" "+actual.getPuntosUbicacion());
                 jugador.setCambiosEnInventario(true);
-                System.out.println("CAMBIOS EN INVENTARIO JUGADOR: "+jugador.getID()+" "+jugador.isCambiosEnInventario());
             }
         }
     }
+
     public String ActualizarChat(){
         return paneles.get(0).getText();
     }
