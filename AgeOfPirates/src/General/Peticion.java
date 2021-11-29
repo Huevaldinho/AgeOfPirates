@@ -11,6 +11,7 @@ public class Peticion implements Serializable{
     private Object datosEntrada;
     private Object datosSalida;
     private Object datosExtra;
+    private Object datoArma;
 
     public Peticion() {
     }

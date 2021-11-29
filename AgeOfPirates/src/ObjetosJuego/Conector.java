@@ -10,7 +10,11 @@ import java.util.ArrayList;
 
 public class Conector extends Item{
     public static Arma tipoArma;
+    private boolean pegadoALaFuente;//Si ya se inserto o si despicharon la fuente
+    private ArrayList<Item> itemsConectados;//Los items que se van a pegar al conector
     public Conector(){
+        itemsConectados=new ArrayList<>();
+        pegadoALaFuente=false;
         super.vivo=true;
         super.nombre = "Conector";
         super.precio = 100;
@@ -19,5 +23,12 @@ public class Conector extends Item{
         super.agregadoAlGrid=false;
         super.puntosUbicacion= new ArrayList<>();
         super.rutaImage="images/conector.png";
+        super.yaTieneConector=false;
+    }
+    public void setPegadoALaFuente(boolean estado){
+        pegadoALaFuente=estado;
+    }
+    public boolean getPegadoALaFuente(){
+        return pegadoALaFuente;
     }
 }

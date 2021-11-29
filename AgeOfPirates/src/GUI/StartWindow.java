@@ -9,6 +9,7 @@ public class StartWindow extends JFrame{
     private JButton btn_Iniciar;
     private JButton salirButton;
     private JPanel mainPanel;
+    private static JFrame interfacePrincipal;
 
     public StartWindow(String nombre) {
         super("Age Of Pirates");
@@ -21,6 +22,7 @@ public class StartWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 new MainWindow();
+                interfacePrincipal.setVisible(false);
             }
         });
         salirButton.addActionListener(new ActionListener() {
@@ -35,6 +37,8 @@ public class StartWindow extends JFrame{
         JFrame interfaz = new StartWindow("Age of Pirates");
         interfaz.setSize(700,575);
         interfaz.setVisible(true);
+        interfacePrincipal=interfaz;
+
     }
 }
 

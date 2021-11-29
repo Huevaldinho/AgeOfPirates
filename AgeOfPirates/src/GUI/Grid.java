@@ -142,7 +142,6 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         }
     }
     public CellPane obtenerCelda(Point punto){
-
         for (CellPane celda : totalCeldas){
             if (celda.getCellCoordinate().equals(punto))
                 return celda;

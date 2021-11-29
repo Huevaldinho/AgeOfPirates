@@ -18,5 +18,6 @@ public class FuenteEnergia extends Item{
         super.cantidadDeEspacios=4;
         super.puntosUbicacion= new ArrayList<>();
         rutaImage="images/fuentepoder.png";
+        super.yaTieneConector=false;
     }
 }

@@ -12,5 +12,6 @@ public class ArmeriaCannonMultiple extends Armeria{
         //super.cantidadDeEspacios=1;
         super.puntosUbicacion= new ArrayList<>();
         super.rutaImage="images/armeria.png";
+        super.yaTieneConector=false;
     }
 }

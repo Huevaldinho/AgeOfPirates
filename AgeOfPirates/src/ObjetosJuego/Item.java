@@ -13,6 +13,8 @@ public class Item implements Serializable {
     public String nombre;
     public boolean vivo;//Si no lo han destruido , false es que ya lo despicharon
     public boolean agregadoAlGrid;
+    //TENEMOS QUE SABER A CUAL CONECTOR SE AGREGO
+    public boolean yaTieneConector;//Se cambia en el proceso de insertar items a conector
     public int numero=0;
     public int precio;
     public int cantidadDeEspacios;

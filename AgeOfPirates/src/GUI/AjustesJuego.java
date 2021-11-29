@@ -23,6 +23,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
     private JComboBox comboBoxInventario;
     private JButton insertarItemAlMarButton;
     private JButton btnVenderAMercado;
+    private JButton btnConectarItem;
     public int id;
     private final int DELAY = 3000;//3 segundo
     private Timer timer;
@@ -57,12 +58,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 int seleccionado = comboBoxInventario.getSelectedIndex();
                 if (seleccionado>=0){
                     InsertarItemEnGrid();//Funcion hace peticion del punto seleccionado
-                    /*
-                        Pasos para insetar un item: Seleccionar el item del comboBox, Clickear el boton "Insertar Item",
-                        Luego clickear la posicion deseada
-                    * */
-                    //Hay que cambiar el estado del item para que no aparezca otra vez en el combobox
-
                 }else{
                     JOptionPane.showMessageDialog(null,"Debe seleccionar un ítem del ComboBox...");
                 }
@@ -72,6 +67,21 @@ public class AjustesJuego extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
                 venderAMercado();
+            }
+        });
+        btnConectarItem.addActionListener(new ActionListener() {//BOTON PARA CONECTAR ITEMS
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Click boton se activa la bandera para el proceso de pegar items al conector
+                //Verificar que el punto seleccionado corresponde a un punto de un conector.
+                //En caso que si sea, empezar a tomar los puntos que se estan clickeando para revisar si correcponden al de
+                //algun item en el servidor
+                //Si corresponden a items, agregarlos al arraylist  de items del conector
+
+                //Crear bandera para determinar cuando se termino de seleccionar los items que se insertaron
+                //Tal vez meter en arrayList de una vez para solo llegar a insertar al conector
+
+                //
             }
         });
     }

@@ -19,5 +19,6 @@ public class Mercado extends Item{
         super.agregadoAlGrid=false;
         super.puntosUbicacion= new ArrayList<>();
         super.rutaImage="images/mercado.png";
+        super.yaTieneConector=false;
     }
 }

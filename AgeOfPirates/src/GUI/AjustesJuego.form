@@ -104,6 +104,14 @@
           <text value="Vender A Mercado"/>
         </properties>
       </component>
+      <component id="32ff4" class="javax.swing.JButton" binding="btnConectarItem">
+        <constraints>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Conectar Item"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

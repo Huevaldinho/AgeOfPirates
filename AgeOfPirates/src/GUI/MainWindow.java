@@ -142,7 +142,6 @@ public class MainWindow extends JFrame implements ActionListener {
         frame.setBackground(Color.BLUE);
         frame.setLayout(null);
         frame.setVisible(true);
-
     }
 
     @Override

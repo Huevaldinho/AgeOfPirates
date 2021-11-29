@@ -20,6 +20,8 @@ public class Admin {
     private Point ultimoPuntoJugador2;
     private Point ultimoPuntoJugador3;
     private Point ultimoPuntoJugador4;
+    //ultimo click conector
+
 
     public Admin(){
         ultimoPunto=null;
@@ -252,20 +254,18 @@ public class Admin {
         //Dato salida peti = item
         Player jugador = BuscarJugadorPorID((int)peticion.getDatosEntrada());
         String nombreItem = (String) peticion.getDatosSalida();
-
         ArrayList<Item> itemsJugador = jugador.getItems();
-
         for (int i =0;i<itemsJugador.size();i++){
             if ((itemsJugador.get(i).isVivo())&&(itemsJugador.get(i).getNombre().equals(nombreItem))){
-                System.out.println("ENCONTRAMOS EL ITEM QUE SE VA A VENDER: "+itemsJugador.get(i).getNombre());
                 int precioItem = itemsJugador.get(i).getPrecio();
                 //SE LE REBAJA 50% AL VENDER
                 int precioRebajado = (int) (precioItem-(precioItem * IConstantes.PORCENTAJE_REBAJA_VENDER_ITEM));
-                System.out.println("PRECIO REBAJADO"+precioRebajado+" PRECIO ITEM: "+precioItem);
                 jugador.setDinero(jugador.getDinero()+precioRebajado);
                 itemsJugador.remove(i);//QUITA LOS ITEMS QUE ESTAN EN EL INVENTARIO  (NO CUENTA LOS DEL GRID)
+                //EL COMBOBOX SE ACTUALIZA SOLO, TAMBIEN EL DINERO
                 break;
             }
         }
     }
+
 }

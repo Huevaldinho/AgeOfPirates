@@ -18,5 +18,6 @@ public class Bruja extends Item{
         super.agregadoAlGrid=false;
         super.puntosUbicacion= new ArrayList<>();
         super.rutaImage="images/witch.png";
+        super.yaTieneConector=false;
     }
 }

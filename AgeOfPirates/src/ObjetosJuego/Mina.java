@@ -21,5 +21,6 @@ public class Mina extends Item{
         super.agregadoAlGrid=false;
         super.puntosUbicacion= new ArrayList<>();
         super.rutaImage="images/mina.png";
+        super.yaTieneConector=false;
     }
 }
