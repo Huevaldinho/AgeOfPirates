@@ -74,6 +74,15 @@ public class Item implements Serializable {
         System.out.println("EN CONECTOR HAY:" +itemsConectados.size());
         //SE REINICIA POR EL CASTEO
     }
+
+    public boolean isYaTieneConector() {
+        return yaTieneConector;
+    }
+
+    public void setYaTieneConector(boolean yaTieneConector) {
+        this.yaTieneConector = yaTieneConector;
+    }
+
     public void eliminaritemConectado(Item item){
         itemsConectados.remove(item);
     }

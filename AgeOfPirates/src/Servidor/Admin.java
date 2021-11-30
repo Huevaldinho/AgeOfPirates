@@ -335,6 +335,7 @@ public class Admin {
     public void AgregarItemAConector(Peticion peticion){
         System.out.println("\n\n\nAGREGAR ITEM A CONECTOR");
         Item itemAAgregar = (Item) peticion.getDatosEntrada();//Item a agregar
+        itemAAgregar.setYaTieneConector(true);
         Item conector = (Item) peticion.getDatosSalida();//Conector seleccionado
         Player jugador = BuscarJugadorPorID((int)peticion.getDatosExtra());//Jugador
         conector.agregarItemConectado(itemAAgregar);
