@@ -21,6 +21,7 @@ public class Item implements Serializable {
     public BufferedImage imagen;
     ArrayList<Point> puntosUbicacion;
     public String rutaImage;
+    public ArrayList<Item> itemsConectados;//Los items que se van a pegar al conector
 
     public Item(){
 
@@ -64,6 +65,17 @@ public class Item implements Serializable {
     }
     public int getNumero(){
         return numero;
+    }
+    public ArrayList<Item> getItemsConectados(){
+        return itemsConectados;
+    }
+    public void agregarItemConectado(Item item){
+        itemsConectados.add(item);
+        System.out.println("EN CONECTOR HAY:" +itemsConectados.size());
+        //SE REINICIA POR EL CASTEO
+    }
+    public void eliminaritemConectado(Item item){
+        itemsConectados.remove(item);
     }
 }
 

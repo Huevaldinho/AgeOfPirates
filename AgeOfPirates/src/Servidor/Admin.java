@@ -333,23 +333,17 @@ public class Admin {
         return null;
     }
     public void AgregarItemAConector(Peticion peticion){
-        System.out.println("\n\n\nME CAGO EN LA PUTAAAAA");
+        System.out.println("\n\n\nAGREGAR ITEM A CONECTOR");
         Item itemAAgregar = (Item) peticion.getDatosEntrada();//Item a agregar
-        Conector conector = (Conector) peticion.getDatosSalida();//Conector seleccionado
+        Item conector = (Item) peticion.getDatosSalida();//Conector seleccionado
         Player jugador = BuscarJugadorPorID((int)peticion.getDatosExtra());//Jugador
-        //Lo agrega al array del conector
-        conector.agregarItemConectado(itemAAgregar);//Agrega el item pero solo agrega uno no se porque
-
-        //Para eso es este brete de aqui abajo
-        Item conectorComoItem = BuscarItemPorID(conector.getNumero(),jugador.getID(),conector.getNombre());
-        System.out.println("Conector como item: "+conectorComoItem.getNombre()+" NUmero: "+conectorComoItem.getNumero());
-
-        conectorComoItem = conector;
-        Conector conectorDeVueltaAConectorParaRevisarItems = (Conector)conectorComoItem;
-        ArrayList<Item> items =conectorDeVueltaAConectorParaRevisarItems.getItemsConectados();
-        for (Item actual: items){
-            System.out.println("ITEM AGREGADO A CONECTOR: "+actual.getNombre());
+        conector.agregarItemConectado(itemAAgregar);
+        Item buscado=BuscarItemPorID(conector.getNumero(),jugador.getID(),conector.getNombre());
+        buscado.agregarItemConectado(itemAAgregar);
+        ArrayList<Item> itemsConector = buscado.getItemsConectados();
+        for (Item actual: itemsConector){
+            System.out.println("ITEM ACTUAL EN CONECTOR:"+ actual.getNombre()+" NUMERO: "+actual.getNumero());
         }
-        System.out.println("\n\n\nME SIGO CAGANDO EN LA PUTA.");
+        System.out.println("FIN AGREGAR ITEM A CONECTOR\n\n\n");
     }
 }

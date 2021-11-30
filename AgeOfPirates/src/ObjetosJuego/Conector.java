@@ -11,9 +11,8 @@ import java.util.ArrayList;
 public class Conector extends Item{
     public static Arma tipoArma;
     private boolean pegadoALaFuente;//Si ya se inserto o si despicharon la fuente
-    private ArrayList<Item> itemsConectados;//Los items que se van a pegar al conector
+
     public Conector(){
-        itemsConectados=new ArrayList<>();
         pegadoALaFuente=false;
         super.vivo=true;
         super.nombre = "Conector";
@@ -24,6 +23,8 @@ public class Conector extends Item{
         super.puntosUbicacion= new ArrayList<>();
         super.rutaImage="images/conector.png";
         super.yaTieneConector=false;
+        super.itemsConectados=new ArrayList<>();
+
     }
     public void setPegadoALaFuente(boolean estado){
         pegadoALaFuente=estado;
@@ -31,14 +32,5 @@ public class Conector extends Item{
     public boolean getPegadoALaFuente(){
         return pegadoALaFuente;
     }
-    public ArrayList<Item> getItemsConectados(){
-        return itemsConectados;
-    }
-    public void agregarItemConectado(Item item){
-        itemsConectados.add(item);
-        System.out.println("EN CONECTOR HAY:" +itemsConectados.size());
-    }
-    public void eliminaritemConectado(Item item){
-        itemsConectados.remove(item);
-    }
+
 }
