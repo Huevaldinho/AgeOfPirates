@@ -22,10 +22,30 @@ public class Item implements Serializable {
     ArrayList<Point> puntosUbicacion;
     public String rutaImage;
     public ArrayList<Item> itemsConectados;//Los items que se van a pegar al conector
+    public int jugador;//Para la mina y para los intercambios
+    public int capacidadDeProcesamiento=50;//Solo para la mina
+    public int velocidad=30000;//Para la mina
 
     public Item(){
 
     }
+
+    public int getVelocidad() {
+        return velocidad;
+    }
+
+    public void setVelocidad(int velocidad) {
+        this.velocidad = velocidad;
+    }
+
+    public int getCapacidadDeProcesamiento() {
+        return capacidadDeProcesamiento;
+    }
+
+    public void setCapacidadDeProcesamiento(int capacidadDeProcesamiento) {
+        this.capacidadDeProcesamiento = capacidadDeProcesamiento;
+    }
+
     public int setIDItem(){
         numero++;//como esta en 0, retorna 1, cuando vuelva va a estar en 1, retorna 2...
         return numero;

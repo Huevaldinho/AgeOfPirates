@@ -391,6 +391,14 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
                 peti.setDatosSalida(1000);
                 nuevo = new Mina();
+                //Configuracion de mina
+                //LA VELOCIDAD NO SE ESTA CONFIGURANDO
+                String velocidad = JOptionPane.showInputDialog("Ingrese la velocidad de procesamiento de la mina: ");
+                String cantidadEnStrng = JOptionPane.showInputDialog("Ingrese la cantidad de procesamiento de mina: ");
+
+                nuevo.setVelocidad(Integer.parseInt(velocidad));
+                nuevo.setCapacidadDeProcesamiento(Integer.parseInt(cantidadEnStrng));
+
                 break;
             }
             case "Armería Cannon":{//1500
@@ -418,7 +426,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 break;
             }
         }
-
+        nuevo.jugador=id;
         Client conexion = new Client(peti);
         if ((boolean)conexion.getRespuestaServer()){
             //Realizar la compra

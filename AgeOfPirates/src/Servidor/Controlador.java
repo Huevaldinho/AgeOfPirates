@@ -140,6 +140,20 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(true);
                 break;
             }
+            case BUSCAR_ITEM_POR_ID:{
+                int idItem = (int) peticionRecibida.getDatosEntrada();
+                int idJugador = (int) peticionRecibida.getDatosSalida();
+                String nombreItem = (String) peticionRecibida.getDatosExtra();
+                peticionRecibida.setDatosSalida(admin.BuscarItemPorID(idItem,idJugador,nombreItem));
+                break;
+            }
+            case SUMAR_ACERO_JUGADOR:{
+                int idJugador = (int) peticionRecibida.getDatosEntrada();
+                int acero = (int) peticionRecibida.getDatosSalida();
+                admin.SumarAceroAJugador(idJugador,acero);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }

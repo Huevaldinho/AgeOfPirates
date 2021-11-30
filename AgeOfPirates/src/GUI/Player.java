@@ -40,8 +40,14 @@ public class Player implements Serializable {
         items=new ArrayList<>();
         armas=new ArrayList<>();
 
-        items.add(new FuenteEnergia());
-        items.add(new Mercado());
+        FuenteEnergia fuente = new FuenteEnergia();
+        fuente.jugador=getID();
+
+        Mercado mercado = new Mercado();
+        mercado.jugador=getID();
+
+        items.add(fuente);
+        items.add(mercado);
         //Estos objetos no extienden de item ni arma, asi que los manejamos individualmente
         barco = null;
         escudo = null;
