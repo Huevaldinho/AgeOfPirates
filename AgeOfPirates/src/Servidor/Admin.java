@@ -352,4 +352,9 @@ public class Admin {
         Player jugador = BuscarJugadorPorID(jugadorID);
         jugador.setAcero(jugador.getAcero()+acero);
     }
+    public void AgregarComodin(Peticion peticion){
+        //Entrada es jugador
+        //Salida es el comodin (kraken o escudo) sacar por instace of pa que no pete
+
+    }
 }

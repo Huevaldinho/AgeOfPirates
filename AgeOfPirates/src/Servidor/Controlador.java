@@ -154,6 +154,11 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(true);
                 break;
             }
+            case GENERAR_COMODIN_BRUJA:{
+                admin.AgregarComodin(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }
