@@ -216,6 +216,7 @@ public class Admin {
                 actual.setAgregadoAlGrid(true);//Cambia el estado a true porque ya se le agrego al grid o se va a hacer
                 System.out.println("Inserto los puntos al item: "+actual.getNombre()+" "+actual.getPuntosUbicacion());
                 jugador.setCambiosEnInventario(true);
+                actual.jugador = jugador.getID();
                 break;
             }
         }
@@ -348,7 +349,6 @@ public class Admin {
                 System.out.println("Item buscado por ID: "+actual.getNumero()+" Nombre: "+actual.getNombre());
                 return actual;
             }
-
         }
         return null;
     }
@@ -366,5 +366,14 @@ public class Admin {
             System.out.println("ITEM ACTUAL EN CONECTOR:"+ actual.getNombre()+" NUMERO: "+actual.getNumero());
         }
         System.out.println("FIN AGREGAR ITEM A CONECTOR\n\n\n");
+    }
+    public void SumarAceroAJugador(int jugadorID, int acero){
+        Player jugador = BuscarJugadorPorID(jugadorID);
+        jugador.setAcero(jugador.getAcero()+acero);
+    }
+    public void AgregarComodin(Peticion peticion){
+        //Entrada es jugador
+        //Salida es el comodin (kraken o escudo) sacar por instace of pa que no pete
+
     }
 }

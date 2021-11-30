@@ -22,6 +22,10 @@ public class Item implements Serializable {
     ArrayList<Point> puntosUbicacion;
     public String rutaImage;
     public ArrayList<Item> itemsConectados;//Los items que se van a pegar al conector
+    public int jugador;//Para la mina y para los intercambios
+    public int capacidadDeProcesamiento=50;//Solo para la mina
+    public int velocidad=30000;//Para la mina
+    public int velocidadBruja=150000;//Cada 2.5 minutos
 
     public Item(){
 
@@ -72,19 +76,30 @@ public class Item implements Serializable {
     public void agregarItemConectado(Item item){
         itemsConectados.add(item);
         System.out.println("EN CONECTOR HAY:" +itemsConectados.size());
-        //SE REINICIA POR EL CASTEO
     }
-
     public boolean isYaTieneConector() {
         return yaTieneConector;
     }
-
     public void setYaTieneConector(boolean yaTieneConector) {
         this.yaTieneConector = yaTieneConector;
     }
-
     public void eliminaritemConectado(Item item){
         itemsConectados.remove(item);
+    }
+    public int getVelocidadBruja(){
+        return velocidadBruja;
+    }
+    public int getVelocidad() {
+        return velocidad;
+    }
+    public void setVelocidad(int velocidad) {
+        this.velocidad = velocidad;
+    }
+    public int getCapacidadDeProcesamiento() {
+        return capacidadDeProcesamiento;
+    }
+    public void setCapacidadDeProcesamiento(int capacidadDeProcesamiento) {
+        this.capacidadDeProcesamiento = capacidadDeProcesamiento;
     }
 }
 

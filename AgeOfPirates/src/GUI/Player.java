@@ -37,7 +37,7 @@ public class Player implements Serializable {
         estado=false;//Aun no puede atacar
         listo = false;
         dinero=4000;
-        acero=5000;
+        acero=0;
         whoAttackedTo=0;
         justAttacked=false;
 
