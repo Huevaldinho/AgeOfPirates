@@ -55,9 +55,5 @@ public class Bruja extends Item implements ActionListener {
             peticionKraken.setDatosSalida(kraken);
             Client conexionKraken = new Client(peticionKraken);
         }
-        //Los comodines es un random de Escudo o Kraken
-        //Entrada jugador
-        //Salida comodin
-        Peticion peticionComodin = new Peticion(TipoAccion.GENERAR_COMODIN_BRUJA,super.jugador);
     }
 }
