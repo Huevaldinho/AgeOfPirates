@@ -31,4 +31,14 @@ public class Conector extends Item{
     public boolean getPegadoALaFuente(){
         return pegadoALaFuente;
     }
+    public ArrayList<Item> getItemsConectados(){
+        return itemsConectados;
+    }
+    public void agregarItemConectado(Item item){
+        itemsConectados.add(item);
+        System.out.println("EN CONECTOR HAY:" +itemsConectados.size());
+    }
+    public void eliminaritemConectado(Item item){
+        itemsConectados.remove(item);
+    }
 }

@@ -3,6 +3,7 @@ package Servidor;
 import GUI.Player;
 import General.IConstantes;
 import General.Peticion;
+import ObjetosJuego.Conector;
 import ObjetosJuego.Item;
 
 import javax.swing.*;
@@ -15,16 +16,17 @@ public class Admin {
     private int cantidadMaximaPlayers;
     private ArrayList<JTextArea> paneles;
     private ArrayList<Player> players;
-    private Point ultimoPunto;
     private Point ultimoPuntoJugador1;
     private Point ultimoPuntoJugador2;
     private Point ultimoPuntoJugador3;
     private Point ultimoPuntoJugador4;
     //ultimo click conector
-
+    private Point ultimoConector1;
+    private Point ultimoConector2;
+    private Point ultimoConector3;
+    private Point ultimoConector4;
 
     public Admin(){
-        ultimoPunto=null;
         players= new ArrayList<>();
         cantidadMaximaPlayers= IConstantes.MAX_PLAYERS;
         paneles = new ArrayList<>();
@@ -64,20 +66,25 @@ public class Admin {
         Point punto =(Point)peticion.getDatosEntrada();
         switch (jugador){
             case 1:{
+                //Arrastrar el previo como conector
+                ultimoConector1=ultimoPuntoJugador1;
                 ultimoPuntoJugador1=punto;
                 System.out.println("Ultimo punto jugador 1: "+punto);
                 break;
             }
             case 2:{
+                ultimoConector2=ultimoPuntoJugador2;
                 ultimoPuntoJugador2=punto;
                 System.out.println("Ultimo punto jugador 2: "+punto);
                 break;
             } case 3:{
+                ultimoConector3=ultimoPuntoJugador3;
                 ultimoPuntoJugador3=punto;
                 System.out.println("Ultimo punto jugador 3: "+punto);
                 break;
             }
             case 4:{
+                ultimoConector4=ultimoPuntoJugador4;
                 ultimoPuntoJugador4=punto;
                 System.out.println("Ultimo punto jugador 4: "+punto);
                 break;
@@ -208,10 +215,10 @@ public class Admin {
                 actual.setAgregadoAlGrid(true);//Cambia el estado a true porque ya se le agrego al grid o se va a hacer
                 System.out.println("Inserto los puntos al item: "+actual.getNombre()+" "+actual.getPuntosUbicacion());
                 jugador.setCambiosEnInventario(true);
+                break;
             }
         }
     }
-
     public String ActualizarChat(){
         return paneles.get(0).getText();
     }
@@ -267,5 +274,82 @@ public class Admin {
             }
         }
     }
+    public void InsertarUltimoPuntoConector(Peticion peticion){
+        Point punto =(Point)peticion.getDatosEntrada();//Conector supuestamente seleccionado
+        int jugador = (int)peticion.getDatosSalida();//ID jugador
+        switch (jugador){
+            case 1:{//Jugador 1
+                ultimoConector1=punto;
+                break;
+            }
+            case 2:{//Jugador 2
+                ultimoConector2=punto;
+                break;
+            } case 3:{//Jugador 3
+                ultimoConector3=punto;
+                break;
+            }
+            case 4:{//Jugador 4
+                ultimoConector4=punto;
+                break;
+            }
+        }
+    }
+    public Point GetUltimoPuntoConector(Peticion peticion){
+        int jugadorQuePide = (int) peticion.getDatosEntrada();
+        switch (jugadorQuePide){
+            case 1: return ultimoConector1;
+            case 2: return ultimoConector2;
+            case 3: return ultimoConector3;
+            case 4: return ultimoConector4;
+        }
+        return null;
+    }
+    public Item ObtenerItemPorPunto(Peticion peticion){
+        Point punto = (Point) peticion.getDatosEntrada();//Entrada punto
+        Player jugador = BuscarJugadorPorID((int)peticion.getDatosSalida());//Salida id
+        ArrayList<Item> itemsJugador = jugador.getItems();
+        ArrayList<Point> puntosItem=null;
+        for (Item actual:itemsJugador){
+            puntosItem = actual.getPuntosUbicacion();
+            for (Point puntoActual:puntosItem){
+                if (puntoActual.equals(punto)){
+                    return actual;
+                }
+            }
+        }
+        return null;
+    }
+    public Item BuscarItemPorID(int idItemBuscado, int idJugador,String nombre){
+        Player jugador = BuscarJugadorPorID(idJugador);
+        ArrayList<Item> itemsJugador = jugador.getItems();
+        for (Item actual:itemsJugador){
+            if ((actual.getNumero()==idItemBuscado )&&(actual.getNombre().compareTo(nombre)==0)){
+                System.out.println("Item buscado por ID: "+actual.getNumero()+" Nombre: "+actual.getNombre());
+                return actual;
+            }
 
+        }
+        return null;
+    }
+    public void AgregarItemAConector(Peticion peticion){
+        System.out.println("\n\n\nME CAGO EN LA PUTAAAAA");
+        Item itemAAgregar = (Item) peticion.getDatosEntrada();//Item a agregar
+        Conector conector = (Conector) peticion.getDatosSalida();//Conector seleccionado
+        Player jugador = BuscarJugadorPorID((int)peticion.getDatosExtra());//Jugador
+        //Lo agrega al array del conector
+        conector.agregarItemConectado(itemAAgregar);//Agrega el item pero solo agrega uno no se porque
+
+        //Para eso es este brete de aqui abajo
+        Item conectorComoItem = BuscarItemPorID(conector.getNumero(),jugador.getID(),conector.getNombre());
+        System.out.println("Conector como item: "+conectorComoItem.getNombre()+" NUmero: "+conectorComoItem.getNumero());
+
+        conectorComoItem = conector;
+        Conector conectorDeVueltaAConectorParaRevisarItems = (Conector)conectorComoItem;
+        ArrayList<Item> items =conectorDeVueltaAConectorParaRevisarItems.getItemsConectados();
+        for (Item actual: items){
+            System.out.println("ITEM AGREGADO A CONECTOR: "+actual.getNombre());
+        }
+        System.out.println("\n\n\nME SIGO CAGANDO EN LA PUTA.");
+    }
 }

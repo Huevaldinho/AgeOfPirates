@@ -122,6 +122,24 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(true);
                 break;
             }
+            case AGREGAR_ULTIMO_CONECTOR:{
+                admin.InsertarUltimoPuntoConector(peticionRecibida);
+                peticionRecibida.setDatosSalida(1);//No ocupa pero por aquello
+                break;
+            }
+            case GET_ULTIMO_PUNTO_CONECTOR:{
+                peticionRecibida.setDatosSalida(admin.GetUltimoPuntoConector(peticionRecibida));
+                break;
+            }
+            case OBTENER_ITEM_POR_PUNTO:{
+                peticionRecibida.setDatosSalida(admin.ObtenerItemPorPunto(peticionRecibida));
+                break;
+            }
+            case AGREGAR_ITEM_A_CONECTOR:{
+                admin.AgregarItemAConector(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados
     }

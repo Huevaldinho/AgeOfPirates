@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class AjustesJuego extends JFrame implements ActionListener{
@@ -72,16 +73,9 @@ public class AjustesJuego extends JFrame implements ActionListener{
         btnConectarItem.addActionListener(new ActionListener() {//BOTON PARA CONECTAR ITEMS
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Click boton se activa la bandera para el proceso de pegar items al conector
-                //Verificar que el punto seleccionado corresponde a un punto de un conector.
-                //En caso que si sea, empezar a tomar los puntos que se estan clickeando para revisar si correcponden al de
-                //algun item en el servidor
-                //Si corresponden a items, agregarlos al arraylist  de items del conector
-
-                //Crear bandera para determinar cuando se termino de seleccionar los items que se insertaron
-                //Tal vez meter en arrayList de una vez para solo llegar a insertar al conector
-
-                //
+                //PASOS
+                // SELECCIONAR EL CONECTOR, LUEGO EL ITEM Y LUEGO DARLE AL BOTON
+                sacarPuntosParaConectarItemAConector();
             }
         });
     }
@@ -455,6 +449,60 @@ public class AjustesJuego extends JFrame implements ActionListener{
             }
         }else{
             JOptionPane.showMessageDialog(null,"Debe seleccionar un item del ComboBox del Mercado");
+        }
+    }
+    public void sacarPuntosParaConectarItemAConector(){
+
+        //Saca el punto seleccionado del Conector
+        Peticion peticionPrueba = new Peticion(TipoAccion.GET_ULTIMO_PUNTO_CONECTOR,id);
+        Client conexionPuntoConector  = new Client(peticionPrueba);
+        System.out.println("PUNTO CONECTOR: "+(Point)conexionPuntoConector.getRespuestaServer());
+        Point puntoSeleccionadoConector = (Point)conexionPuntoConector.getRespuestaServer();
+
+        //Saca el punto seleccionado del Item
+        Peticion peticionItemSeleccionado = new Peticion(TipoAccion.OBTENER_ULTIMO_PUNTO,id);
+        Client conexionPuntoItem = new Client(peticionItemSeleccionado);
+        System.out.println("PUNTO ITEM: "+(Point)conexionPuntoItem.getRespuestaServer());
+        Point puntoSeleccionadoItem = (Point)conexionPuntoItem.getRespuestaServer();
+
+        //Verifica que si es un Punto de un item
+        //Ahora mandar a verificar si existe conector en ese punto y si existe item en el otro
+        Peticion peticionVerificarPuntoConector = new Peticion(TipoAccion.OBTENER_ITEM_POR_PUNTO,puntoSeleccionadoConector);
+        peticionVerificarPuntoConector.setDatosSalida(id);
+        Client conexionValidarPuntoConector = new Client(peticionVerificarPuntoConector);
+
+        if (conexionValidarPuntoConector.getRespuestaServer()!=null){
+            //Verifica que sea un conector
+            Item itemSeleccionadoComoConector = (Item)conexionValidarPuntoConector.getRespuestaServer();
+
+            if (itemSeleccionadoComoConector.getNombre().compareTo("Conector")==0){
+
+                System.out.println("\nSI SELECCIONO UN CONECTOR, NOMBRE "+itemSeleccionadoComoConector.getNombre()+
+                        " NUMERO: "+itemSeleccionadoComoConector.getNumero());
+                Peticion peticionVerificiarPuntoItem = new Peticion(TipoAccion.OBTENER_ITEM_POR_PUNTO, puntoSeleccionadoItem);
+                peticionVerificiarPuntoItem.setDatosSalida(id);
+                Client conexionValidarPuntoItem = new Client(peticionVerificiarPuntoItem);
+                if (conexionValidarPuntoItem.getRespuestaServer()!=null){
+                    //Si selecciono el punto de un item
+                    Item itemSeleccionado = (Item) conexionValidarPuntoItem.getRespuestaServer();
+                    System.out.println("SI SELECCIONO UN ITEM, NOMBRE: "+itemSeleccionado.getNombre());
+                    //Meter Item al Conector
+                    Peticion peticionAgregarItemAConector = new Peticion(TipoAccion.AGREGAR_ITEM_A_CONECTOR,itemSeleccionado);
+                    peticionAgregarItemAConector.setDatosSalida(itemSeleccionadoComoConector);
+                    peticionAgregarItemAConector.setDatosExtra(id);
+                    Client conexionAgregarItemAConector = new Client(peticionAgregarItemAConector);
+
+
+                }else{
+                    JOptionPane.showMessageDialog(null,"El punto seleccionado para el Item no corresponde a ninguno registrado");
+                }
+
+
+            }else{
+                JOptionPane.showMessageDialog(null,"El punto seleccionado No pertenece a un Conector...");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null,"El punto seleccionado No pertenece a un Conector...");
         }
     }
 }
