@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class Arma implements Serializable {
     ArrayList<Point> puntosUbicacion = new ArrayList<>();
-    String nombre;
+    public String nombre;
+    public int costo;
     public Arma(){
         nombre="Arma";
     }

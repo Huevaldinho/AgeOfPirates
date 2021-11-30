@@ -28,6 +28,8 @@ public class Player implements Serializable {
     private boolean listo;
     private boolean vivo;
     private boolean cambiosEnInventario;
+    private boolean justAttacked;
+    private int whoAttackedTo;
 
     public Player() {
         cambiosEnInventario=false;
@@ -35,19 +37,15 @@ public class Player implements Serializable {
         estado=false;//Aun no puede atacar
         listo = false;
         dinero=4000;
-        acero=0;
+        acero=5000;
+        whoAttackedTo=0;
+        justAttacked=false;
 
         items=new ArrayList<>();
         armas=new ArrayList<>();
 
-        FuenteEnergia fuente = new FuenteEnergia();
-        fuente.jugador=getID();
-
-        Mercado mercado = new Mercado();
-        mercado.jugador=getID();
-
-        items.add(fuente);
-        items.add(mercado);
+        items.add(new FuenteEnergia());
+        items.add(new Mercado());
         //Estos objetos no extienden de item ni arma, asi que los manejamos individualmente
         barco = null;
         escudo = null;
@@ -136,6 +134,22 @@ public class Player implements Serializable {
     public void agregarNuevoItem(Item nuevo){
         items.add(nuevo);
     }
+    public void agregarArma(Arma nuevaArma){
+        armas.add(nuevaArma);
+    }
+    public boolean isJustAttacked() {
+        return justAttacked;
+    }
+    public void setJustAttacked(boolean justAttacked) {
+        this.justAttacked = justAttacked;
+    }
+    public int getWhoAttackedTo() {
+        return whoAttackedTo;
+    }
+    public void setWhoAttackedTo(int whoAttackedTo) {
+        this.whoAttackedTo = whoAttackedTo;
+    }
+
     @Override
     public String toString() {
         return "Player{" +

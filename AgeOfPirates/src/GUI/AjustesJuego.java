@@ -1,5 +1,6 @@
 package GUI;
 
+import Arma.Arma;
 import Cliente.Client;
 import ObjetosJuego.*;
 import General.Peticion;
@@ -25,8 +26,14 @@ public class AjustesJuego extends JFrame implements ActionListener{
     private JButton insertarItemAlMarButton;
     private JButton btnVenderAMercado;
     private JButton btnConectarItem;
+    private JComboBox cmbBox_jugadores;
+    private JButton btnAtacar;
+    private JComboBox cmbBox_ArmasDisponibles;
+    private ComprarArmas ventanaArmas;
+    private boolean cambiosArmas;
     public int id;
-    private final int DELAY = 3000;//3 segundo
+    public int cntJugadoresTotales;
+    private final int DELAY = 1000;//3 segundo
     private Timer timer;
     private boolean cambiosEnInventario;
 
@@ -35,6 +42,10 @@ public class AjustesJuego extends JFrame implements ActionListener{
         setContentPane(panel);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.pack();
+
+        cntJugadoresTotales=0;
+        cambiosArmas=true;
+        ventanaArmas=null;
 
         cambiosEnInventario=true;
         timer = new Timer(DELAY,this);
@@ -84,6 +95,23 @@ public class AjustesJuego extends JFrame implements ActionListener{
         SetComboBoxInventario();//Actualiza constantemente el combobox de items del player
         ActualizarDinero();//Actualiza constantemente la etiqueta del dinero del player
         ActualizarAcero();//Actualiza el acero
+        setCmbBox_jugadores();
+        comprarArmas();
+        actualizarArmas();
+    }
+    public void setCmbBox_jugadores(){
+        Peticion petiJugadoresActivos = new Peticion(TipoAccion.GET_CANTIDAD_PLAYERS_CONECTADOS,null);
+        Client conexion = new Client(petiJugadoresActivos);
+        int cntPlayers = (int) conexion.getRespuestaServer();
+        if (cntPlayers-cntJugadoresTotales!=1){
+            int [] arr = new int[3];
+            if (id == 1) arr = new int[]{2, 3, 4};
+            else if (id == 2) arr = new int[]{1, 3, 4};
+            else if (id == 3) arr = new int[]{1, 2, 4};
+            else if (id == 4) arr = new int[]{1, 2, 3};
+            cmbBox_jugadores.addItem("Jugador "+arr[cntJugadoresTotales]);
+            cntJugadoresTotales++;
+        }
     }
     public void SetComboBoxInventario(){
         if (cambiosEnInventario){
@@ -132,6 +160,52 @@ public class AjustesJuego extends JFrame implements ActionListener{
             System.out.println("TIENE QUE SELECIONAR EL ITEM, LUEGO EL PUNTO Y POR ULTIMO DARLE AL BOTON");
             JOptionPane.showMessageDialog(null,"Celda ocupada, intente en otra celda!");
         }
+    }
+    public void comprarArmas(){
+        Peticion peticionPunto = new Peticion(TipoAccion.OBTENER_ULTIMO_PUNTO,id);
+        Client conexion = new Client(peticionPunto);
+        if (conexion!=null) {
+            Point puntoSeleccionado = (Point) conexion.getRespuestaServer();//Punto seleccionado
+            Armeria armeriaSeleccionada = (Armeria) darArmeria(puntoSeleccionado);
+            if (armeriaSeleccionada!=null){
+                Peticion borrarPunto = new Peticion(TipoAccion.ELIMINAR_ULTIMO_PUNTO,id);
+                Client resp = new Client(borrarPunto);
+                ventanaArmas = new ComprarArmas(armeriaSeleccionada);
+                ventanaArmas.setId(id);
+                ventanaArmas.setVisible(true);
+            }
+        }
+    }
+    public Item darArmeria(Point punto){
+        Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,id);
+        Client conexion = new Client(pedirJugador);
+        Player jugador = (Player) conexion.getRespuestaServer();
+        for (Item item : jugador.getItems()){
+            if (item instanceof Armeria) {
+                for (Point pnt : item.getPuntosUbicacion()) {
+                    if (pnt.equals(punto))
+                        return item;
+                }
+            }
+        }
+        return null;
+    }
+    public void actualizarArmas(){
+
+        try{
+            if (ventanaArmas.isTermino()){
+                cmbBox_ArmasDisponibles.removeAllItems();//Lo limpi
+                Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,id);
+                Client conexion = new Client(pedirJugador);
+                Player jugador = (Player) conexion.getRespuestaServer();
+                for (Arma arma : jugador.getArmas()){
+                    cmbBox_ArmasDisponibles.addItem((String)arma.nombre);
+                }
+            }
+        }catch(NullPointerException e){
+            ;
+        }
+
     }
     public ArrayList<Point> SeleccionarPuntosParaItem(Point puntoClickeado){
         ArrayList<Point> puntos = new ArrayList<>();
@@ -391,14 +465,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 peti = new Peticion(TipoAccion.CONSULTAR_CANTIDAD_SUFICIENTE_DINERO,id);
                 peti.setDatosSalida(1000);
                 nuevo = new Mina();
-                //Configuracion de mina
-                //LA VELOCIDAD NO SE ESTA CONFIGURANDO
-                String velocidad = JOptionPane.showInputDialog("Ingrese la velocidad de procesamiento de la mina: ");
-                String cantidadEnStrng = JOptionPane.showInputDialog("Ingrese la cantidad de procesamiento de mina: ");
-
-                nuevo.setVelocidad(Integer.parseInt(velocidad));
-                nuevo.setCapacidadDeProcesamiento(Integer.parseInt(cantidadEnStrng));
-
                 break;
             }
             case "Armería Cannon":{//1500
@@ -426,7 +492,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 break;
             }
         }
-        nuevo.jugador=id;
+
         Client conexion = new Client(peti);
         if ((boolean)conexion.getRespuestaServer()){
             //Realizar la compra

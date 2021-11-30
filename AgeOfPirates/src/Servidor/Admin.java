@@ -1,5 +1,6 @@
 package Servidor;
 
+import Arma.Arma;
 import GUI.Player;
 import General.IConstantes;
 import General.Peticion;
@@ -215,7 +216,6 @@ public class Admin {
                 actual.setAgregadoAlGrid(true);//Cambia el estado a true porque ya se le agrego al grid o se va a hacer
                 System.out.println("Inserto los puntos al item: "+actual.getNombre()+" "+actual.getPuntosUbicacion());
                 jugador.setCambiosEnInventario(true);
-                actual.jugador = jugador.getID();
                 break;
             }
         }
@@ -245,6 +245,25 @@ public class Admin {
         //Antes de llegar a este punto ya se valido que tenga toda la plata
         QuitarDineroAJugador(jugador.getID(),nuevoItem.getPrecio());
     }
+    public void comprarArmas(Peticion peticion){
+        Arma arma = (Arma) peticion.getDatosEntrada();
+        Player jugador = BuscarJugadorPorID((int)peticion.getDatosSalida());
+        jugador.agregarArma(arma);
+        jugador.setAcero(jugador.getAcero()-arma.costo);
+    }
+    public boolean aceroSuficiente(int id , int costo){
+        Player jugador = BuscarJugadorPorID(id);
+        return jugador.getAcero()>=costo;
+    }
+    public void eliminarUltimoPunto(int id){
+        switch (id){
+            case 1: ultimoPuntoJugador1 = null;
+            case 2: ultimoPuntoJugador2 = null;
+            case 3: ultimoPuntoJugador3 = null;
+            case 4: ultimoPuntoJugador4 = null;
+        }
+    }
+
     public boolean DineroSufiente(int idJugador,int cantidadAPreguntar){
         Player jugador = BuscarJugadorPorID(idJugador);
         if (jugador.getDinero()>=cantidadAPreguntar)
@@ -347,14 +366,5 @@ public class Admin {
             System.out.println("ITEM ACTUAL EN CONECTOR:"+ actual.getNombre()+" NUMERO: "+actual.getNumero());
         }
         System.out.println("FIN AGREGAR ITEM A CONECTOR\n\n\n");
-    }
-    public void SumarAceroAJugador(int jugadorID, int acero){
-        Player jugador = BuscarJugadorPorID(jugadorID);
-        jugador.setAcero(jugador.getAcero()+acero);
-    }
-    public void AgregarComodin(Peticion peticion){
-        //Entrada es jugador
-        //Salida es el comodin (kraken o escudo) sacar por instace of pa que no pete
-
     }
 }

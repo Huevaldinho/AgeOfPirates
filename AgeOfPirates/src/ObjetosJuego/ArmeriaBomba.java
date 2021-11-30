@@ -1,9 +1,12 @@
 package ObjetosJuego;
 
+import Arma.Bomba;
+
 import java.util.ArrayList;
 
 public class ArmeriaBomba extends Armeria{
     public ArmeriaBomba(){
+        super.setTipoArma(new Bomba());
         super.vivo=true;
         super.precio = 1500;
         super.nombre = "Armería Bomba";

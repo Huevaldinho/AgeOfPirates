@@ -14,15 +14,12 @@ import java.net.Socket;
  */
 public class Server {
     private Controlador accesoApp;
-    private int numCli;
     public Server() {
         accesoApp = new Controlador();//Controlador para manejar las peticiones
-        numCli = 0;//No hace nada, solo para ver las peticiones
         try {
             ServerSocket skServidor = new ServerSocket(IConstantes.PUERTO);
             System.out.println("Inicializando servidor en puerto " + IConstantes.PUERTO+'\n');
             while (true) {
-                numCli++;
                 System.out.println("Servidor esperando petición...");
                 Socket skCliente = skServidor.accept(); //Espera la activacion de una peticion
                 //Establece el canal de salida del servidor hacia el cliente
@@ -40,7 +37,7 @@ public class Server {
                 flujoSalida.writeObject(peticionRecibida);
                 //Desconecta la comunicacion con el cliente
                 skCliente.close();
-                System.out.println("Desconectando a la peticion: " + numCli+'\n');
+                System.out.println("\nDesconectando a la peticion \n");
             }//Ciclo while (true)
         } catch (Exception e) {
             System.out.println(e.getMessage());

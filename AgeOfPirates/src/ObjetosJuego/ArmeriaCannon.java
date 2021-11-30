@@ -1,9 +1,12 @@
 package ObjetosJuego;
 
+import Arma.Cannon;
+
 import java.util.ArrayList;
 
 public class ArmeriaCannon extends Armeria{
     public ArmeriaCannon(){
+        super.setTipoArma(new Cannon());
         super.vivo=true;
         super.precio = 1500;
         super.nombre = "Armería Cannon";

@@ -1,99 +1,44 @@
 package GUI;
 
 import Cliente.Client;
-import GUI.CellPane;
 import General.Peticion;
 import General.TipoAccion;
 import ObjetosJuego.Item;
 
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.MatteBorder;
 
-
-public class Grid extends JPanel implements ActionListener, Serializable {
+public class GridRival extends JPanel implements ActionListener, Serializable {
     public static final int ROWS = 20;
     public static final int COLUMNS = 20;
     private ArrayList<CellPane> totalCeldas;
-    private AjustesJuego ajustesJuego;
+    private Player jugador;
     private final int DELAY = 25;
     private Timer timer;
-    private Player jugador;
 
-    /**
-     * Se crean los componentes en las primeras lineas, desde que se declara el timer,
-     * se inicia el hilo del juego, que se hace con el ActionListener, que a su vez entonces la acción realizada
-     * es la que está en la función "actionPerformed", para correr la actionPerformed, se necesita un Timer, que
-     * genera un delay de n segundos para ir corriendo (esto supongo que se hace para no sobrecargar al cpu (nuestro
-     * delay es de 25 ms, se puede cambiar)), que se guarda en la variable DELAY. creado el timer, se hace
-     * timer.start() para dar inicio al hilo, lo que esté en el actionPerformed se mantiene durante toda la partida,
-     * así que básicamente es la función más importante.
-     */
-    public Grid(){
-        //REGISTRA EL JUGADOR 1
-        Peticion peticionRegistrarJugador = new Peticion(TipoAccion.REGISTRAR_PLAYER,null);
-        Client conexionRegistrarJugador = new Client(peticionRegistrarJugador);
-        Object respuestaRegistrarJugador = conexionRegistrarJugador.getRespuestaServer();
-
-        //ESTE ES EL ID QUE SE LE VA A ASIGNAR AL PLAYER
-        jugador = new Player();
-        jugador.setID((int)respuestaRegistrarJugador);//Se le pasa el ID al player
-        //Jugador ahora tiene grid
-        //jugador.setGrid(this);
+    GridRival(int numJugador){
+        Peticion peti = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,numJugador);
+        Client conexion = new Client(peti);
+        jugador = (Player) conexion.getRespuestaServer();
 
         totalCeldas=new ArrayList<>();
 
         crearTablero();
-
-        timer = new Timer(DELAY,this);
-        timer.start();
-
-
-
-        Peticion petiAgregarJugador = new Peticion(TipoAccion.AGREGAR_JUGADOR,jugador);
-        Client conexion = new Client(petiAgregarJugador);
-        Object respuesta = conexion.getRespuestaServer();
-
-        ajustesJuego = new AjustesJuego();
-
-        ajustesJuego.id=jugador.getID();
-        ajustesJuego.setVisible(true);
-        ajustesJuego.lblAjustesJugador.setText("Ajustes del jugador "+jugador.getID());
-
     }
-//    public int getPlayerID(){
-//        return jugador.getID();
-//    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         Peticion peti = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,jugador.getID());
         Client conexion = new Client(peti);
         jugador = (Player) conexion.getRespuestaServer();
 
-        dibujarCelda();
     }
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // when calling g.drawImage() we can use "this" for the ImageObserver
-        // because Component implements the ImageObserver interface, and JPanel
-        // extends from Component. So "this" Board instance, as a Component, can
-        // react to imageUpdate() events triggered by g.drawImage()
-
-        // draw our graphics.
-
-        // this smooths out animations on some systems
-        Toolkit.getDefaultToolkit().sync();
-    }
-
-
     private void crearTablero(){
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -125,7 +70,6 @@ public class Grid extends JPanel implements ActionListener, Serializable {
     }
     public void dibujarCelda(){
         if (jugador.isCambiosEnInventario()){
-            System.out.println("\nDIBUJAR CELDA");
             for (Item itemActual: jugador.getItems()){
                 if (itemActual.getAgregadoAlGrid()){
                     for (Point puntoActual:itemActual.getPuntosUbicacion()){
@@ -147,6 +91,5 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         }
         return null;
     }
+
 }
-
-

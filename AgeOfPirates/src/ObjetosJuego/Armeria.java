@@ -2,10 +2,6 @@ package ObjetosJuego;
 
 import Arma.Arma;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Armeria extends Item{
@@ -19,5 +15,13 @@ public class Armeria extends Item{
         //super.cantidadDeEspacios=1;
         super.puntosUbicacion= new ArrayList<>();
         super.rutaImage="images/armeria.png";
+    }
+
+    public Arma getTipoArma() {
+        return tipoArma;
+    }
+
+    public void setTipoArma(Arma tipoArma) {
+        Armeria.tipoArma = tipoArma;
     }
 }

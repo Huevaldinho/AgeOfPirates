@@ -1,5 +1,6 @@
 package Servidor;
 
+import Arma.Arma;
 import General.Peticion;
 
 import java.awt.*;
@@ -140,24 +141,18 @@ public class Controlador {
                 peticionRecibida.setDatosSalida(true);
                 break;
             }
-            case BUSCAR_ITEM_POR_ID:{
-                int idItem = (int) peticionRecibida.getDatosEntrada();
-                int idJugador = (int) peticionRecibida.getDatosSalida();
-                String nombreItem = (String) peticionRecibida.getDatosExtra();
-                peticionRecibida.setDatosSalida(admin.BuscarItemPorID(idItem,idJugador,nombreItem));
-                break;
-            }
-            case SUMAR_ACERO_JUGADOR:{
-                int idJugador = (int) peticionRecibida.getDatosEntrada();
-                int acero = (int) peticionRecibida.getDatosSalida();
-                admin.SumarAceroAJugador(idJugador,acero);
+            case COMPRAR_ARMAS:{
+                admin.comprarArmas(peticionRecibida);
                 peticionRecibida.setDatosSalida(true);
                 break;
             }
-            case GENERAR_COMODIN_BRUJA:{
-                admin.AgregarComodin(peticionRecibida);
-                peticionRecibida.setDatosSalida(true);
+            case CONSULTAR_CANTIDAD_SUFICIENTE_ACERO:{
+                peticionRecibida.setDatosSalida(admin.aceroSuficiente((int)peticionRecibida.getDatosEntrada(),(int)peticionRecibida.getDatosSalida()));
                 break;
+            }
+            case ELIMINAR_ULTIMO_PUNTO:{
+                admin.eliminarUltimoPunto((int)peticionRecibida.getDatosEntrada());
+                peticionRecibida.setDatosSalida(null);
             }
         }
         return peticionRecibida;//Retorna la peticion con datos modificados

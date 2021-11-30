@@ -17,10 +17,11 @@ public class MainWindow extends JFrame implements ActionListener {
     JFrame frame;
     JPanel mapaJugador;
     JPanel mensajes;
-    JPanel mapaRival;
+    JTabbedPane tabbedPane;
     private int jugadorID;
+    private int cambioJugador;
     private JTextArea chat;
-    private final int DELAY = 3000;//3 segundo
+    private final int DELAY = 1000;//3 segundo
     private Timer timer;
 
     MainWindow(){
@@ -34,6 +35,7 @@ public class MainWindow extends JFrame implements ActionListener {
             System.exit(0);
         }
         jugadorID=(int)puedeSeguir+1;
+        cambioJugador = 0;
         timer = new Timer(DELAY,this);
         timer.start();
         createUIComponents();
@@ -44,7 +46,7 @@ public class MainWindow extends JFrame implements ActionListener {
     private void createUIComponents() {
         // TODO: place custom component creation code here
         frame = new JFrame("Age of Pirates"+"- Jugador: "+jugadorID);
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
 
         //Mi mapa
         Dimension dimension = new Dimension(800,800);
@@ -124,18 +126,10 @@ public class MainWindow extends JFrame implements ActionListener {
         mensajes.setMinimumSize(dimension);
         mensajes.setMaximumSize(dimension);
 
-        //Mapa enemigos
-        mapaRival = new JPanel();
-        mapaRival.setBackground(Color.RED);
-        mapaRival.setEnabled(true);
-        mapaRival.setPreferredSize(dimension);
-        mapaRival.setMinimumSize(dimension);
-        mapaRival.setMaximumSize(dimension);
 
         tabbedPane.setBounds(0,0,800,800);
         tabbedPane.add("Mapa",mapaJugador);
         tabbedPane.add("Mensajes",mensajes);
-        tabbedPane.add("Mapa Rival",mapaRival);
 
         frame.add(tabbedPane);
         frame.setSize(new Dimension(800,850));
@@ -152,6 +146,38 @@ public class MainWindow extends JFrame implements ActionListener {
         String texto = (String) conexion.getRespuestaServer();
         chat.setText(texto);
 
+        annadirTabs();
+
         //ACTUALIZAR LA BITACORA
+    }
+
+    public void annadirTabs(){
+        Peticion peticionParaVerSiContinua = new Peticion(TipoAccion.GET_CANTIDAD_PLAYERS_CONECTADOS,null);
+        Client petiParaContinuar = new Client(peticionParaVerSiContinua);
+        Object puedeSeguir = petiParaContinuar.getRespuestaServer();
+
+        int cntJugadores = (int)puedeSeguir;
+
+        if (cntJugadores-cambioJugador!=1){
+            int [] arr = new int[3];
+            if (jugadorID == 1) arr = new int[]{2, 3, 4};
+            else if (jugadorID == 2) arr = new int[]{1, 3, 4};
+            else if (jugadorID == 3) arr = new int[]{1, 2, 4};
+            else if (jugadorID == 4) arr = new int[]{1, 2, 3};
+            
+            String titulo = "Mapa del rival "+ (arr[cambioJugador]);
+            JPanel mapaRival = new GridRival(arr[cambioJugador]);
+            Dimension dimension = new Dimension(800,800);
+            mapaRival.setBackground(Color.red);
+            mapaRival.setEnabled(true);
+            mapaRival.setPreferredSize(dimension);
+            mapaRival.setMinimumSize(dimension);
+            mapaRival.setMaximumSize(dimension);
+            tabbedPane.add(titulo,mapaRival);
+            cambioJugador++;
+        }
+
+
+
     }
 }
