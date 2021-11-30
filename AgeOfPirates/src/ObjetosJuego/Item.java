@@ -25,11 +25,14 @@ public class Item implements Serializable {
     public int jugador;//Para la mina y para los intercambios
     public int capacidadDeProcesamiento=50;//Solo para la mina
     public int velocidad=30000;//Para la mina
+    public int velocidadBruja=150000;//Cada 2.5 minutos
 
     public Item(){
 
     }
-
+    public int getVelocidadBruja(){
+        return velocidadBruja;
+    }
     public int getVelocidad() {
         return velocidad;
     }
