@@ -12,6 +12,7 @@ public class Peticion implements Serializable{
     private Object datosSalida;
     private Object datosExtra;
     private Object datoArma;
+    private Object datoComprador;
 
     public Peticion() {
     }
@@ -22,6 +23,15 @@ public class Peticion implements Serializable{
         this.accion = accion;
         this.datosEntrada = datosEntrada;
     }
+
+    public Object getDatoComprador() {
+        return datoComprador;
+    }
+
+    public void setDatoComprador(Object datoComprador) {
+        this.datoComprador = datoComprador;
+    }
+
     public void setDatosExtra(Object obj){
         datosExtra=obj;
     }

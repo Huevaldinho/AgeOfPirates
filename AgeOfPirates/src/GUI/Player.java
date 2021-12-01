@@ -137,6 +137,17 @@ public class Player implements Serializable {
     public void agregarArma(Arma nuevaArma){
         armas.add(nuevaArma);
     }
+    public void eliminarArma(Arma armaAEliminar){
+        armaAEliminar.getnombre();
+
+        for (int i=0;i<armas.size();i++){
+            if (armas.get(i).getnombre().equals(armaAEliminar.getnombre())){
+                System.out.println("ELIMINA ARMA DEL ARRAYLIST");
+                armas.remove(i);
+                break;
+            }
+        }
+    }
     public boolean isJustAttacked() {
         return justAttacked;
     }

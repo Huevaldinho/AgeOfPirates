@@ -37,7 +37,7 @@ public class Server {
                 flujoSalida.writeObject(peticionRecibida);
                 //Desconecta la comunicacion con el cliente
                 skCliente.close();
-                System.out.println("\nDesconectando a la peticion \n");
+                System.out.println("Desconectando a la peticion \n");
             }//Ciclo while (true)
         } catch (Exception e) {
             System.out.println(e.getMessage());

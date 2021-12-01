@@ -1,6 +1,7 @@
 package Servidor;
 
 import Arma.Arma;
+import General.Intercambio;
 import General.Peticion;
 
 import java.awt.*;
@@ -153,6 +154,7 @@ public class Controlador {
             case ELIMINAR_ULTIMO_PUNTO:{
                 admin.eliminarUltimoPunto((int)peticionRecibida.getDatosEntrada());
                 peticionRecibida.setDatosSalida(null);
+                break;
             }
             case BUSCAR_ITEM_POR_ID:{
                 int idItem = (int) peticionRecibida.getDatosEntrada();
@@ -170,6 +172,25 @@ public class Controlador {
             }
             case GENERAR_COMODIN_BRUJA:{
                 admin.AgregarComodin(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
+            case INTERCAMBIO_ARMA:{
+                admin.IntercambioArma(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
+            case INTERCAMBIO_ACERO:{
+                admin.IntercambioAcero(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
+            case REVISAR_SI_HAY_INTERCAMBIO:{
+                peticionRecibida.setDatosSalida(admin.getSolicitudDeIntercambio((Integer) peticionRecibida.getDatosEntrada()));
+                break;
+            }
+            case ENVIAR_RESPUESTA_OFERTA:{
+                admin.respuestaOferta((boolean)peticionRecibida.getDatosEntrada(),(Intercambio)peticionRecibida.getDatosSalida());
                 peticionRecibida.setDatosSalida(true);
                 break;
             }

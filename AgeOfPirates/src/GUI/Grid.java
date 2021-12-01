@@ -2,6 +2,7 @@ package GUI;
 
 import Cliente.Client;
 import GUI.CellPane;
+import General.Intercambio;
 import General.Peticion;
 import General.TipoAccion;
 import ObjetosJuego.Item;
@@ -147,6 +148,7 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         }
         return null;
     }
+
 }
 
 

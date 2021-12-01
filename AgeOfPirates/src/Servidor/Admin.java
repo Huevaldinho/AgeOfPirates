@@ -3,6 +3,7 @@ package Servidor;
 import Arma.Arma;
 import GUI.Player;
 import General.IConstantes;
+import General.Intercambio;
 import General.Peticion;
 import ObjetosJuego.Conector;
 import ObjetosJuego.Item;
@@ -27,7 +28,20 @@ public class Admin {
     private Point ultimoConector3;
     private Point ultimoConector4;
 
+
+    //Jugador que acepta o declina la oferta
+    private boolean yaRespondio;
+    private Intercambio solicitudDeIntercambio1;
+    private Intercambio solicitudDeIntercambio2;
+    private Intercambio solicitudDeIntercambio3;
+    private Intercambio solicitudDeIntercambio4;
+
     public Admin(){
+        yaRespondio=false;
+        solicitudDeIntercambio1=null;
+        solicitudDeIntercambio2=null;
+        solicitudDeIntercambio3=null;
+        solicitudDeIntercambio4=null;
         players= new ArrayList<>();
         cantidadMaximaPlayers= IConstantes.MAX_PLAYERS;
         paneles = new ArrayList<>();
@@ -250,6 +264,7 @@ public class Admin {
         Arma arma = (Arma) peticion.getDatosEntrada();
         Player jugador = BuscarJugadorPorID((int)peticion.getDatosSalida());
         jugador.agregarArma(arma);
+        System.out.println("\n\n\nARMA NUEVA JUGADOR: "+jugador.getArmas().size()+"\n\n\n");
         jugador.setAcero(jugador.getAcero()-arma.costo);
     }
     public boolean aceroSuficiente(int id , int costo){
@@ -264,7 +279,6 @@ public class Admin {
             case 4: ultimoPuntoJugador4 = null;
         }
     }
-
     public boolean DineroSufiente(int idJugador,int cantidadAPreguntar){
         Player jugador = BuscarJugadorPorID(idJugador);
         if (jugador.getDinero()>=cantidadAPreguntar)
@@ -353,7 +367,7 @@ public class Admin {
         return null;
     }
     public void AgregarItemAConector(Peticion peticion){
-        System.out.println("\n\n\nAGREGAR ITEM A CONECTOR");
+
         Item itemAAgregar = (Item) peticion.getDatosEntrada();//Item a agregar
         itemAAgregar.setYaTieneConector(true);
         Item conector = (Item) peticion.getDatosSalida();//Conector seleccionado
@@ -365,7 +379,6 @@ public class Admin {
         for (Item actual: itemsConector){
             System.out.println("ITEM ACTUAL EN CONECTOR:"+ actual.getNombre()+" NUMERO: "+actual.getNumero());
         }
-        System.out.println("FIN AGREGAR ITEM A CONECTOR\n\n\n");
     }
     public void SumarAceroAJugador(int jugadorID, int acero){
         Player jugador = BuscarJugadorPorID(jugadorID);
@@ -376,4 +389,117 @@ public class Admin {
         //Salida es el comodin (kraken o escudo) sacar por instace of pa que no pete
 
     }
+    public void IntercambioArma(Peticion peticion){//Solo hace la peticion de intercambio
+        //Jugador vendedor
+        Player jugadorVendedor = BuscarJugadorPorID((int)peticion.getDatosEntrada());
+        //Jugador comprador
+        Player jugadorComprador = BuscarJugadorPorID((int) peticion.getDatoComprador());
+        //Precio de venta establecido
+        int precioVenta = (int) peticion.getDatosSalida();
+        //Arma a vender
+        Arma armaAIntercambiar = (Arma) peticion.getDatosExtra();
+
+        //Mandar solicitud al usuario y esperar respuesta
+        crearSolicitudDeIntercambio(jugadorVendedor.getID(),jugadorComprador.getID(),precioVenta,armaAIntercambiar);
+
+        System.out.println("\n\n\n");
+        System.out.println("Jugador vendedor: "+jugadorVendedor.toString());
+        System.out.println("Jugador comprador: "+jugadorComprador.toString());
+        System.out.println("Arma a vender: "+armaAIntercambiar.toString());
+        System.out.println("Precio: "+precioVenta);
+        System.out.println("\n\n\n");
+    }
+    public void crearSolicitudDeIntercambio(int vendedor,int comprador,int precio, Arma arma){
+        Intercambio intercambio = new Intercambio(vendedor,comprador,precio,arma);
+        switch (comprador){
+            case 1:{
+                solicitudDeIntercambio1=intercambio;
+                break;
+            }
+            case 2:{
+                solicitudDeIntercambio2=intercambio;
+                break;
+            }
+            case 3:{
+                solicitudDeIntercambio3=intercambio;
+                break;
+            }
+            case 4:{
+                solicitudDeIntercambio4=intercambio;
+                break;
+            }
+        }
+    }
+    public void IntercambioAcero(Peticion peticion){//FALTA
+        //Entrada ID jugador
+        //Acero
+        //Salida precio
+        //Jugador
+        Player jugadorVendedor = BuscarJugadorPorID((int)peticion.getDatosEntrada());
+        Player jugadorComprador = BuscarJugadorPorID((int)peticion.getDatoComprador());
+        int precioVenta = (int)peticion.getDatosSalida();
+        int aceroAVender = (int)peticion.getDatosExtra();
+
+    }
+    public void respuestaOferta(boolean respuesta,Intercambio intercambio){
+        if (respuesta){
+            realizarIntercambio(intercambio);
+        }else{
+            switch (intercambio.getJugadorComprador()){
+                case 1:{
+                    solicitudDeIntercambio1=null;
+                    break;
+                }
+                case 2:{
+                    solicitudDeIntercambio2=null;
+                    break;
+                }
+                case 3:{
+                    solicitudDeIntercambio3=null;
+                    break;
+                }
+                case 4:{
+                    solicitudDeIntercambio4=null;
+                    break;
+                }
+            }
+        }
+    }
+    public void realizarIntercambio(Intercambio intercambio){
+        Player jugadorComprador = BuscarJugadorPorID(intercambio.getJugadorComprador());
+        Player jugadorVendedor = BuscarJugadorPorID(intercambio.getJugadorVendedor());
+        jugadorComprador.agregarArma(intercambio.getNombreArma());
+        jugadorVendedor.eliminarArma(intercambio.getNombreArma());
+        jugadorComprador.setDinero(jugadorComprador.getDinero()-intercambio.getPrecio());
+        System.out.println("Jugador vendedor despues de cambio: "+jugadorVendedor.toString());
+        System.out.println("Jugador comprador despues de cambio: "+jugadorComprador.toString());
+        switch (intercambio.getJugadorComprador()){
+            case 1:{
+                solicitudDeIntercambio1=null;
+                break;
+            }
+            case 2:{
+                solicitudDeIntercambio2=null;
+                break;
+            }
+            case 3:{
+                solicitudDeIntercambio3=null;
+                break;
+            }
+            case 4:{
+                solicitudDeIntercambio4=null;
+                break;
+            }
+        }
+    }
+    public Intercambio getSolicitudDeIntercambio(int jugadorQuePreguntaSiTieneSolicidud){
+        switch (jugadorQuePreguntaSiTieneSolicidud){
+            case 1:{return solicitudDeIntercambio1;}
+            case 2:{return solicitudDeIntercambio2;}
+            case 3:{return solicitudDeIntercambio3;}
+            case 4:{return solicitudDeIntercambio4;}
+        }
+        return null;
+    }
+
 }

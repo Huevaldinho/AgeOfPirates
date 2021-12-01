@@ -11,4 +11,7 @@ public class Arma implements Serializable {
     public Arma(){
         nombre="Arma";
     }
+    public String getnombre(){
+        return nombre;
+    }
 }

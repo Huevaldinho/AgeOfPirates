@@ -2,6 +2,7 @@ package GUI;
 
 import Arma.Arma;
 import Cliente.Client;
+import General.Intercambio;
 import ObjetosJuego.*;
 import General.Peticion;
 import General.TipoAccion;
@@ -29,7 +30,11 @@ public class AjustesJuego extends JFrame implements ActionListener{
     private JComboBox cmbBox_jugadores;
     private JButton btnAtacar;
     private JComboBox cmbBox_ArmasDisponibles;
+    private JButton btnIntercambio;
     private ComprarArmas ventanaArmas;
+    private VentanaIntercambio ventanaIntercambio;
+
+
     private boolean cambiosArmas;
     public int id;
     public int cntJugadoresTotales;
@@ -46,6 +51,7 @@ public class AjustesJuego extends JFrame implements ActionListener{
         cntJugadoresTotales=0;
         cambiosArmas=true;
         ventanaArmas=null;
+        ventanaIntercambio=null;
 
         cambiosEnInventario=true;
         timer = new Timer(DELAY,this);
@@ -89,6 +95,14 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 sacarPuntosParaConectarItemAConector();
             }
         });
+        btnIntercambio.addActionListener(new ActionListener() {//BOTON INTERCAMBIO ENTRE JUGADORES
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("CANTIDAD JUGADORES: "+cntJugadoresTotales);
+                ventanaIntercambio = new VentanaIntercambio(id);
+                ventanaIntercambio.setVisible(true);
+            }
+        });
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -98,6 +112,35 @@ public class AjustesJuego extends JFrame implements ActionListener{
         setCmbBox_jugadores();
         comprarArmas();
         actualizarArmas();
+        revisarSiHayIntercambio();
+
+    }
+    public void revisarSiHayIntercambio(){
+        Peticion peticion = new Peticion(TipoAccion.REVISAR_SI_HAY_INTERCAMBIO,id);
+        Client conexion = new Client(peticion);
+        if (conexion.getRespuestaServer()!=null){
+            Intercambio intercambio = (Intercambio) conexion.getRespuestaServer();
+            //Mostrar peticion
+            //Enviar respuesta de vuelta
+            int respuestaOferta =JOptionPane.showConfirmDialog(null,"Jugador "+intercambio.getJugadorComprador()+" - "+
+                    " el jugador "+intercambio.getJugadorVendedor()+" desea realizar la venta de "+intercambio.getNombreArma().getnombre()+" por"+" "+
+                    intercambio.getPrecio()+" dolares, desea realizar el intercambio?");
+            System.out.println("Respuesta: "+respuestaOferta);
+            boolean r=false;
+            if (respuestaOferta==0){
+                r=true;
+            }
+
+            Peticion respuesta = new Peticion(TipoAccion.ENVIAR_RESPUESTA_OFERTA,r);
+
+            respuesta.setDatosSalida(intercambio);
+            Client conexionRespuesta = new Client(respuesta);
+            if (respuestaOferta==0){
+                cambiosArmas=true;
+                System.out.println("CAMBIOS ARMA EN RESPUESTA OFERTA: "+cambiosArmas);
+            }
+
+        }
     }
     public void setCmbBox_jugadores(){
         Peticion petiJugadoresActivos = new Peticion(TipoAccion.GET_CANTIDAD_PLAYERS_CONECTADOS,null);
@@ -192,7 +235,8 @@ public class AjustesJuego extends JFrame implements ActionListener{
     }
     public void actualizarArmas(){
         try{
-            if (ventanaArmas.isTermino()){
+            System.out.println("CAMBIOS ARMA EN ACTUALIZAR ARMA: "+cambiosArmas);
+            if (cambiosArmas||ventanaArmas.isTermino()){
                 cmbBox_ArmasDisponibles.removeAllItems();//Lo limpi
                 Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,id);
                 Client conexion = new Client(pedirJugador);
@@ -200,9 +244,19 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 for (Arma arma : jugador.getArmas()){
                     cmbBox_ArmasDisponibles.addItem((String)arma.nombre);
                 }
+                cambiosArmas=false;
             }
         }catch(NullPointerException e){
-            ;
+            if (cambiosArmas){
+                cmbBox_ArmasDisponibles.removeAllItems();//Lo limpi
+                Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,id);
+                Client conexion = new Client(pedirJugador);
+                Player jugador = (Player) conexion.getRespuestaServer();
+                for (Arma arma : jugador.getArmas()){
+                    cmbBox_ArmasDisponibles.addItem((String)arma.nombre);
+                }
+                cambiosArmas=false;
+            }
         }
     }
     public ArrayList<Point> SeleccionarPuntosParaItem(Point puntoClickeado){
@@ -465,10 +519,10 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 nuevo = new Mina();
                 //Configuracion de mina
                 //LA VELOCIDAD NO SE ESTA CONFIGURANDO
-                String velocidad = JOptionPane.showInputDialog("Ingrese la velocidad de procesamiento de la mina: ");
+                String velocidad = JOptionPane.showInputDialog("Ingrese la velocidad de procesamiento (segundos) de la mina: ");
                 String cantidadEnStrng = JOptionPane.showInputDialog("Ingrese la cantidad de procesamiento de mina: ");
 
-                nuevo.setVelocidad(Integer.parseInt(velocidad));
+                nuevo.setVelocidad(Integer.parseInt(velocidad)*1000);
                 nuevo.setCapacidadDeProcesamiento(Integer.parseInt(cantidadEnStrng));
                 break;
             }
