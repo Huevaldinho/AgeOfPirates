@@ -394,6 +394,11 @@ public class Admin {
         Player jugador = BuscarJugadorPorID(idJugador);
         ArrayList<Item> itemsJugador = jugador.getItems();
         for (Item actual:itemsJugador){
+            if (actual.getNombre().equals("Mina")){
+                if (actual.getNumero()==idItemBuscado+1 &&(idJugador==jugador.getID())){
+                    return actual;
+                }
+            }
             if ((actual.getNumero()==idItemBuscado )&&(actual.getNombre().compareTo(nombre)==0)){
                 System.out.println("Item buscado por ID: "+actual.getNumero()+" Nombre: "+actual.getNombre());
                 if (conector != null) {

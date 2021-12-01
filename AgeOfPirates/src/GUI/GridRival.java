@@ -18,6 +18,7 @@ public class GridRival extends JPanel implements ActionListener, Serializable {
     public static final int ROWS = 20;
     public static final int COLUMNS = 20;
     private ArrayList<CellPane> totalCeldas;
+    private AjustesJuego ajustesJuego;
     private Player jugador;
     private final int DELAY = 25;
     private Timer timer;
@@ -90,6 +91,20 @@ public class GridRival extends JPanel implements ActionListener, Serializable {
                 return celda;
         }
         return null;
+    }
+    public void pintarFuego(){
+        if (jugador.getItemsEliminados().size()!=0){
+            for (Item itemActual : jugador.getItemsEliminados()){
+                for (Point punto : itemActual.getPuntosUbicacion()){
+                    for (CellPane celdas : totalCeldas){
+                        if (punto.equals(celdas.getCellCoordinate())) {
+                            celdas.usada = false;
+                            celdas.drawFire();
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

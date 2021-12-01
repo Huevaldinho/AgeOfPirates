@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 
@@ -106,6 +107,62 @@ public class AjustesJuego extends JFrame implements ActionListener{
                 ventanaIntercambio.setVisible(true);
             }
         });
+        btnAtacar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Arma armaSeleccionada = darArmaSeleccionada();
+                ArrayList<Point> puntosRival = new ArrayList<>();
+                Peticion borrarPunto = new Peticion(TipoAccion.ELIMINAR_ULTIMO_PUNTO,id); //limpia el último punto
+                Client resp = new Client(borrarPunto);
+                if (armaSeleccionada!=null){
+                    JOptionPane.showMessageDialog(null,"Si desea atacar, seleccione la(s) casilla(s) del rival deseado a enviar su disparo");
+                    for (int i = 0 ; i< armaSeleccionada.cantidadDisparos ; i++){ //OBTIENE TRES ULTIMOS PUNTOS EN RIVAL, MIENTRAS SEAN DIFERENTES
+                        System.out.println("ENCICLADO");
+                        Peticion peticionPunto = new Peticion(TipoAccion.OBTENER_ULTIMO_PUNTO,id);
+                        Client conexion = new Client(peticionPunto);
+                        if (conexion!=null){
+                            Point puntoSeleccionado = (Point) conexion.getRespuestaServer();//Punto seleccionado
+                            if (armaSeleccionada.cantidadDisparos==1){
+                                puntosRival.add(puntoSeleccionado);
+                            }else{
+                                try{
+                                    if (!puntoSeleccionado.equals(puntosRival.get(i - 1)))
+                                        puntosRival.add(puntoSeleccionado);
+                                    else
+                                        continue;
+                                }catch(IndexOutOfBoundsException xa){
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    System.out.println("SALE DEL CICLO");
+                    Peticion miJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,id);//Borrar el arma
+                    Client conex = new Client(miJugador);
+                    Player jugadorAtacante = (Player) conex.getRespuestaServer();
+                    jugadorAtacante.getArmas().remove(armaSeleccionada);
+                    cambiosArmas=true;
+
+                    Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,darJugadorSeleccionado()); //guardarle a quien ataca sus items eliminados
+                    Client conexion = new Client(pedirJugador);
+                    Player jugadorAtacado = (Player) conexion.getRespuestaServer();
+                    for (Item itemRival:jugadorAtacado.getItems()){
+                        for (Point puntoItem : itemRival.getPuntosUbicacion()){
+                            for (Point puntoSeleccionados : puntosRival){
+                                if (puntoItem.equals(puntoSeleccionados))
+                                    jugadorAtacado.getItems().remove(itemRival);
+                                jugadorAtacado.getItemsEliminados().add(itemRival);
+                            }
+                        }
+                    }
+                    eliminarItems(jugadorAtacado);
+                    Peticion peticion = new Peticion(TipoAccion.ATAQUE_REALIZADO,id);
+                    Client conexionAtaqueRealizado = new Client(peticion);
+                }else{
+                    System.out.println("No tiene armas");
+                }
+            }
+        });
     }
     @Override
     public void actionPerformed(ActionEvent e){
@@ -139,7 +196,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
         Client conexionEmpezar = new Client(peticionEmpezar);
         if (conexionEmpezar.getRespuestaServer()!=null){
             if ((boolean) conexionEmpezar.getRespuestaServer()){//TODOS ESTAN LISTOS
-
                 //Atacar();
             }else{
                 //System.out.println("FALTA GENTE POR CONFIRMAR LISTO");
@@ -154,12 +210,97 @@ public class AjustesJuego extends JFrame implements ActionListener{
         if (conexionTurno.getRespuestaServer()!=null){
             //Atacamos
             int turno = (int)conexionTurno.getRespuestaServer();
-            System.out.println("TURNO : "+turno+" ID: "+id);
             if (turno==id){
-                Peticion peticion = new Peticion(TipoAccion.ATAQUE_REALIZADO,id);
-                Client conexionAtaqueRealizado = new Client(peticion);
+                Arma armaSeleccionada = darArmaSeleccionada();
+                ArrayList<Point> puntosRival = new ArrayList<>();
+                Peticion borrarPunto = new Peticion(TipoAccion.ELIMINAR_ULTIMO_PUNTO,id); //limpia el último punto
+                Client resp = new Client(borrarPunto);
+                if (armaSeleccionada!=null){
+                    JOptionPane.showMessageDialog(null,"Si desea atacar, seleccione la(s) casilla(s) del rival deseado a enviar su disparo");
+                    for (int i = 0 ; i< armaSeleccionada.cantidadDisparos ; i++){ //OBTIENE TRES ULTIMOS PUNTOS EN RIVAL, MIENTRAS SEAN DIFERENTES
+                        Peticion peticionPunto = new Peticion(TipoAccion.OBTENER_ULTIMO_PUNTO,id);
+                        Client conexion = new Client(peticionPunto);
+                        if (conexion!=null){
+                            Point puntoSeleccionado = (Point) conexion.getRespuestaServer();//Punto seleccionado
+                            if (armaSeleccionada.cantidadDisparos==1){
+                                puntosRival.add(puntoSeleccionado);
+                            }else{
+                                try{
+                                    if (!puntoSeleccionado.equals(puntosRival.get(i - 1)))
+                                        puntosRival.add(puntoSeleccionado);
+                                    else
+                                        continue;
+                                }catch(IndexOutOfBoundsException e){
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    Peticion miJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,id);//Borrar el arma
+                    Client conex = new Client(miJugador);
+                    Player jugadorAtacante = (Player) conex.getRespuestaServer();
+                    jugadorAtacante.getArmas().remove(armaSeleccionada);
+                    cambiosArmas=true;
+
+                    Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,darJugadorSeleccionado()); //guardarle a quien ataca sus items eliminados
+                    Client conexion = new Client(pedirJugador);
+                    Player jugadorAtacado = (Player) conexion.getRespuestaServer();
+                    for (Item itemRival:jugadorAtacado.getItems()){
+                        for (Point puntoItem : itemRival.getPuntosUbicacion()){
+                            for (Point puntoSeleccionados : puntosRival){
+                                if (puntoItem.equals(puntoSeleccionados))
+                                    jugadorAtacado.getItems().remove(itemRival);
+                                    jugadorAtacado.getItemsEliminados().add(itemRival);
+                            }
+                        }
+                    }
+                    eliminarItems(jugadorAtacado);
+                    Peticion peticion = new Peticion(TipoAccion.ATAQUE_REALIZADO,id);
+                    Client conexionAtaqueRealizado = new Client(peticion);
+                }else{
+                    System.out.println("No tiene armas");
+                }
             }
         }
+    }
+    public void eliminarItems(Player jugadorAtacado){
+        if (jugadorAtacado.getItemsEliminados().size()!=0){
+            for (Item item : jugadorAtacado.getItemsEliminados()){
+                if (item.nombre.equals("Remolino")) selfAttack();
+                else{
+                    Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,darJugadorSeleccionado());
+                    Client conexion = new Client(pedirJugador);
+                    Player jugador = (Player) conexion.getRespuestaServer();
+                    jugador.getItems().removeIf(item::equals);
+                    jugador.setCambiosEnInventario(true);
+                }
+            }
+        }
+    }
+    public void selfAttack(){
+        System.out.println("Pegó a un remolino");
+    }
+    public int darJugadorSeleccionado(){
+        String s = (String) cmbBox_jugadores.getSelectedItem();
+        switch (s){
+            case "Jugador 1": return 1;
+            case "Jugador 2": return 2;
+            case "Jugador 3": return 3;
+            case "Jugador 4": return 4;
+            default: return 0;
+        }
+    }
+    public Arma darArmaSeleccionada(){
+        Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,id);
+        Client conexion = new Client(pedirJugador);
+        Player jugador = (Player) conexion.getRespuestaServer();
+        for (Arma arma : jugador.getArmas()){
+            if (cmbBox_ArmasDisponibles.getSelectedItem().equals(arma.nombre)){
+                System.out.println("Esta es mi ultima arma"+arma);
+                return arma;
+            }
+        }
+        return null;
     }
     public void revisaSiYaNoTieneItems(){
         Peticion peticion = new Peticion(TipoAccion.REVISAR_SI_YA_PERDIO,id);
@@ -168,7 +309,9 @@ public class AjustesJuego extends JFrame implements ActionListener{
             if ((boolean)cliente.getRespuestaServer()){//Se quedo sin items
                 Peticion peticionEliminarJugador = new Peticion(TipoAccion.BORRAR_JUGADOR,id);
                 Client conexionBorrar = new Client(peticionEliminarJugador);
-                JOptionPane.showMessageDialog(null,"GAME OVER!");
+
+                JOptionPane.showMessageDialog(null,"GAME OVER");
+
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {

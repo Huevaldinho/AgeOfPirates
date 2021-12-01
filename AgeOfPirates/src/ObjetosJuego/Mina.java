@@ -39,15 +39,8 @@ public class Mina extends Item implements ActionListener {
         timer.stop();
         timer = new Timer(DELAY,this);
         timer.start();
-        //Hilo para crear acero de Mina, Falta poder configurar el tiempo y la cantidad que procesa
-        Peticion peticion = new Peticion(TipoAccion.BUSCAR_ITEM_POR_ID,numero);
-        peticion.setDatosSalida(super.jugador);
-        peticion.setDatosExtra(nombre);
-        Client conexion = new Client(peticion);
-        if (conexion!=null){
-            Item item = (Item) conexion.getRespuestaServer();
-            agregadoAlGrid=item.getAgregadoAlGrid();
-        }
+        //Hilo para crear acero de Mina
+        agregadoAlGrid=true;
         if (agregadoAlGrid && vivo){
             Peticion peticionSumarAcero = new Peticion(TipoAccion.SUMAR_ACERO_JUGADOR,jugador);
             peticionSumarAcero.setDatosSalida(super.getCapacidadDeProcesamiento());

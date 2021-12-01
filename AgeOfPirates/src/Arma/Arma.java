@@ -8,6 +8,7 @@ public class Arma implements Serializable {
     ArrayList<Point> puntosUbicacion = new ArrayList<>();
     public String nombre;
     public int costo;
+    public int cantidadDisparos;
     public Arma(){
         nombre="Arma";
     }

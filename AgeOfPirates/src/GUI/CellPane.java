@@ -5,11 +5,14 @@ import General.Peticion;
 import General.TipoAccion;
 import ObjetosJuego.Item;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class CellPane extends JPanel {
 
@@ -67,5 +70,25 @@ public class CellPane extends JPanel {
     }
     public Color getColor(){
         return getBackground();
+    }
+    public void undoDraw() {
+        try {
+            BufferedImage img = ImageIO.read(new File("images/whiteScreen.png"));
+            JLabel l = new JLabel(new ImageIcon(img));
+            this.add(l);
+        } catch (IOException e) {
+            System.out.println("No se pudo abrir la imagen");
+            e.printStackTrace();
+        }
+    }
+    public void drawFire(){
+        try {
+            BufferedImage img = ImageIO.read(new File("images/fire.png"));
+            JLabel l = new JLabel(new ImageIcon(img));
+            this.add(l);
+        } catch (IOException e) {
+            System.out.println("No se pudo abrir la imagen");
+            e.printStackTrace();
+        }
     }
 }

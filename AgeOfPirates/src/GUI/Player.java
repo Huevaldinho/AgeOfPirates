@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Player implements Serializable {
     private ArrayList<Arma> armas;//Para atacar, se muestran en combobox del mapa rival
     private ArrayList<Item> items;//Cada componente, se muestra en mi mapa
+    private ArrayList<Item> itemsEliminados;//Cada componente, se muestra en mi mapa
     private Barco barco;
     private Escudo escudo;
     private Kraken kraken;
@@ -32,6 +33,14 @@ public class Player implements Serializable {
     private int whoAttackedTo;
 
 
+    public ArrayList<Item> getItemsEliminados() {
+        return itemsEliminados;
+    }
+
+    public void setItemsEliminados(ArrayList<Item> itemsEliminados) {
+        this.itemsEliminados = itemsEliminados;
+    }
+
     public Player() {
         cambiosEnInventario=false;
         vivo=true;//Se muere cuando se queda sin items
@@ -44,6 +53,7 @@ public class Player implements Serializable {
 
         items=new ArrayList<>();
         armas=new ArrayList<>();
+        itemsEliminados=new ArrayList<>();
 
         items.add(new FuenteEnergia());
         items.add(new Mercado());

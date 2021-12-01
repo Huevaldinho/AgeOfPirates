@@ -67,8 +67,6 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         timer = new Timer(DELAY,this);
         timer.start();
 
-
-
         Peticion petiAgregarJugador = new Peticion(TipoAccion.AGREGAR_JUGADOR,jugador);
         Client conexion = new Client(petiAgregarJugador);
         Object respuesta = conexion.getRespuestaServer();
@@ -90,6 +88,7 @@ public class Grid extends JPanel implements ActionListener, Serializable {
 
         dibujarCelda();
         PintarCeldaConectores();
+        despintarItem();
     }
     @Override
     public void paintComponent(Graphics g) {
@@ -104,8 +103,6 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         // this smooths out animations on some systems
         Toolkit.getDefaultToolkit().sync();
     }
-
-
     private void crearTablero(){
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -185,6 +182,20 @@ public class Grid extends JPanel implements ActionListener, Serializable {
             jugador.setCambiosEnInventario(false);
             Peticion cambiarEstadoJugador = new Peticion(TipoAccion.SET_CAMBIOS_JUGADOR_ITEMS,jugador.getID());
             Client conexion = new Client(cambiarEstadoJugador);
+        }
+    }
+    public void despintarItem(){
+        if (jugador.getItemsEliminados().size()!=0){
+            for (Item itemActual : jugador.getItemsEliminados()){
+                for (Point punto : itemActual.getPuntosUbicacion()){
+                    for (CellPane celdas : totalCeldas){
+                        if (punto.equals(celdas.getCellCoordinate())) {
+                            celdas.usada = false;
+                            celdas.undoDraw();
+                        }
+                    }
+                }
+            }
         }
     }
     public CellPane obtenerCelda(Point punto){
