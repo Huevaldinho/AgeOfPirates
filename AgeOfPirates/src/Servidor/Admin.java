@@ -402,12 +402,12 @@ public class Admin {
         //Mandar solicitud al usuario y esperar respuesta
         crearSolicitudDeIntercambio(jugadorVendedor.getID(),jugadorComprador.getID(),precioVenta,armaAIntercambiar);
 
-        System.out.println("\n\n\n");
-        System.out.println("Jugador vendedor: "+jugadorVendedor.toString());
-        System.out.println("Jugador comprador: "+jugadorComprador.toString());
-        System.out.println("Arma a vender: "+armaAIntercambiar.toString());
-        System.out.println("Precio: "+precioVenta);
-        System.out.println("\n\n\n");
+//        System.out.println("\n\n\n");
+//        System.out.println("Jugador vendedor: "+jugadorVendedor.toString());
+//        System.out.println("Jugador comprador: "+jugadorComprador.toString());
+//        System.out.println("Arma a vender: "+armaAIntercambiar.toString());
+//        System.out.println("Precio: "+precioVenta);
+//        System.out.println("\n\n\n");
     }
     public void crearSolicitudDeIntercambio(int vendedor,int comprador,int precio, Arma arma){
         Intercambio intercambio = new Intercambio(vendedor,comprador,precio,arma);
@@ -430,6 +430,7 @@ public class Admin {
             }
         }
     }
+
     public void IntercambioAcero(Peticion peticion){//FALTA
         //Entrada ID jugador
         //Acero
@@ -439,7 +440,28 @@ public class Admin {
         Player jugadorComprador = BuscarJugadorPorID((int)peticion.getDatoComprador());
         int precioVenta = (int)peticion.getDatosSalida();
         int aceroAVender = (int)peticion.getDatosExtra();
-
+        CrearSolicitudDeIntercambioAcero(jugadorVendedor.getID(),jugadorComprador.getID(),precioVenta,aceroAVender);
+    }
+    public void CrearSolicitudDeIntercambioAcero(int vendedor,int comprador,int precio,int acero){
+        Intercambio intercambio = new Intercambio(vendedor,comprador,precio,acero);
+        switch (comprador){
+            case 1:{
+                solicitudDeIntercambio1=intercambio;
+                break;
+            }
+            case 2:{
+                solicitudDeIntercambio2=intercambio;
+                break;
+            }
+            case 3:{
+                solicitudDeIntercambio3=intercambio;
+                break;
+            }
+            case 4:{
+                solicitudDeIntercambio4=intercambio;
+                break;
+            }
+        }
     }
     public void respuestaOferta(boolean respuesta,Intercambio intercambio){
         if (respuesta){
@@ -468,9 +490,15 @@ public class Admin {
     public void realizarIntercambio(Intercambio intercambio){
         Player jugadorComprador = BuscarJugadorPorID(intercambio.getJugadorComprador());
         Player jugadorVendedor = BuscarJugadorPorID(intercambio.getJugadorVendedor());
-        jugadorComprador.agregarArma(intercambio.getNombreArma());
-        jugadorVendedor.eliminarArma(intercambio.getNombreArma());
+        if (intercambio.getNombreArma()!=null){//Para el intercambio de acero  no se puede realizar esto o peta
+            jugadorComprador.agregarArma(intercambio.getNombreArma());
+            jugadorVendedor.eliminarArma(intercambio.getNombreArma());
+        }
         jugadorComprador.setDinero(jugadorComprador.getDinero()-intercambio.getPrecio());
+        //Quita y pone el acero en caso que sea necesario
+        jugadorVendedor.setAcero(jugadorVendedor.getAcero()-intercambio.getAcero());
+        jugadorComprador.setAcero(jugadorComprador.getAcero()+intercambio.getAcero());
+
         System.out.println("Jugador vendedor despues de cambio: "+jugadorVendedor.toString());
         System.out.println("Jugador comprador despues de cambio: "+jugadorComprador.toString());
         switch (intercambio.getJugadorComprador()){

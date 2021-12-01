@@ -9,6 +9,7 @@ public class Intercambio implements Serializable {
     private int jugadorComprador;
     private Arma arma;
     private int precio;
+    private int acero=0;
 
     public Intercambio(){
 
@@ -19,6 +20,20 @@ public class Intercambio implements Serializable {
         this.precio=precio;
         this.arma=nombre;
     }
+    public Intercambio(int vendedor,int comprador,int precio,int acero){
+        this.jugadorVendedor=vendedor;
+        this.jugadorComprador=comprador;
+        this.precio=precio;
+        this.acero=acero;
+    }
+    public int getAcero() {
+        return acero;
+    }
+
+    public void setAcero(int acero) {
+        this.acero = acero;
+    }
+
     public int getJugadorVendedor() {
         return jugadorVendedor;
     }

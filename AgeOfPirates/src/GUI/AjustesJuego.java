@@ -122,9 +122,16 @@ public class AjustesJuego extends JFrame implements ActionListener{
             Intercambio intercambio = (Intercambio) conexion.getRespuestaServer();
             //Mostrar peticion
             //Enviar respuesta de vuelta
-            int respuestaOferta =JOptionPane.showConfirmDialog(null,"Jugador "+intercambio.getJugadorComprador()+" - "+
-                    " el jugador "+intercambio.getJugadorVendedor()+" desea realizar la venta de "+intercambio.getNombreArma().getnombre()+" por"+" "+
-                    intercambio.getPrecio()+" dolares, desea realizar el intercambio?");
+            int respuestaOferta=0;
+            if (intercambio.getNombreArma()!=null){
+                respuestaOferta =JOptionPane.showConfirmDialog(null,"Jugador "+intercambio.getJugadorComprador()+" - "+
+                        " el jugador "+intercambio.getJugadorVendedor()+" desea realizar la venta de "+intercambio.getNombreArma().getnombre()+" por"+" "+
+                        intercambio.getPrecio()+" dolares, desea realizar el intercambio?");
+            }else{
+                respuestaOferta =JOptionPane.showConfirmDialog(null,"Jugador "+intercambio.getJugadorComprador()+" - "+
+                        " el jugador "+intercambio.getJugadorVendedor()+" desea realizar la venta de "+intercambio.getAcero()+"kg de acero por"+" "+
+                        intercambio.getPrecio()+" dolares, desea realizar el intercambio?");
+            }
             System.out.println("Respuesta: "+respuestaOferta);
             boolean r=false;
             if (respuestaOferta==0){
