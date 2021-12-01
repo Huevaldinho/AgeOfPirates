@@ -98,7 +98,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
         btnIntercambio.addActionListener(new ActionListener() {//BOTON INTERCAMBIO ENTRE JUGADORES
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("CANTIDAD JUGADORES: "+cntJugadoresTotales);
                 ventanaIntercambio = new VentanaIntercambio(id);
                 ventanaIntercambio.setVisible(true);
             }
@@ -132,7 +131,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
                         " el jugador "+intercambio.getJugadorVendedor()+" desea realizar la venta de "+intercambio.getAcero()+"kg de acero por"+" "+
                         intercambio.getPrecio()+" dolares, desea realizar el intercambio?");
             }
-            System.out.println("Respuesta: "+respuestaOferta);
             boolean r=false;
             if (respuestaOferta==0){
                 r=true;
@@ -144,7 +142,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
             Client conexionRespuesta = new Client(respuesta);
             if (respuestaOferta==0){
                 cambiosArmas=true;
-                System.out.println("CAMBIOS ARMA EN RESPUESTA OFERTA: "+cambiosArmas);
             }
 
         }
@@ -169,7 +166,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
             Peticion peticion = new Peticion(TipoAccion.SET_INVENTARIO_COMBOBOX,id);
             Client conexion = new Client(peticion);
             String [] items = (String[]) conexion.getRespuestaServer();//Nuevos items para el combobox
-            System.out.println("CANTIDAD DE ITEMS: "+items.length);
             for (int i=0;i<items.length;i++){
                 comboBoxInventario.addItem(items[i]);
             }
@@ -242,7 +238,6 @@ public class AjustesJuego extends JFrame implements ActionListener{
     }
     public void actualizarArmas(){
         try{
-            System.out.println("CAMBIOS ARMA EN ACTUALIZAR ARMA: "+cambiosArmas);
             if (cambiosArmas||ventanaArmas.isTermino()){
                 cmbBox_ArmasDisponibles.removeAllItems();//Lo limpi
                 Peticion pedirJugador = new Peticion(TipoAccion.GET_JUGADOR_POR_ID,id);
