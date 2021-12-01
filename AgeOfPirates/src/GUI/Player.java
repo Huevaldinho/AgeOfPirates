@@ -31,6 +31,7 @@ public class Player implements Serializable {
     private boolean justAttacked;
     private int whoAttackedTo;
 
+
     public Player() {
         cambiosEnInventario=false;
         vivo=true;//Se muere cuando se queda sin items
@@ -47,6 +48,7 @@ public class Player implements Serializable {
         items.add(new FuenteEnergia());
         items.add(new Mercado());
         //Estos objetos no extienden de item ni arma, asi que los manejamos individualmente
+
         barco = null;
         escudo = null;
         kraken = null;

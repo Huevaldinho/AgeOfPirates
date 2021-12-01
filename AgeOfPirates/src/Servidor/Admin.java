@@ -1,6 +1,8 @@
 package Servidor;
 
 import Arma.Arma;
+import Comodines.Escudo;
+import Comodines.Kraken;
 import GUI.Player;
 import General.IConstantes;
 import General.Intercambio;
@@ -12,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Admin {
     private int cantidadPlayersActivos;
@@ -35,13 +38,32 @@ public class Admin {
     private Intercambio solicitudDeIntercambio2;
     private Intercambio solicitudDeIntercambio3;
     private Intercambio solicitudDeIntercambio4;
+    private  int numeroItemComprado =0;
+
+    private boolean kraken1;
+    private boolean kraken2;
+    private boolean kraken3;
+    private boolean kraken4;
+
+
+
+    //Turnos
+    private int turno;
+    private Player jugadorTurno;
 
     public Admin(){
         yaRespondio=false;
+        //turno=1;
+        turno=0;
         solicitudDeIntercambio1=null;
         solicitudDeIntercambio2=null;
         solicitudDeIntercambio3=null;
         solicitudDeIntercambio4=null;
+        kraken1=false;
+        kraken2=false;
+        kraken3=false;
+        kraken4=false;
+
         players= new ArrayList<>();
         cantidadMaximaPlayers= IConstantes.MAX_PLAYERS;
         paneles = new ArrayList<>();
@@ -160,6 +182,16 @@ public class Admin {
             }
         }
     }
+    public void BorrarJugador(Peticion peticion){
+        int idJugador = (int) peticion.getDatosEntrada();
+        for (int i =0;i<players.size();i++){
+            if (players.get(i).getID()==idJugador){
+                players.remove(i);
+                cantidadPlayersActivos--;
+                break;
+            }
+        }
+    }
     public void EliminarJugadorPorItems(){
         for (int i=0;i<players.size();i++){
             if (players.get(i).getItems().size()==0){//Se quedo sin items
@@ -255,6 +287,9 @@ public class Admin {
     }
     public void ComprarItem(Peticion peticion){
         Item nuevoItem = (Item) peticion.getDatosEntrada();
+        nuevoItem.setID(numeroItemComprado);
+        numeroItemComprado++;
+
         Player jugador = BuscarJugadorPorID((int)peticion.getDatosSalida());
         jugador.agregarNuevoItem(nuevoItem);
         //Antes de llegar a este punto ya se valido que tenga toda la plata
@@ -355,12 +390,18 @@ public class Admin {
         }
         return null;
     }
-    public Item BuscarItemPorID(int idItemBuscado, int idJugador,String nombre){
+    public Item BuscarItemPorID(int idItemBuscado, int idJugador,String nombre,Item conector){
         Player jugador = BuscarJugadorPorID(idJugador);
         ArrayList<Item> itemsJugador = jugador.getItems();
         for (Item actual:itemsJugador){
             if ((actual.getNumero()==idItemBuscado )&&(actual.getNombre().compareTo(nombre)==0)){
                 System.out.println("Item buscado por ID: "+actual.getNumero()+" Nombre: "+actual.getNombre());
+                if (conector != null) {
+                    if (conector.equals(actual)){
+                        System.out.println("IGUALES POR EQUALS "+conector+" - "+actual);
+                        return actual;
+                    }
+                }
                 return actual;
             }
         }
@@ -373,7 +414,7 @@ public class Admin {
         Item conector = (Item) peticion.getDatosSalida();//Conector seleccionado
         Player jugador = BuscarJugadorPorID((int)peticion.getDatosExtra());//Jugador
         conector.agregarItemConectado(itemAAgregar);
-        Item buscado=BuscarItemPorID(conector.getNumero(),jugador.getID(),conector.getNombre());
+        Item buscado = BuscarItemPorID(conector.getNumero(),jugador.getID(),conector.getNombre(),conector);
         buscado.agregarItemConectado(itemAAgregar);
         ArrayList<Item> itemsConector = buscado.getItemsConectados();
         for (Item actual: itemsConector){
@@ -387,10 +428,16 @@ public class Admin {
     public void AgregarComodin(Peticion peticion){
         //Entrada es jugador
         //Salida es el comodin (kraken o escudo) sacar por instace of pa que no pete
+        Player jugador = BuscarJugadorPorID((int)peticion.getDatosEntrada());
+        if ((int)peticion.getDatosExtra()==1){
+            jugador.setEscudo((Escudo) peticion.getDatosSalida());
+        }else{
+            jugador.setKraken((Kraken)peticion.getDatosSalida());
 
+        }
     }
-    public void IntercambioArma(Peticion peticion){//Solo hace la peticion de intercambio
-        //Jugador vendedor
+    public void IntercambioArma(Peticion peticion){
+        //Jugador vendedor //Solo hace la peticion de intercambio
         Player jugadorVendedor = BuscarJugadorPorID((int)peticion.getDatosEntrada());
         //Jugador comprador
         Player jugadorComprador = BuscarJugadorPorID((int) peticion.getDatoComprador());
@@ -430,8 +477,7 @@ public class Admin {
             }
         }
     }
-
-    public void IntercambioAcero(Peticion peticion){//FALTA
+    public void IntercambioAcero(Peticion peticion){
         //Entrada ID jugador
         //Acero
         //Salida precio
@@ -529,5 +575,84 @@ public class Admin {
         }
         return null;
     }
+    public boolean RevisarSiYaPerdio(Peticion peticion){
+        Player jugador = BuscarJugadorPorID((int) peticion.getDatosEntrada());
+        if (jugador.getItems().size()==0)
+            return true;//Ya mamo
+        return false;//Todavia juega
+    }
+    public boolean TodosListos(){
+        for (Player actual:players){
+            if (actual.isListo()==false){
+                return false;
+            }
+        }
+        return true;
+    }
+    public int TurnoDeJugador(){
+        //Determinar de quien es el turno
+//        for (int i =0;i<players.size();i++){
+//            if (players.get(i).isJustAttacked()){
+//                if (i==3){
+//                    turno =players.get(0).getID();
+//                    break;
+//                }
+//                turno = players.get(i+1).getID();
+//                break;
+//            }
+//        }
+//        return turno;
+        int turnoDe=0;
+        Player jugador = null;
+        if (turno < players.size()){
+            jugador = players.get(turno);
+            turnoDe=jugador.getID();
+            turno++;
+        }else{
+            turno=0;
+            jugador = players.get(turno);
+            turnoDe=jugador.getID();
+            turno++;
+        }
 
+        jugador.setEstado(true);//Cuando ataca se cambia
+        jugador.setJustAttacked(false);//Se pone true cuando ataca
+        System.out.println("TURNO DE: "+turnoDe);
+        return turnoDe;
+    }
+    public void CambiarEstadoAtaque(int idJugador){
+        Player jugador = BuscarJugadorPorID(idJugador);
+        jugador.setEstado(false);
+        jugador.setJustAttacked(true);
+    }
+    public ArrayList<Item> GetConectores(Peticion peticion){
+        Player jugador = BuscarJugadorPorID((int)peticion.getDatosEntrada());
+        ArrayList<Item> itemsJugador = jugador.getItems();
+        ArrayList<Item> arrayConectores = new ArrayList<>();
+        for (Item actual:itemsJugador){
+            if (actual.getNombre().equals("Conector")){
+                System.out.println("ENCONTRE UN CONECTOR");
+                arrayConectores.add(actual);
+            }
+        }
+        return arrayConectores;
+    }
+    public boolean preguntarKrakenDisponible(int idJugador){
+        Player jugador = BuscarJugadorPorID(idJugador);
+        if (jugador.getKraken()!=null){
+            return true;
+        }
+        return false;
+    }
+    public void respuestaKreken(int jugadorQuienRecibeAtaque, int quienAtaca){
+        Player victima = BuscarJugadorPorID(jugadorQuienRecibeAtaque);
+        Player atacante = BuscarJugadorPorID(quienAtaca);
+        ataqueKraken(victima);//Ataca
+        atacante.setKraken(null);//Se gasta el kraken
+    }
+    public void ataqueKraken(Player victima){
+        Random random = new Random();
+        int r = random.nextInt(victima.getItems().size());
+        victima.getItems().remove(r);
+    }
 }

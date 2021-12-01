@@ -49,12 +49,14 @@ public class Bruja extends Item implements ActionListener{
             escudo = new Escudo();
             Peticion peticionescudo = new Peticion(TipoAccion.GENERAR_COMODIN_BRUJA,jugador);
             peticionescudo.setDatosSalida(escudo);
+            peticionescudo.setDatosExtra(1);//Escudo
             Client conexionEscudo = new Client(peticionescudo);
         } else {
             System.out.println("Kraken");
             kraken = new Kraken();
             Peticion peticionKraken = new Peticion(TipoAccion.GENERAR_COMODIN_BRUJA,jugador);
             peticionKraken.setDatosSalida(kraken);
+            peticionKraken.setDatosExtra(2);//Kraken
             Client conexionKraken = new Client(peticionKraken);
         }
     }

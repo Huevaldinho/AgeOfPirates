@@ -17,6 +17,7 @@ public class CellPane extends JPanel {
     private final Point cellCoordinate;
     public boolean usada;
     public int IDJugador;
+    public boolean pintado=false;
 
     public CellPane(Point cellCoordinate) {
         usada = false;
@@ -56,5 +57,15 @@ public class CellPane extends JPanel {
     public void draw(BufferedImage img) {
         JLabel l = new JLabel(new ImageIcon(img));
         this.add(l);
+    }
+    public void pintarCelda(){
+        setBackground(Color.BLUE);
+    }
+    public void pintarCelda(Color color){
+        setBackground(color);
+        pintado=true;
+    }
+    public Color getColor(){
+        return getBackground();
     }
 }

@@ -6,12 +6,14 @@ import General.Intercambio;
 import General.Peticion;
 import General.TipoAccion;
 import ObjetosJuego.Item;
+import ObjetosJuego.Remolino;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
@@ -25,6 +27,8 @@ public class Grid extends JPanel implements ActionListener, Serializable {
     private final int DELAY = 25;
     private Timer timer;
     private Player jugador;
+    private ArrayList<Color> coloresCeldas;
+    private int contadorColores;
 
     /**
      * Se crean los componentes en las primeras lineas, desde que se declara el timer,
@@ -37,6 +41,15 @@ public class Grid extends JPanel implements ActionListener, Serializable {
      */
     public Grid(){
         //REGISTRA EL JUGADOR 1
+        contadorColores=0;
+        coloresCeldas = new ArrayList<>();
+        coloresCeldas.add(Color.BLUE);
+        coloresCeldas.add(Color.GREEN);
+        coloresCeldas.add(Color.YELLOW);
+        coloresCeldas.add(Color.CYAN);
+        coloresCeldas.add(Color.ORANGE);
+        coloresCeldas.add(Color.MAGENTA);
+        coloresCeldas.add(Color.PINK);
         Peticion peticionRegistrarJugador = new Peticion(TipoAccion.REGISTRAR_PLAYER,null);
         Client conexionRegistrarJugador = new Client(peticionRegistrarJugador);
         Object respuestaRegistrarJugador = conexionRegistrarJugador.getRespuestaServer();
@@ -66,11 +79,8 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         ajustesJuego.setVisible(true);
         ajustesJuego.lblAjustesJugador.setText("Ajustes del jugador "+jugador.getID());
 
+        agregarRemolinos();
     }
-//    public int getPlayerID(){
-//        return jugador.getID();
-//    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -79,6 +89,7 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         jugador = (Player) conexion.getRespuestaServer();
 
         dibujarCelda();
+        PintarCeldaConectores();
     }
     @Override
     public void paintComponent(Graphics g) {
@@ -123,6 +134,41 @@ public class Grid extends JPanel implements ActionListener, Serializable {
                 totalCeldas.add(cellPane);
             }
         }
+
+    }
+    public void agregarRemolinos(){
+        Random xRandom = new Random();
+        Random yRandom = new Random();
+        Point punto1 = new Point(xRandom.nextInt(20),yRandom.nextInt(20));
+        Point punto2 = new Point(xRandom.nextInt(20),yRandom.nextInt(20));
+
+        Item remo1 = new Remolino();
+        remo1.setAgregadoAlGrid(true);
+        ArrayList<Point> puntos = remo1.getPuntosUbicacion();
+        puntos.add(punto1);
+
+
+        Item remo2 = new Remolino();
+        remo2.setAgregadoAlGrid(true);
+        ArrayList<Point> puntos2 = remo2.getPuntosUbicacion();
+        puntos2.add(punto2);
+
+        Peticion peticionRemo1 = new Peticion(TipoAccion.REALIZAR_COMPRA_ITEM,remo1);
+        peticionRemo1.setDatosSalida(jugador.getID());
+        Client conexion1 = new Client(peticionRemo1);
+        Object resp1= conexion1.getRespuestaServer();
+
+        Peticion peticionRemo2 = new Peticion(TipoAccion.REALIZAR_COMPRA_ITEM,remo2);
+        peticionRemo2.setDatosSalida(jugador.getID());
+        Client conexion2 = new Client(peticionRemo2);
+        Object resp2= conexion2.getRespuestaServer();
+
+
+
+        CellPane celdaremolino1 = obtenerCelda(punto1);
+        celdaremolino1.draw(remo1.loadImage());
+        CellPane celdaremolino2 = obtenerCelda(punto2);
+        celdaremolino2.draw(remo2.loadImage());
     }
     public void dibujarCelda(){
         if (jugador.isCambiosEnInventario()){
@@ -148,7 +194,48 @@ public class Grid extends JPanel implements ActionListener, Serializable {
         }
         return null;
     }
+    public void PintarCeldaConectores(){//SOLO PINTA LAS CELDAS DE LOS CONECTORES
+        Peticion peticionConectores = new Peticion(TipoAccion.GET_CONECTORES,jugador.getID());
+        Client cliente = new Client(peticionConectores);
+        if (cliente.getRespuestaServer()!=null){
+            //Lista de conectores
+            ArrayList<Item> conectores = (ArrayList<Item>) cliente.getRespuestaServer();
+            for (Item actualConector:conectores) {
+                //Si tiene ubicacion (ya esta en el grid)
+                if (actualConector.getPuntosUbicacion().size() != 0) {
 
+                    CellPane celda = obtenerCelda(actualConector.getPuntosUbicacion().get(0));
+                    //Reinicia color en caso de ser necesario
+                    if (contadorColores >= coloresCeldas.size())
+                        contadorColores = 0;
+                    //Si ya esta pintada, ponga el mismo color
+                    if (celda.pintado) {//coloresCeldas.get(contadorColores)
+                        celda.pintarCelda(celda.getColor());
+                    } else {//Si no tiene que poner uno diferente
+                        celda.pintarCelda(coloresCeldas.get(contadorColores));
+                        contadorColores++;
+                    }
+                    pintarSoloConector(actualConector.getItemsConectados(),celda.getColor());
+                }
+            }
+        }
+    }
+    public void pintarSoloConector(ArrayList<Item> itemsConectados,Color colorConector){
+            //For para todos los items
+            //For para todos los puntos
+            if (itemsConectados.size()!=0){
+                for (Item actual: itemsConectados){
+                    ArrayList<Point> puntosItem = actual.getPuntosUbicacion();
+                    if (puntosItem.size()!=0){
+                        for (Point actualPunto:puntosItem){
+                            CellPane celda = obtenerCelda(actualPunto);
+                            celda.pintado=true;
+                            celda.pintarCelda(colorConector);
+                        }
+                    }
+                }
+            }
+    }
 }
 
 

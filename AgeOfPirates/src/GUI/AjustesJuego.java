@@ -7,10 +7,14 @@ import ObjetosJuego.*;
 import General.Peticion;
 import General.TipoAccion;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 
@@ -104,7 +108,8 @@ public class AjustesJuego extends JFrame implements ActionListener{
         });
     }
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
+        revisaSiYaNoTieneItems();
         SetComboBoxInventario();//Actualiza constantemente el combobox de items del player
         ActualizarDinero();//Actualiza constantemente la etiqueta del dinero del player
         ActualizarAcero();//Actualiza el acero
@@ -112,7 +117,66 @@ public class AjustesJuego extends JFrame implements ActionListener{
         comprarArmas();
         actualizarArmas();
         revisarSiHayIntercambio();
+        empezarJuego();
+        revisarKrake();
+    }
+    public void revisarKrake(){
+        Peticion peticion = new Peticion(TipoAccion.KRAKEN_DISPONIBLE,id);
+        Client conexion = new Client(peticion);
+        if (conexion.getRespuestaServer()!=null){
+            boolean respuesta = (boolean) conexion.getRespuestaServer();
+            if (respuesta){
+                String jugadorStr = JOptionPane.showInputDialog("Ingrese el jugador para atacar con El Kraken: ");
+                int jugador = Integer.parseInt(jugadorStr);
+                Peticion respuestaPeticion = new Peticion(TipoAccion.RESPUESTA_ATAQUE_KREKEN,jugador);
+                respuestaPeticion.setDatosSalida(id);
+                Client cliente = new Client(respuestaPeticion);
+            }
+        }
+    }
+    public void empezarJuego(){
+        Peticion peticionEmpezar = new Peticion(TipoAccion.TODOS_LISTOS,null);
+        Client conexionEmpezar = new Client(peticionEmpezar);
+        if (conexionEmpezar.getRespuestaServer()!=null){
+            if ((boolean) conexionEmpezar.getRespuestaServer()){//TODOS ESTAN LISTOS
 
+                //Atacar();
+            }else{
+                //System.out.println("FALTA GENTE POR CONFIRMAR LISTO");
+                ;
+            }
+        }
+    }
+    public void Atacar(){
+        //Preguntar si es mi turno
+        Peticion turnoDe = new Peticion(TipoAccion.TURNO_DE_JUGADOR,null);
+        Client conexionTurno = new Client(turnoDe);
+        if (conexionTurno.getRespuestaServer()!=null){
+            //Atacamos
+            int turno = (int)conexionTurno.getRespuestaServer();
+            System.out.println("TURNO : "+turno+" ID: "+id);
+            if (turno==id){
+                Peticion peticion = new Peticion(TipoAccion.ATAQUE_REALIZADO,id);
+                Client conexionAtaqueRealizado = new Client(peticion);
+            }
+        }
+    }
+    public void revisaSiYaNoTieneItems(){
+        Peticion peticion = new Peticion(TipoAccion.REVISAR_SI_YA_PERDIO,id);
+        Client cliente = new Client(peticion);
+        if (cliente.getRespuestaServer()!=null){
+            if ((boolean)cliente.getRespuestaServer()){//Se quedo sin items
+                Peticion peticionEliminarJugador = new Peticion(TipoAccion.BORRAR_JUGADOR,id);
+                Client conexionBorrar = new Client(peticionEliminarJugador);
+                JOptionPane.showMessageDialog(null,"GAME OVER!");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.exit(0);
+            }
+        }
     }
     public void revisarSiHayIntercambio(){
         Peticion peticion = new Peticion(TipoAccion.REVISAR_SI_HAY_INTERCAMBIO,id);

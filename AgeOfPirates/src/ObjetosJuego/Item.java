@@ -30,6 +30,9 @@ public class Item implements Serializable {
     public Item(){
 
     }
+    public void setID(int numero){
+        this.numero=numero;
+    }
     public int setIDItem(){
         numero++;//como esta en 0, retorna 1, cuando vuelva va a estar en 1, retorna 2...
         return numero;

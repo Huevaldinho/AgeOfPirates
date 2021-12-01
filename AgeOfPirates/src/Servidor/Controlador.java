@@ -160,7 +160,7 @@ public class Controlador {
                 int idItem = (int) peticionRecibida.getDatosEntrada();
                 int idJugador = (int) peticionRecibida.getDatosSalida();
                 String nombreItem = (String) peticionRecibida.getDatosExtra();
-                peticionRecibida.setDatosSalida(admin.BuscarItemPorID(idItem,idJugador,nombreItem));
+                peticionRecibida.setDatosSalida(admin.BuscarItemPorID(idItem,idJugador,nombreItem,null));
                 break;
             }
             case SUMAR_ACERO_JUGADOR:{
@@ -191,6 +191,43 @@ public class Controlador {
             }
             case ENVIAR_RESPUESTA_OFERTA:{
                 admin.respuestaOferta((boolean)peticionRecibida.getDatosEntrada(),(Intercambio)peticionRecibida.getDatosSalida());
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
+            case REVISAR_SI_YA_PERDIO:{
+                //True  = se quedo sin items
+                //False = todavia juega
+                peticionRecibida.setDatosSalida(admin.RevisarSiYaPerdio(peticionRecibida));
+                break;
+            }
+            case BORRAR_JUGADOR:{
+                admin.BorrarJugador(peticionRecibida);
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
+            case TODOS_LISTOS:{
+                peticionRecibida.setDatosSalida(admin.TodosListos());
+                break;
+            }
+            case TURNO_DE_JUGADOR:{
+                peticionRecibida.setDatosSalida(admin.TurnoDeJugador());
+                break;
+            }
+            case ATAQUE_REALIZADO:{
+                admin.CambiarEstadoAtaque((int)peticionRecibida.getDatosEntrada());
+                peticionRecibida.setDatosSalida(true);
+                break;
+            }
+            case GET_CONECTORES:{
+                peticionRecibida.setDatosSalida(admin.GetConectores(peticionRecibida));
+                break;
+            }
+            case KRAKEN_DISPONIBLE:{
+                peticionRecibida.setDatosSalida(admin.preguntarKrakenDisponible((int)peticionRecibida.getDatosEntrada()));
+                break;
+            }
+            case RESPUESTA_ATAQUE_KREKEN:{
+                admin.respuestaKreken((int)peticionRecibida.getDatosEntrada(),(int)peticionRecibida.getDatosSalida());
                 peticionRecibida.setDatosSalida(true);
                 break;
             }
